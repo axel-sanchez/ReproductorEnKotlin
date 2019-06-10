@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Reproductor en Kotlin</string>
+    <string name="minuto">00:00</string>
+    <string name="race">Race</string>
+    <string name="edsheerancastleonthehill">Castle On The Hill</string>
+    <string name="edsheerandive">Dive</string>
+    <string name="edsheerangalwaygirl">Galway Girl</string>
+    <string name="edsheerangivemelove">Give Me Love</string>
+    <string name="edsheeranhowwouldyoufeel">How Would You Feel</string>
+    <string name="edsheeranlegohouse">Lego House</string>
+    <string name="edsheeranone">None</string>
+    <string name="edsheeranperfect">Perfect</string>
+    <string name="edsheerantheateam">The A Team</string>
+    <string name="edsheeranthinkingoutloud">Thinking Out Loud</string>
+    <string name="happieredsheeranlyric">Happier</string>
+    <string name="photographedsheeran">Photograph</string>
+</resources>
