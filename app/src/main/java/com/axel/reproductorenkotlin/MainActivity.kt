@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var posicion = 0
     }
+    //esto es para el commit
     var barraProgreso: SeekBar = findViewById(R.id.seekBar)
     var canciones: MutableList<Cancion> = LinkedList()
     var txtMinuto: TextView = findViewById(R.id.txtMinuto)
