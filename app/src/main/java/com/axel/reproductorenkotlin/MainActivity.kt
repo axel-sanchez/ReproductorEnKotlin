@@ -18,20 +18,19 @@ class MainActivity : AppCompatActivity() {
     lateinit var txtMinuto: TextView
     lateinit var txtDuracion: TextView
     lateinit var txtNombre: TextView
-
-    var repetir = 2
+    lateinit var mediaPlayer: MediaPlayer
+    lateinit var canciones: MutableList<Cancion>
+    var repetir: Int = 2
+    var minutoMilisegundos: Float = 0.0f
+    var duracionMilisegundos: Float = 0.0f
+    lateinit var hiloplay: HiloPlay
+    var ejecutar = true
+    var iteradorSegundos: Float = 0.0f
     companion object {
         var posicion = 0
     }
     //esto es para el commit
 
-    var canciones: MutableList<Cancion> = LinkedList()
-    var minutoMilisegundos: Float = 0.0f
-    var duracionMilisegundos: Float = 0.0f
-    var hiloplay: HiloPlay = HiloPlay()
-    var ejecutar = true
-    var iteradorSegundos: Float = 0.0f
-    var mediaPlayer: MediaPlayer = MediaPlayer.create(this, canciones.get(posicion).getCancion())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +43,9 @@ class MainActivity : AppCompatActivity() {
         txtMinuto = findViewById(R.id.txtMinuto)
         txtDuracion = findViewById(R.id.txtDuracion)
         txtNombre = findViewById(R.id.txtNombre)
+        canciones = LinkedList()
+
+
 
         canciones.add(Cancion(R.raw.edsheerancastleonthehill, R.drawable.castleonthehill, "Castle on the hill"))
         canciones.add(Cancion(R.raw.edsheerandive, R.drawable.dive, "Dive"))
@@ -57,6 +59,8 @@ class MainActivity : AppCompatActivity() {
         canciones.add(Cancion(R.raw.edsheeranthinkingoutloud, R.drawable.thinkingoutloud, "Thinking out loud"))
         canciones.add(Cancion(R.raw.happieredsheeranlyric, R.drawable.happier, "Happier"))
         canciones.add(Cancion(R.raw.photographedsheeran, R.drawable.photograph, "Photograph"))
+
+        mediaPlayer = MediaPlayer.create(this, canciones.get(posicion).getCancion())
 
         txtNombre.text = canciones.get(posicion).getNombre()
 
