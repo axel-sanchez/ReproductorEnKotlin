@@ -11,19 +11,21 @@ import java.lang.Exception
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    var playPausa: Button = findViewById(R.id.btnPlayPause)
-    var btnRepetir: Button = findViewById(R.id.btnRepetir)
-    var portada: ImageView = findViewById(R.id.imageView)
+    lateinit var playPausa: Button
+    lateinit var btnRepetir: Button
+    lateinit var portada: ImageView
+    lateinit var barraProgreso: SeekBar
+    lateinit var txtMinuto: TextView
+    lateinit var txtDuracion: TextView
+    lateinit var txtNombre: TextView
+
     var repetir = 2
     companion object {
         var posicion = 0
     }
     //esto es para el commit
-    var barraProgreso: SeekBar = findViewById(R.id.seekBar)
+
     var canciones: MutableList<Cancion> = LinkedList()
-    var txtMinuto: TextView = findViewById(R.id.txtMinuto)
-    var txtDuracion: TextView = findViewById(R.id.txtDuracion)
-    var txtNombre: TextView = findViewById(R.id.txtNombre)
     var minutoMilisegundos: Float = 0.0f
     var duracionMilisegundos: Float = 0.0f
     var hiloplay: HiloPlay = HiloPlay()
@@ -34,6 +36,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        playPausa = findViewById(R.id.btnPlayPause)
+        btnRepetir = findViewById(R.id.btnRepetir)
+        portada = findViewById(R.id.imageView)
+        barraProgreso = findViewById(R.id.seekBar)
+        txtMinuto = findViewById(R.id.txtMinuto)
+        txtDuracion = findViewById(R.id.txtDuracion)
+        txtNombre = findViewById(R.id.txtNombre)
 
         canciones.add(Cancion(R.raw.edsheerancastleonthehill, R.drawable.castleonthehill, "Castle on the hill"))
         canciones.add(Cancion(R.raw.edsheerandive, R.drawable.dive, "Dive"))
