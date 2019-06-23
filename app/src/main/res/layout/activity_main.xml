@@ -20,40 +20,64 @@
             android:layout_marginEnd="0dp"
             android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
 
-            <Button
-                    android:id="@+id/btnMinimizar"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/abajorelleno"
-                    android:onClick="listDeReproduccion"
-                    android:textColor="#353333" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true">
 
-            <TextView
-                    android:id="@+id/txtNombre"
-                    android:layout_width="300dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/app_name"
-                    android:gravity="bottom|center"
-                    android:textColor="#353333"
-                    android:textSize="24sp"
-                    android:textStyle="bold|italic"/>
+                <Button
+                        android:id="@+id/btnMinimizar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/abajo_relleno"
+                        android:textColor="#353333" />
 
-            <Button
-                    android:id="@+id/btnLista"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/mas"
-                    android:textColor="#353333" />
-        </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                        android:id="@+id/txtNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/app_name"
+                        android:gravity="bottom|center"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:textColor="#353333"
+                        android:textSize="24sp"
+                        android:textStyle="bold|italic"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+
+                <Button
+                        android:id="@+id/btnLista"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/mas"
+                        android:textColor="#353333" />
+
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
 
         <ImageView
                 android:id="@+id/imageView"
