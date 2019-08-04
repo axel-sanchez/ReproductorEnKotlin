@@ -16,6 +16,7 @@
         android:elevation="50dp">
 
         <FrameLayout
+            android:id="@+id/contenedor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"/>
@@ -24,12 +25,9 @@
 
 
     <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navegador"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/nav_menu"
-        app:labelVisibilityMode="unlabeled"
-        android:outlineAmbientShadowColor="#ffffff"
-    android:outlineSpotShadowColor="#ffffff"/>
-
+        app:menu="@menu/nav_menu"/>
 </RelativeLayout>
