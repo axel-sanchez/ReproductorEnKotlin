@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item
+            android:id="@+id/home"
+            android:checkable="true"
+            android:icon="@drawable/ic_home_gray_24dp"
+            android:title="Home"/>
+
+        <item
+            android:id="@+id/explore"
+            android:checkable="true"
+            android:title="Explorar"
+            android:icon="@drawable/ic_explore_gray_24dp"/>
+
+        <item
+            android:id="@+id/buscar"
+            android:checkable="true"
+            android:title="Buscar"
+            android:icon="@drawable/ic_search_gray_24dp"/>
+
+        <item
+            android:id="@+id/biblioteca"
+            android:checkable="true"
+            android:icon="@drawable/ic_library_music_gray_24dp"
+            android:title="Biblioteca"/>
+
+        <item
+            android:id="@+id/perfil"
+            android:checkable="true"
+            android:title="Perfil"
+            android:icon="@drawable/ic_person_gray_24dp"/>
+</menu>

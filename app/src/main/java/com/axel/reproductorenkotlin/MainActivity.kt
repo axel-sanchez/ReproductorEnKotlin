@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     var repetir: Int = 2
     var minutoMilisegundos: Float = 0.0f
     var duracionMilisegundos: Float = 0.0f
-    lateinit var hiloplay: HiloPlay
+    //lateinit var hiloplay: HiloPlay
     var ejecutar = true
     var iteradorSegundos: Float = 0.0f
     companion object {
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        playPausa = findViewById(R.id.btnPlayPause)
+        /*playPausa = findViewById(R.id.btnPlayPause)
         btnRepetir = findViewById(R.id.btnRepetir)
         portada = findViewById(R.id.imageView)
         barraProgreso = findViewById(R.id.seekBar)
@@ -83,11 +83,11 @@ class MainActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
 
             }
-        } )
+        } )*/
     }
 
     //Hilo para la reproducción de canciones
-    inner class HiloPlay: Thread(){
+    /*inner class HiloPlay: Thread(){
         override fun run() {
             while(iteradorSegundos < (duracionMilisegundos / 1000f) && ejecutar ){
                 minutoMilisegundos = iteradorSegundos * 1000 //En milisegundos
@@ -277,7 +277,6 @@ class MainActivity : AppCompatActivity() {
                 mediaPlayer.prepare()
                 mediaPlayer.stop()
                 mediaPlayer.release()
-                //mediaPlayer = null TODO: ESTA LÍNEA PUEDE DAR ERROR
             } catch(e: Exception){
                 e.printStackTrace()
             }
@@ -318,7 +317,7 @@ class MainActivity : AppCompatActivity() {
         } else{
             runOnUiThread(object: Runnable{
                 override fun run() {
-                    Toast.makeText(applicationContext, "No hay más canciones", Toast.LENGTH_SHORT).show() //TODO: NO ESTOY SEGURO DE SI ESTÁ BIEN
+                    Toast.makeText(applicationContext, "No hay más canciones", Toast.LENGTH_SHORT).show()
                 }
             })
         }
@@ -333,7 +332,6 @@ class MainActivity : AppCompatActivity() {
                 mediaPlayer.prepare()
                 mediaPlayer.stop()
                 mediaPlayer.release()
-                //mediaPlayer = null TODO: CAPAZ DE ERROR NO LO SÉ RICK
             } catch(e: Exception){
                 e.printStackTrace()
             }
@@ -381,7 +379,7 @@ class MainActivity : AppCompatActivity() {
             portada.setImageResource(canciones.get(posicion).getPortada())
             txtNombre.text = canciones.get(posicion).getNombre()
         }
-    }
+    }*/
 }
 
 
