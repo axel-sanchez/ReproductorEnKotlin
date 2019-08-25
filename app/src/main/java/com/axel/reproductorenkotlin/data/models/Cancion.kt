@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin
+package com.axel.reproductorenkotlin.data.models
 
 class Cancion(cancion: Int, portada: Int, nombre:String){ //#353333---Snookplay
     private var cancion: Int = 0

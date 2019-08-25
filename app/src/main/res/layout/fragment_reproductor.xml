@@ -2,11 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context=".MainActivity">
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -144,8 +142,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/anteriorgris"
-            android:contentDescription="@string/app_name"
-            android:onClick="anterior" />
+            android:contentDescription="@string/app_name" />
 
         <Button
             android:id="@+id/btnDetener"
@@ -154,8 +151,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/stop"
-            android:contentDescription="@string/app_name"
-            android:onClick="detener" />
+            android:contentDescription="@string/app_name" />
 
         <Button
             android:id="@+id/btnPlayPause"
@@ -164,8 +160,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/playy"
-            android:contentDescription="@string/app_name"
-            android:onClick="playPause" />
+            android:contentDescription="@string/app_name" />
 
         <Button
             android:id="@+id/btnRepetir"
@@ -174,8 +169,7 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/repeticion"
-            android:contentDescription="@string/app_name"
-            android:onClick="repetir" />
+            android:contentDescription="@string/app_name" />
 
         <Button
             android:id="@+id/btnSiguiente"
@@ -183,7 +177,6 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@drawable/siguientegris"
-            android:contentDescription="@string/app_name"
-            android:onClick="siguiente" />
+            android:contentDescription="@string/app_name" />
     </LinearLayout>
 </RelativeLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        tools:context=".ui.view.MainActivity">
+
+    <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="110dp"
+            android:background="@color/colorPrimary"
+            android:elevation="110dp">
+
+        <FrameLayout
+                android:id="@+id/contenedor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary" />
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+            android:id="@+id/reproductor"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_above="@+id/navegador"
+            android:text="Presione para ver el reproductor"/>
+
+
+    <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navegador"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            app:labelVisibilityMode="unlabeled"
+            app:itemIconTint="@drawable/bottom_navigation_view_selector"
+            app:menu="@menu/nav_menu" />
+</RelativeLayout>
