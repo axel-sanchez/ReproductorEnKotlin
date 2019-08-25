@@ -20,8 +20,6 @@ import kotlinx.android.synthetic.main.fragment_reproductor.*
 import kotlinx.android.synthetic.main.fragment_reproductor.view.*
 import java.lang.Exception
 import java.util.*
-import android.R
-
 
 
 class MainFragment: ReproductorFragment() {
