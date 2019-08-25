@@ -46,8 +46,6 @@ class NavigationFragment: ReproductorFragment() {
         //  setDisplayHomeAsUpEnabled(true)
         //  setDisplayShowTitleEnabled(false)}
 
-
-
         navegador.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         reproductor.setOnClickListener {

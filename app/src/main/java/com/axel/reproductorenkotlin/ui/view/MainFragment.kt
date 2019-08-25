@@ -1,27 +1,34 @@
 package com.axel.reproductorenkotlin.ui.view
 
+import android.arch.lifecycle.ReportFragment
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.SystemClock
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.data.models.Cancion
+import com.axel.reproductorenkotlin.ui.view.adapter.ViewPageAdapter
+import com.axel.reproductorenkotlin.ui.view.adapter.itemViewPager
 import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
 import com.axel.reproductorenkotlin.ui.view.interfaces.INavigationHost
 import kotlinx.android.synthetic.main.fragment_reproductor.*
 import kotlinx.android.synthetic.main.fragment_reproductor.view.*
 import java.lang.Exception
 import java.util.*
+import android.R
+
+
 
 class MainFragment: ReproductorFragment() {
 
     lateinit var playPausa: Button
     lateinit var btnRepetir: Button
-    lateinit var portada: ImageView
+    //lateinit var portada: ImageView
     lateinit var barraProgreso: SeekBar
     lateinit var txtMinuto: TextView
     lateinit var txtDuracion: TextView
@@ -58,12 +65,13 @@ class MainFragment: ReproductorFragment() {
 
         playPausa = view.findViewById(R.id.btnPlayPause)
         btnRepetir = view.findViewById(R.id.btnRepetir)
-        portada = view.findViewById(R.id.imageView)
+        //portada = view.findViewById(R.id.imageView)
         barraProgreso = view.findViewById(R.id.seekBar)
         txtMinuto = view.findViewById(R.id.txtMinuto)
         txtDuracion = view.findViewById(R.id.txtDuracion)
         txtNombre = view.findViewById(R.id.txtNombre)
         canciones = LinkedList()
+
 
         view.btnDetener.setOnClickListener{
             detener()
@@ -197,6 +205,34 @@ class MainFragment: ReproductorFragment() {
 
             }
         } )
+
+        var listado: MutableList<itemViewPager> = LinkedList()
+        for(i in 0 until (canciones.size-1)){
+            listado.add(itemViewPager(
+                    "cancion ${i}",
+                    PortadaFragment.newInstance(i, canciones)
+                )
+            )
+        }
+        val adapter = ViewPageAdapter(childFragmentManager, listado)
+        viewpager.adapter = adapter
+
+
+        //TODO: TENGO QUE AGREGAR FUNCIONES DE CAMBIAR CANCION AL VIEWPAGER
+        viewpager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(p0: Int) {
+
+            }
+
+            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+
+            }
+
+            override fun onPageSelected(p0: Int) {
+
+            }
+
+        })
 
         /*navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
@@ -387,7 +423,7 @@ class MainFragment: ReproductorFragment() {
                 txtDuracion.text = pasarAminutos(mediaPlayer.duration.toFloat())
                 mediaPlayer.start()
 
-                portada.setImageResource(canciones.get(posicion).getPortada())
+                //portada.setImageResource(canciones.get(posicion).getPortada())
                 txtNombre.text = canciones.get(posicion).getNombre()
             } else{
                 posicion--
@@ -395,7 +431,7 @@ class MainFragment: ReproductorFragment() {
                 duracionMilisegundos = mediaPlayer.duration.toFloat()
                 txtDuracion.text = pasarAminutos(duracionMilisegundos)
 
-                portada.setImageResource(canciones.get(posicion).getPortada())
+                //portada.setImageResource(canciones.get(posicion).getPortada())
                 txtNombre.text = canciones.get(posicion).getNombre()
             }
         } else{
@@ -513,7 +549,7 @@ class MainFragment: ReproductorFragment() {
                 txtDuracion.text = pasarAminutos(duracionMilisegundos)
                 mediaPlayer.start()
 
-                portada.setImageResource(canciones.get(posicion).getPortada())
+                //portada.setImageResource(canciones.get(posicion).getPortada())
                 txtNombre.text = canciones.get(posicion).getNombre()
             } else{
                 posicion++
@@ -521,7 +557,7 @@ class MainFragment: ReproductorFragment() {
                 duracionMilisegundos = mediaPlayer.duration.toFloat()
                 txtDuracion.text = pasarAminutos(duracionMilisegundos)
 
-                portada.setImageResource(canciones.get(posicion).getPortada())
+                //portada.setImageResource(canciones.get(posicion).getPortada())
                 txtNombre.text = canciones.get(posicion).getNombre()
             }
         } else{
@@ -644,7 +680,7 @@ class MainFragment: ReproductorFragment() {
 
             activity?.runOnUiThread(object : Runnable {
                 override fun run() {
-                    portada.setImageResource(canciones.get(posicion).getPortada())
+                    //portada.setImageResource(canciones.get(posicion).getPortada())
                     txtNombre.text = canciones.get(posicion).getNombre()
                 }
             })
@@ -784,7 +820,7 @@ class MainFragment: ReproductorFragment() {
             )
 
             playPausa.setBackgroundResource(R.drawable.playy)
-            portada.setImageResource(canciones.get(posicion).getPortada())
+            //portada.setImageResource(canciones.get(posicion).getPortada())
             txtNombre.text = canciones.get(posicion).getNombre()
         } else{
             ejecutar = false
@@ -798,7 +834,7 @@ class MainFragment: ReproductorFragment() {
             duracionMilisegundos = mediaPlayer.duration.toFloat()
             txtDuracion.text = pasarAminutos(duracionMilisegundos)
 
-            portada.setImageResource(canciones.get(posicion).getPortada())
+            //portada.setImageResource(canciones.get(posicion).getPortada())
             txtNombre.text = canciones.get(posicion).getNombre()
         }
     }
