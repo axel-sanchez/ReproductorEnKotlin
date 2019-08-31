@@ -1,7 +1,5 @@
 package com.axel.reproductorenkotlin.ui.view
 
-import android.arch.lifecycle.ReportFragment
-import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.SystemClock
@@ -21,12 +19,10 @@ import kotlinx.android.synthetic.main.fragment_reproductor.view.*
 import java.lang.Exception
 import java.util.*
 
-
 class MainFragment: ReproductorFragment() {
 
     lateinit var playPausa: Button
     lateinit var btnRepetir: Button
-    //lateinit var portada: ImageView
     lateinit var barraProgreso: SeekBar
     lateinit var txtMinuto: TextView
     lateinit var txtDuracion: TextView
@@ -39,6 +35,7 @@ class MainFragment: ReproductorFragment() {
     lateinit var hiloplay: HiloPlay
     var ejecutar = true
     var iteradorSegundos: Float = 0.0f
+    var posicion: Int = 0
     companion object {
         var posicion = 0
     }
@@ -77,6 +74,7 @@ class MainFragment: ReproductorFragment() {
 
         view.btnSiguiente.setOnClickListener {
             siguiente()
+            viewpager.currentItem = viewpager.currentItem + 1
         }
 
         view.btnMinimizar.setOnClickListener {
@@ -85,6 +83,7 @@ class MainFragment: ReproductorFragment() {
 
         view.btnAnterior.setOnClickListener {
             anterior()
+            viewpager.currentItem = viewpager.currentItem - 1
         }
 
         view.btnRepetir.setOnClickListener {
@@ -215,18 +214,28 @@ class MainFragment: ReproductorFragment() {
         val adapter = ViewPageAdapter(childFragmentManager, listado)
         viewpager.adapter = adapter
 
+        viewpager.pageMargin = -64
+
 
         //TODO: TENGO QUE AGREGAR FUNCIONES DE CAMBIAR CANCION AL VIEWPAGER
         viewpager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
-            override fun onPageScrollStateChanged(p0: Int) {
+            override fun onPageScrollStateChanged(state: Int) {
 
             }
 
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                if(position < posicion){
+                    if(posicion > 0){
+                        anterior()
+                    }
+                } else if(position > posicion){
+                    if(posicion < canciones.size-2){
+                        siguiente()
+                    }
+                }
             }
 
-            override fun onPageSelected(p0: Int) {
+            override fun onPageSelected(position: Int) {
 
             }
 
@@ -291,7 +300,7 @@ class MainFragment: ReproductorFragment() {
     //Método para la lista de reproduccion
     fun listaDeReproduccion(){
         //todo: terminar
-        (activity as INavigationHost).navigateTo(NavigationFragment.newInstance(canciones[0].getNombre()), true)
+        (activity as INavigationHost).navigateTo(NavigationFragment.newInstance(canciones[posicion].getNombre()), true)
     }
 
     //Método para repetir la canción
@@ -421,15 +430,14 @@ class MainFragment: ReproductorFragment() {
                 txtDuracion.text = pasarAminutos(mediaPlayer.duration.toFloat())
                 mediaPlayer.start()
 
-                //portada.setImageResource(canciones.get(posicion).getPortada())
                 txtNombre.text = canciones.get(posicion).getNombre()
             } else{
                 posicion--
                 mediaPlayer = MediaPlayer.create(this.context, canciones.get(posicion).getCancion())
                 duracionMilisegundos = mediaPlayer.duration.toFloat()
                 txtDuracion.text = pasarAminutos(duracionMilisegundos)
+                txtMinuto.text = "00:00"
 
-                //portada.setImageResource(canciones.get(posicion).getPortada())
                 txtNombre.text = canciones.get(posicion).getNombre()
             }
         } else{
@@ -547,15 +555,14 @@ class MainFragment: ReproductorFragment() {
                 txtDuracion.text = pasarAminutos(duracionMilisegundos)
                 mediaPlayer.start()
 
-                //portada.setImageResource(canciones.get(posicion).getPortada())
                 txtNombre.text = canciones.get(posicion).getNombre()
             } else{
                 posicion++
                 mediaPlayer = MediaPlayer.create(this.context, canciones.get(posicion).getCancion())
                 duracionMilisegundos = mediaPlayer.duration.toFloat()
                 txtDuracion.text = pasarAminutos(duracionMilisegundos)
+                txtMinuto.text = "00:00"
 
-                //portada.setImageResource(canciones.get(posicion).getPortada())
                 txtNombre.text = canciones.get(posicion).getNombre()
             }
         } else{
@@ -676,10 +683,11 @@ class MainFragment: ReproductorFragment() {
             ejecutar = true
             hiloplay.start()
 
+
             activity?.runOnUiThread(object : Runnable {
                 override fun run() {
-                    //portada.setImageResource(canciones.get(posicion).getPortada())
                     txtNombre.text = canciones.get(posicion).getNombre()
+                    viewpager.currentItem = viewpager.currentItem + 1
                 }
             })
         } else{
@@ -818,7 +826,6 @@ class MainFragment: ReproductorFragment() {
             )
 
             playPausa.setBackgroundResource(R.drawable.playy)
-            //portada.setImageResource(canciones.get(posicion).getPortada())
             txtNombre.text = canciones.get(posicion).getNombre()
         } else{
             ejecutar = false
@@ -832,7 +839,6 @@ class MainFragment: ReproductorFragment() {
             duracionMilisegundos = mediaPlayer.duration.toFloat()
             txtDuracion.text = pasarAminutos(duracionMilisegundos)
 
-            //portada.setImageResource(canciones.get(posicion).getPortada())
             txtNombre.text = canciones.get(posicion).getNombre()
         }
     }

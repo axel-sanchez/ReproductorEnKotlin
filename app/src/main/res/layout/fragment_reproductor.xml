@@ -78,6 +78,10 @@
                 android:layout_height="400dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
                 android:paddingBottom="30dp"/>
     </LinearLayout>
 

@@ -37,7 +37,6 @@ class PortadaFragment: ReproductorFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         imageView.setImageResource(canciones.get(position).getPortada())
-
     }
 
     companion object {
@@ -50,5 +49,4 @@ class PortadaFragment: ReproductorFragment() {
                 this.canciones = canciones
             }
     }
-
 }
