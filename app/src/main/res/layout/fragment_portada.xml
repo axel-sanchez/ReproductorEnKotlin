@@ -10,7 +10,6 @@
             android:layout_height="400dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:paddingBottom="30dp"
             app:srcCompat="@drawable/castleonthehill" />
 
 </RelativeLayout>

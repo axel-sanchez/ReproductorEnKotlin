@@ -36,7 +36,7 @@ class PortadaFragment: ReproductorFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        imageView.setImageResource(canciones.get(position).getPortada())
+        imageView.setImageResource(canciones[position].getPortada())
     }
 
     companion object {

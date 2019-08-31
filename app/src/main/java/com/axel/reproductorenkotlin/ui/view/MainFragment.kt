@@ -60,7 +60,6 @@ class MainFragment: ReproductorFragment() {
 
         playPausa = view.findViewById(R.id.btnPlayPause)
         btnRepetir = view.findViewById(R.id.btnRepetir)
-        //portada = view.findViewById(R.id.imageView)
         barraProgreso = view.findViewById(R.id.seekBar)
         txtMinuto = view.findViewById(R.id.txtMinuto)
         txtDuracion = view.findViewById(R.id.txtDuracion)
@@ -95,92 +94,44 @@ class MainFragment: ReproductorFragment() {
         }
 
         canciones.add(
-            Cancion(
-                R.raw.edsheerancastleonthehill,
-                R.drawable.castleonthehill,
-                "Castle on the hill"
-            )
+            Cancion(R.raw.edsheerancastleonthehill, R.drawable.castleonthehill, "Castle on the hill")
         )
         canciones.add(
-            Cancion(
-                R.raw.edsheerandive,
-                R.drawable.dive,
-                "Dive"
-            )
+            Cancion(R.raw.edsheerandive, R.drawable.dive, "Dive")
         )
         canciones.add(
-            Cancion(
-                R.raw.edsheerangalwaygirl,
-                R.drawable.galwaygirl,
-                "Galway girl"
-            )
+            Cancion(R.raw.edsheerangalwaygirl, R.drawable.galwaygirl, "Galway girl")
         )
         canciones.add(
-            Cancion(
-                R.raw.edsheerangivemelove,
-                R.drawable.givemelove,
-                "Give me love"
-            )
+            Cancion(R.raw.edsheerangivemelove, R.drawable.givemelove, "Give me love")
         )
         canciones.add(
-            Cancion(
-                R.raw.edsheeranhowwouldyoufeel,
-                R.drawable.howwouldyoufeel,
-                "How would you feel"
-            )
+            Cancion(R.raw.edsheeranhowwouldyoufeel, R.drawable.howwouldyoufeel, "How would you feel")
         )
         canciones.add(
-            Cancion(
-                R.raw.edsheeranlegohouse,
-                R.drawable.legohouse,
-                "Lego house"
-            )
+            Cancion(R.raw.edsheeranlegohouse, R.drawable.legohouse, "Lego house")
         )
         canciones.add(
-            Cancion(
-                R.raw.edsheeranone,
-                R.drawable.one,
-                "One"
-            )
+            Cancion(R.raw.edsheeranone, R.drawable.one, "One")
         )
         canciones.add(
-            Cancion(
-                R.raw.edsheeranperfect,
-                R.drawable.perfect,
-                "Perfect"
-            )
+            Cancion(R.raw.edsheeranperfect, R.drawable.perfect, "Perfect")
         )
         canciones.add(
-            Cancion(
-                R.raw.edsheerantheateam,
-                R.drawable.theateam,
-                "The a team"
-            )
+            Cancion(R.raw.edsheerantheateam, R.drawable.theateam, "The a team")
         )
         canciones.add(
-            Cancion(
-                R.raw.edsheeranthinkingoutloud,
-                R.drawable.thinkingoutloud,
-                "Thinking out loud"
-            )
+            Cancion(R.raw.edsheeranthinkingoutloud, R.drawable.thinkingoutloud, "Thinking out loud")
         )
         canciones.add(
-            Cancion(
-                R.raw.happieredsheeranlyric,
-                R.drawable.happier,
-                "Happier"
-            )
+            Cancion(R.raw.happieredsheeranlyric, R.drawable.happier, "Happier")
         )
         canciones.add(
-            Cancion(
-                R.raw.photographedsheeran,
-                R.drawable.photograph,
-                "Photograph"
-            )
+            Cancion(R.raw.photographedsheeran, R.drawable.photograph, "Photograph")
         )
-        mediaPlayer = MediaPlayer.create(this.context, canciones.get(MainFragment.posicion).getCancion())
+        mediaPlayer = MediaPlayer.create(this.context, canciones[MainFragment.posicion].getCancion())
 
-        txtNombre.text = canciones.get(MainFragment.posicion).getNombre()
+        txtNombre.text = canciones[MainFragment.posicion].getNombre()
 
         duracionMilisegundos = mediaPlayer.duration.toFloat() //En milisegundos
         txtDuracion.text = pasarAminutos(duracionMilisegundos)
@@ -203,10 +154,10 @@ class MainFragment: ReproductorFragment() {
             }
         } )
 
-        var listado: MutableList<itemViewPager> = LinkedList()
+        val listado: MutableList<itemViewPager> = LinkedList()
         for(i in 0 until (canciones.size-1)){
             listado.add(itemViewPager(
-                    "cancion ${i}",
+                    "cancion $i",
                     PortadaFragment.newInstance(i, canciones)
                 )
             )
@@ -216,8 +167,6 @@ class MainFragment: ReproductorFragment() {
 
         viewpager.pageMargin = -64
 
-
-        //TODO: TENGO QUE AGREGAR FUNCIONES DE CAMBIAR CANCION AL VIEWPAGER
         viewpager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {
 
@@ -240,11 +189,6 @@ class MainFragment: ReproductorFragment() {
             }
 
         })
-
-        /*navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
-        navigation.itemIconTintList = null*/
-
     }
 
     //Hilo para la reproducción de canciones
@@ -253,7 +197,7 @@ class MainFragment: ReproductorFragment() {
             while(iteradorSegundos < (duracionMilisegundos / 1000f) && ejecutar ){
                 minutoMilisegundos = iteradorSegundos * 1000 //En milisegundos
                 txtMinuto.text = pasarAminutos(minutoMilisegundos)
-                barraProgreso.setProgress(minutoMilisegundos.toInt())
+                barraProgreso.progress = minutoMilisegundos.toInt()
                 iteradorSegundos++
                 SystemClock.sleep(1000)
             }
@@ -280,26 +224,28 @@ class MainFragment: ReproductorFragment() {
 
     //Método utilizado para pasar de milisegundos a minutos y segundos
     fun pasarAminutos(milis: Float): String{
-        var minutos: Float = (milis/1000f/60f)
-        var segundos: Float = (minutos - minutos.toInt()) * 60f
-        var s: String
-        var m: String
+        val minutos: Float = (milis/1000f/60f)
+        val segundos: Float = (minutos - minutos.toInt()) * 60f
+        val s: String
+        val m: String
+
         if( segundos.toInt() < 10){
             s = "0${segundos.toInt()}"
         } else{
             s = "${segundos.toInt()}"
         }
+
         if(minutos.toInt() < 10){
             m = "0${minutos.toInt()}"
         } else{
             m = "${minutos.toInt()}"
         }
+
         return "$m:$s"
     }
 
     //Método para la lista de reproduccion
     fun listaDeReproduccion(){
-        //todo: terminar
         (activity as INavigationHost).navigateTo(NavigationFragment.newInstance(canciones[posicion].getNombre()), true)
     }
 
@@ -309,12 +255,12 @@ class MainFragment: ReproductorFragment() {
         if(repetir == 1){
             btnRepetir.setBackgroundResource(R.drawable.repeticion)
             Toast.makeText(this.context, "No repetir", Toast.LENGTH_SHORT).show()
-            mediaPlayer.setLooping(false)
+            mediaPlayer.isLooping = false
             repetir = 2
         } else{
             btnRepetir.setBackgroundResource(R.drawable.repetir)
             Toast.makeText(this.context, "Repetir", Toast.LENGTH_SHORT).show()
-            mediaPlayer.setLooping(true)
+            mediaPlayer.isLooping = true
             repetir = 1
         }
     }
@@ -322,7 +268,7 @@ class MainFragment: ReproductorFragment() {
     //Método para volver a la canción anterior
     fun anterior(){
         if(posicion >= 1){
-            if(mediaPlayer.isPlaying()){
+            if(mediaPlayer.isPlaying){
                 iteradorSegundos = 0.0f
 
                 try{
@@ -335,110 +281,38 @@ class MainFragment: ReproductorFragment() {
                     e.printStackTrace()
                 }
 
-                canciones.set(0,
-                    Cancion(
-                        R.raw.edsheerancastleonthehill,
-                        R.drawable.castleonthehill,
-                        "Castle on the hill"
-                    )
-                )
-                canciones.set(1,
-                    Cancion(
-                        R.raw.edsheerandive,
-                        R.drawable.dive,
-                        "Dive"
-                    )
-                )
-                canciones.set(2,
-                    Cancion(
-                        R.raw.edsheerangalwaygirl,
-                        R.drawable.galwaygirl,
-                        "Galway girl"
-                    )
-                )
-                canciones.set(3,
-                    Cancion(
-                        R.raw.edsheerangivemelove,
-                        R.drawable.givemelove,
-                        "Give me love"
-                    )
-                )
-                canciones.set(4,
-                    Cancion(
-                        R.raw.edsheeranhowwouldyoufeel,
-                        R.drawable.howwouldyoufeel,
-                        "How would you feel"
-                    )
-                )
-                canciones.set(5,
-                    Cancion(
-                        R.raw.edsheeranlegohouse,
-                        R.drawable.legohouse,
-                        "Lego house"
-                    )
-                )
-                canciones.set(6,
-                    Cancion(
-                        R.raw.edsheeranone,
-                        R.drawable.one,
-                        "One"
-                    )
-                )
-                canciones.set(7,
-                    Cancion(
-                        R.raw.edsheeranperfect,
-                        R.drawable.perfect,
-                        "Perfect"
-                    )
-                )
-                canciones.set(8,
-                    Cancion(
-                        R.raw.edsheerantheateam,
-                        R.drawable.theateam,
-                        "The a team"
-                    )
-                )
-                canciones.set(9,
-                    Cancion(
-                        R.raw.edsheeranthinkingoutloud,
-                        R.drawable.thinkingoutloud,
-                        "Thinking out loud"
-                    )
-                )
-                canciones.set(10,
-                    Cancion(
-                        R.raw.happieredsheeranlyric,
-                        R.drawable.happier,
-                        "Happier"
-                    )
-                )
-                canciones.set(11,
-                    Cancion(
-                        R.raw.photographedsheeran,
-                        R.drawable.photograph,
-                        "Photograph"
-                    )
-                )
+                canciones[0]  = Cancion(R.raw.edsheerancastleonthehill, R.drawable.castleonthehill,"Castle on the hill")
+                canciones[1]  = Cancion(R.raw.edsheerandive, R.drawable.dive,"Dive")
+                canciones[2]  = Cancion(R.raw.edsheerangalwaygirl, R.drawable.galwaygirl,"Galway girl")
+                canciones[3]  = Cancion(R.raw.edsheerangivemelove, R.drawable.givemelove,"Give me love")
+                canciones[4]  = Cancion(R.raw.edsheeranhowwouldyoufeel, R.drawable.howwouldyoufeel, "How would you feel")
+                canciones[5]  = Cancion(R.raw.edsheeranlegohouse, R.drawable.legohouse, "Lego house")
+                canciones[6]  = Cancion(R.raw.edsheeranone, R.drawable.one, "One")
+                canciones[7]  = Cancion(R.raw.edsheeranperfect, R.drawable.perfect, "Perfect")
+                canciones[8]  = Cancion(R.raw.edsheerantheateam, R.drawable.theateam, "The a team")
+                canciones[9]  = Cancion(R.raw.edsheeranthinkingoutloud, R.drawable.thinkingoutloud, "Thinking out loud")
+                canciones[10] = Cancion(R.raw.happieredsheeranlyric, R.drawable.happier, "Happier")
+                canciones[11] = Cancion(R.raw.photographedsheeran, R.drawable.photograph, "Photograph")
 
                 posicion--
-                mediaPlayer = MediaPlayer.create(this.context, canciones.get(posicion).getCancion())
-                barraProgreso.setProgress(0)
+                mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
+                barraProgreso.progress = 0
                 minutoMilisegundos = 0.0f
-                txtMinuto.text = "00:00"
+                txtMinuto.text = resources.getString(R.string.minuto)
                 duracionMilisegundos = mediaPlayer.duration.toFloat()
                 barraProgreso.max = duracionMilisegundos.toInt()
                 txtDuracion.text = pasarAminutos(mediaPlayer.duration.toFloat())
                 mediaPlayer.start()
 
-                txtNombre.text = canciones.get(posicion).getNombre()
+                txtNombre.text = canciones[posicion].getNombre()
             } else{
                 posicion--
-                mediaPlayer = MediaPlayer.create(this.context, canciones.get(posicion).getCancion())
+                mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
                 duracionMilisegundos = mediaPlayer.duration.toFloat()
                 txtDuracion.text = pasarAminutos(duracionMilisegundos)
-                txtMinuto.text = "00:00"
+                txtMinuto.text = resources.getString(R.string.minuto)
 
-                txtNombre.text = canciones.get(posicion).getNombre()
+                txtNombre.text = canciones[posicion].getNombre()
             }
         } else{
             Toast.makeText(this.context, "No hay canciones anteriores", Toast.LENGTH_SHORT).show()
@@ -460,110 +334,38 @@ class MainFragment: ReproductorFragment() {
                     e.printStackTrace()
                 }
 
-                canciones.set(0,
-                    Cancion(
-                        R.raw.edsheerancastleonthehill,
-                        R.drawable.castleonthehill,
-                        "Castle on the hill"
-                    )
-                )
-                canciones.set(1,
-                    Cancion(
-                        R.raw.edsheerandive,
-                        R.drawable.dive,
-                        "Dive"
-                    )
-                )
-                canciones.set(2,
-                    Cancion(
-                        R.raw.edsheerangalwaygirl,
-                        R.drawable.galwaygirl,
-                        "Galway girl"
-                    )
-                )
-                canciones.set(3,
-                    Cancion(
-                        R.raw.edsheerangivemelove,
-                        R.drawable.givemelove,
-                        "Give me love"
-                    )
-                )
-                canciones.set(4,
-                    Cancion(
-                        R.raw.edsheeranhowwouldyoufeel,
-                        R.drawable.howwouldyoufeel,
-                        "How would you feel"
-                    )
-                )
-                canciones.set(5,
-                    Cancion(
-                        R.raw.edsheeranlegohouse,
-                        R.drawable.legohouse,
-                        "Lego house"
-                    )
-                )
-                canciones.set(6,
-                    Cancion(
-                        R.raw.edsheeranone,
-                        R.drawable.one,
-                        "One"
-                    )
-                )
-                canciones.set(7,
-                    Cancion(
-                        R.raw.edsheeranperfect,
-                        R.drawable.perfect,
-                        "Perfect"
-                    )
-                )
-                canciones.set(8,
-                    Cancion(
-                        R.raw.edsheerantheateam,
-                        R.drawable.theateam,
-                        "The a team"
-                    )
-                )
-                canciones.set(9,
-                    Cancion(
-                        R.raw.edsheeranthinkingoutloud,
-                        R.drawable.thinkingoutloud,
-                        "Thinking out loud"
-                    )
-                )
-                canciones.set(10,
-                    Cancion(
-                        R.raw.happieredsheeranlyric,
-                        R.drawable.happier,
-                        "Happier"
-                    )
-                )
-                canciones.set(11,
-                    Cancion(
-                        R.raw.photographedsheeran,
-                        R.drawable.photograph,
-                        "Photograph"
-                    )
-                )
+                canciones[0]  = Cancion(R.raw.edsheerancastleonthehill, R.drawable.castleonthehill,"Castle on the hill")
+                canciones[1]  = Cancion(R.raw.edsheerandive, R.drawable.dive,"Dive")
+                canciones[2]  = Cancion(R.raw.edsheerangalwaygirl, R.drawable.galwaygirl,"Galway girl")
+                canciones[3]  = Cancion(R.raw.edsheerangivemelove, R.drawable.givemelove,"Give me love")
+                canciones[4]  = Cancion(R.raw.edsheeranhowwouldyoufeel, R.drawable.howwouldyoufeel, "How would you feel")
+                canciones[5]  = Cancion(R.raw.edsheeranlegohouse, R.drawable.legohouse, "Lego house")
+                canciones[6]  = Cancion(R.raw.edsheeranone, R.drawable.one, "One")
+                canciones[7]  = Cancion(R.raw.edsheeranperfect, R.drawable.perfect, "Perfect")
+                canciones[8]  = Cancion(R.raw.edsheerantheateam, R.drawable.theateam, "The a team")
+                canciones[9]  = Cancion(R.raw.edsheeranthinkingoutloud, R.drawable.thinkingoutloud, "Thinking out loud")
+                canciones[10] = Cancion(R.raw.happieredsheeranlyric, R.drawable.happier, "Happier")
+                canciones[11] = Cancion(R.raw.photographedsheeran, R.drawable.photograph, "Photograph")
 
                 posicion++
-                mediaPlayer = MediaPlayer.create(this.context, canciones.get(posicion).getCancion())
-                barraProgreso.setProgress(0)
+                mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
+                barraProgreso.progress = 0
                 minutoMilisegundos = 0.0f
-                txtMinuto.text = "00:00"
+                txtMinuto.text = resources.getString(R.string.minuto)
                 duracionMilisegundos = mediaPlayer.duration.toFloat()
                 barraProgreso.max = duracionMilisegundos.toInt()
                 txtDuracion.text = pasarAminutos(duracionMilisegundos)
                 mediaPlayer.start()
 
-                txtNombre.text = canciones.get(posicion).getNombre()
+                txtNombre.text = canciones[posicion].getNombre()
             } else{
                 posicion++
-                mediaPlayer = MediaPlayer.create(this.context, canciones.get(posicion).getCancion())
+                mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
                 duracionMilisegundos = mediaPlayer.duration.toFloat()
                 txtDuracion.text = pasarAminutos(duracionMilisegundos)
-                txtMinuto.text = "00:00"
+                txtMinuto.text = resources.getString(R.string.minuto)
 
-                txtNombre.text = canciones.get(posicion).getNombre()
+                txtNombre.text = canciones[posicion].getNombre()
             }
         } else{
             Toast.makeText(this.context, "No hay más canciones", Toast.LENGTH_SHORT).show()
@@ -583,96 +385,24 @@ class MainFragment: ReproductorFragment() {
                 e.printStackTrace()
             }
 
-            canciones.set(0,
-                Cancion(
-                    R.raw.edsheerancastleonthehill,
-                    R.drawable.castleonthehill,
-                    "Castle on the hill"
-                )
-            )
-            canciones.set(1,
-                Cancion(
-                    R.raw.edsheerandive,
-                    R.drawable.dive,
-                    "Dive"
-                )
-            )
-            canciones.set(2,
-                Cancion(
-                    R.raw.edsheerangalwaygirl,
-                    R.drawable.galwaygirl,
-                    "Galway girl"
-                )
-            )
-            canciones.set(3,
-                Cancion(
-                    R.raw.edsheerangivemelove,
-                    R.drawable.givemelove,
-                    "Give me love"
-                )
-            )
-            canciones.set(4,
-                Cancion(
-                    R.raw.edsheeranhowwouldyoufeel,
-                    R.drawable.howwouldyoufeel,
-                    "How would you feel"
-                )
-            )
-            canciones.set(5,
-                Cancion(
-                    R.raw.edsheeranlegohouse,
-                    R.drawable.legohouse,
-                    "Lego house"
-                )
-            )
-            canciones.set(6,
-                Cancion(
-                    R.raw.edsheeranone,
-                    R.drawable.one,
-                    "One"
-                )
-            )
-            canciones.set(7,
-                Cancion(
-                    R.raw.edsheeranperfect,
-                    R.drawable.perfect,
-                    "Perfect"
-                )
-            )
-            canciones.set(8,
-                Cancion(
-                    R.raw.edsheerantheateam,
-                    R.drawable.theateam,
-                    "The a team"
-                )
-            )
-            canciones.set(9,
-                Cancion(
-                    R.raw.edsheeranthinkingoutloud,
-                    R.drawable.thinkingoutloud,
-                    "Thinking out loud"
-                )
-            )
-            canciones.set(10,
-                Cancion(
-                    R.raw.happieredsheeranlyric,
-                    R.drawable.happier,
-                    "Happier"
-                )
-            )
-            canciones.set(11,
-                Cancion(
-                    R.raw.photographedsheeran,
-                    R.drawable.photograph,
-                    "Photograph"
-                )
-            )
+            canciones[0]  = Cancion(R.raw.edsheerancastleonthehill, R.drawable.castleonthehill,"Castle on the hill")
+            canciones[1]  = Cancion(R.raw.edsheerandive, R.drawable.dive,"Dive")
+            canciones[2]  = Cancion(R.raw.edsheerangalwaygirl, R.drawable.galwaygirl,"Galway girl")
+            canciones[3]  = Cancion(R.raw.edsheerangivemelove, R.drawable.givemelove,"Give me love")
+            canciones[4]  = Cancion(R.raw.edsheeranhowwouldyoufeel, R.drawable.howwouldyoufeel, "How would you feel")
+            canciones[5]  = Cancion(R.raw.edsheeranlegohouse, R.drawable.legohouse, "Lego house")
+            canciones[6]  = Cancion(R.raw.edsheeranone, R.drawable.one, "One")
+            canciones[7]  = Cancion(R.raw.edsheeranperfect, R.drawable.perfect, "Perfect")
+            canciones[8]  = Cancion(R.raw.edsheerantheateam, R.drawable.theateam, "The a team")
+            canciones[9]  = Cancion(R.raw.edsheeranthinkingoutloud, R.drawable.thinkingoutloud, "Thinking out loud")
+            canciones[10] = Cancion(R.raw.happieredsheeranlyric, R.drawable.happier, "Happier")
+            canciones[11] = Cancion(R.raw.photographedsheeran, R.drawable.photograph, "Photograph")
 
             posicion++
-            mediaPlayer = MediaPlayer.create(this.context, canciones.get(posicion).getCancion())
-            barraProgreso.setProgress(0)
+            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
+            barraProgreso.progress = 0
             minutoMilisegundos = 0.0f
-            txtMinuto.text = "00:00"
+            txtMinuto.text = resources.getString(R.string.minuto)
             duracionMilisegundos = mediaPlayer.duration.toFloat()
             barraProgreso.max = duracionMilisegundos.toInt()
             txtDuracion.text = pasarAminutos(duracionMilisegundos)
@@ -684,34 +414,30 @@ class MainFragment: ReproductorFragment() {
             hiloplay.start()
 
 
-            activity?.runOnUiThread(object : Runnable {
-                override fun run() {
-                    txtNombre.text = canciones.get(posicion).getNombre()
-                    viewpager.currentItem = viewpager.currentItem + 1
-                }
-            })
+            activity?.runOnUiThread {
+                txtNombre.text = canciones[posicion].getNombre()
+                viewpager.currentItem = viewpager.currentItem + 1
+            }
         } else{
-            activity?.runOnUiThread(object: Runnable{
-                override fun run() {
-                    Toast.makeText(context, "No hay más canciones", Toast.LENGTH_SHORT).show()
-                    btnPlayPause.setBackgroundResource(R.drawable.playy)
-                    barraProgreso.progress = 0
-                    txtMinuto.text = "00:00"
-                    ejecutar = false
-                    try{
-                        mediaPlayer.reset()
-                        mediaPlayer.prepare()
-                        mediaPlayer.stop()
-                        mediaPlayer.release()
-                    } catch(e: Exception){
-                        e.printStackTrace()
-                    }
-                    hiloplay.interrupt()
-                    posicion = canciones.size - 2
-                    mediaPlayer = MediaPlayer.create(context, canciones.get(posicion).getCancion())
-                    minutoMilisegundos = 0.0f
+            activity?.runOnUiThread {
+                Toast.makeText(context, "No hay más canciones", Toast.LENGTH_SHORT).show()
+                btnPlayPause.setBackgroundResource(R.drawable.playy)
+                barraProgreso.progress = 0
+                txtMinuto.text = resources.getString(R.string.minuto)
+                ejecutar = false
+                try{
+                    mediaPlayer.reset()
+                    mediaPlayer.prepare()
+                    mediaPlayer.stop()
+                    mediaPlayer.release()
+                } catch(e: Exception){
+                    e.printStackTrace()
                 }
-            })
+                hiloplay.interrupt()
+                posicion = canciones.size - 2
+                mediaPlayer = MediaPlayer.create(context, canciones[posicion].getCancion())
+                minutoMilisegundos = 0.0f
+            }
         }
     }
 
@@ -730,9 +456,9 @@ class MainFragment: ReproductorFragment() {
 
             hiloplay.interrupt()
             posicion = 0
-            mediaPlayer = MediaPlayer.create(this.context, canciones.get(posicion).getCancion())
+            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
 
-            txtMinuto.text = "00:00"
+            txtMinuto.text = resources.getString(R.string.minuto)
             barraProgreso.progress = 0
             minutoMilisegundos = 0.0f
             iteradorSegundos = 0.0f
@@ -740,98 +466,26 @@ class MainFragment: ReproductorFragment() {
             duracionMilisegundos = mediaPlayer.duration.toFloat()
             txtDuracion.text = pasarAminutos(duracionMilisegundos)
 
-            canciones.set(0,
-                Cancion(
-                    R.raw.edsheerancastleonthehill,
-                    R.drawable.castleonthehill,
-                    "Castle on the hill"
-                )
-            )
-            canciones.set(1,
-                Cancion(
-                    R.raw.edsheerandive,
-                    R.drawable.dive,
-                    "Dive"
-                )
-            )
-            canciones.set(2,
-                Cancion(
-                    R.raw.edsheerangalwaygirl,
-                    R.drawable.galwaygirl,
-                    "Galway girl"
-                )
-            )
-            canciones.set(3,
-                Cancion(
-                    R.raw.edsheerangivemelove,
-                    R.drawable.givemelove,
-                    "Give me love"
-                )
-            )
-            canciones.set(4,
-                Cancion(
-                    R.raw.edsheeranhowwouldyoufeel,
-                    R.drawable.howwouldyoufeel,
-                    "How would you feel"
-                )
-            )
-            canciones.set(5,
-                Cancion(
-                    R.raw.edsheeranlegohouse,
-                    R.drawable.legohouse,
-                    "Lego house"
-                )
-            )
-            canciones.set(6,
-                Cancion(
-                    R.raw.edsheeranone,
-                    R.drawable.one,
-                    "One"
-                )
-            )
-            canciones.set(7,
-                Cancion(
-                    R.raw.edsheeranperfect,
-                    R.drawable.perfect,
-                    "Perfect"
-                )
-            )
-            canciones.set(8,
-                Cancion(
-                    R.raw.edsheerantheateam,
-                    R.drawable.theateam,
-                    "The a team"
-                )
-            )
-            canciones.set(9,
-                Cancion(
-                    R.raw.edsheeranthinkingoutloud,
-                    R.drawable.thinkingoutloud,
-                    "Thinking out loud"
-                )
-            )
-            canciones.set(10,
-                Cancion(
-                    R.raw.happieredsheeranlyric,
-                    R.drawable.happier,
-                    "Happier"
-                )
-            )
-            canciones.set(11,
-                Cancion(
-                    R.raw.photographedsheeran,
-                    R.drawable.photograph,
-                    "Photograph"
-                )
-            )
+            canciones[0]  = Cancion(R.raw.edsheerancastleonthehill, R.drawable.castleonthehill,"Castle on the hill")
+            canciones[1]  = Cancion(R.raw.edsheerandive, R.drawable.dive,"Dive")
+            canciones[2]  = Cancion(R.raw.edsheerangalwaygirl, R.drawable.galwaygirl,"Galway girl")
+            canciones[3]  = Cancion(R.raw.edsheerangivemelove, R.drawable.givemelove,"Give me love")
+            canciones[4]  = Cancion(R.raw.edsheeranhowwouldyoufeel, R.drawable.howwouldyoufeel, "How would you feel")
+            canciones[5]  = Cancion(R.raw.edsheeranlegohouse, R.drawable.legohouse, "Lego house")
+            canciones[6]  = Cancion(R.raw.edsheeranone, R.drawable.one, "One")
+            canciones[7]  = Cancion(R.raw.edsheeranperfect, R.drawable.perfect, "Perfect")
+            canciones[8]  = Cancion(R.raw.edsheerantheateam, R.drawable.theateam, "The a team")
+            canciones[9]  = Cancion(R.raw.edsheeranthinkingoutloud, R.drawable.thinkingoutloud, "Thinking out loud")
+            canciones[10] = Cancion(R.raw.happieredsheeranlyric, R.drawable.happier, "Happier")
+            canciones[11] = Cancion(R.raw.photographedsheeran, R.drawable.photograph, "Photograph")
 
             playPausa.setBackgroundResource(R.drawable.playy)
-            txtNombre.text = canciones.get(posicion).getNombre()
+            txtNombre.text = canciones[posicion].getNombre()
         } else{
             ejecutar = false
             posicion = 0
-            mediaPlayer = MediaPlayer.create(this.context, canciones.get(posicion).getCancion())
-            txtMinuto.text = "00:00"
+            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
+            txtMinuto.text = resources.getString(R.string.minuto)
             barraProgreso.progress = 0
             minutoMilisegundos = 0.0f
             iteradorSegundos = 0.0f
@@ -839,7 +493,7 @@ class MainFragment: ReproductorFragment() {
             duracionMilisegundos = mediaPlayer.duration.toFloat()
             txtDuracion.text = pasarAminutos(duracionMilisegundos)
 
-            txtNombre.text = canciones.get(posicion).getNombre()
+            txtNombre.text = canciones[posicion].getNombre()
         }
     }
 
