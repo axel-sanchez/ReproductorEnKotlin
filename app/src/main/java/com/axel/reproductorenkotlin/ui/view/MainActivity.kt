@@ -1,8 +1,8 @@
 package com.axel.reproductorenkotlin.ui.view
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.ui.view.interfaces.INavigationHost
 import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
@@ -16,13 +16,13 @@ class MainActivity : AppCompatActivity(), INavigationHost {
 
         if (savedInstanceState == null) {
 
-            var fragment: Fragment = MainFragment()
+            var fragment: androidx.fragment.app.Fragment = MainFragment()
 
             replaceTo(fragment, false)
         }
     }
 
-    override fun navigateTo(fragment: Fragment, addToBackstack: Boolean) {
+    override fun navigateTo(fragment: androidx.fragment.app.Fragment, addToBackstack: Boolean) {
         val transaction = supportFragmentManager
             .beginTransaction()
             .add(R.id.container, fragment)
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), INavigationHost {
         transaction.commit()
     }
 
-    override fun replaceTo(fragment: Fragment, addToBackstack: Boolean) {
+    override fun replaceTo(fragment: androidx.fragment.app.Fragment, addToBackstack: Boolean) {
         val transaction = supportFragmentManager
             .beginTransaction()
             .replace(R.id.container, fragment)

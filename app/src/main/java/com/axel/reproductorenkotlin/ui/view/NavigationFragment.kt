@@ -1,8 +1,8 @@
 package com.axel.reproductorenkotlin.ui.view
 
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,13 +59,13 @@ class NavigationFragment: ReproductorFragment() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.home -> {
-                //todo: todavia no esta creado el Home
-                // navigateTo(HomeFragment(), true)
+                navigateTo(HomeFragment(), true)
                 itemSelected = item.itemId
 
                 return@OnNavigationItemSelectedListener true
             }
             R.id.explore -> {
+                navigateTo(ExploreFragment(), true)
                 itemSelected = item.itemId
                 return@OnNavigationItemSelectedListener true
             }
@@ -77,6 +77,7 @@ class NavigationFragment: ReproductorFragment() {
             }
             R.id.biblioteca -> {
                 itemSelected = item.itemId
+                navigateTo(BibliotecaFragment(), true)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.perfil -> {
@@ -88,7 +89,7 @@ class NavigationFragment: ReproductorFragment() {
         false
     }
 
-    fun navigateTo(fragment: Fragment, addToBackstack: Boolean) {
+    fun navigateTo(fragment: androidx.fragment.app.Fragment, addToBackstack: Boolean) {
 
         val transaction = childFragmentManager
             .beginTransaction()

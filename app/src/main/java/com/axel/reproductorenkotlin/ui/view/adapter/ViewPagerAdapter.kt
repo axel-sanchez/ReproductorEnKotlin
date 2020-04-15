@@ -1,12 +1,11 @@
 package com.axel.reproductorenkotlin.ui.view.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 
-class ViewPageAdapter(fm: FragmentManager, private val items: List<itemViewPager>) : FragmentPagerAdapter(fm) {
+class ViewPageAdapter(fm: FragmentManager, private val items: List<ItemViewPager>) : androidx.fragment.app.FragmentPagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment? {
+    override fun getItem(position: Int): Fragment {
         return items[position].fragment
     }
 
@@ -19,8 +18,6 @@ class ViewPageAdapter(fm: FragmentManager, private val items: List<itemViewPager
         // Generate title based on item position
         return items[position].title
     }
-
-
 }
 
-class itemViewPager(val title : String ,val fragment: Fragment)
+class ItemViewPager(val title : String, val fragment: Fragment)
