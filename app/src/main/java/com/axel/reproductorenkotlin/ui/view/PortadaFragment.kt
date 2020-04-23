@@ -16,7 +16,7 @@ class PortadaFragment: ReproductorFragment() {
     var position = 0
     lateinit var canciones: MutableList<Cancion>
 
-    override fun OnBackPressFragment() = false
+    override fun onBackPressFragment() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

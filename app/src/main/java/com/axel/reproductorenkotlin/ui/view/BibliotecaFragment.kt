@@ -28,7 +28,7 @@ class BibliotecaFragment : ReproductorFragment() {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var canciones: MutableList<Cancion>
 
-    override fun OnBackPressFragment() = false
+    override fun onBackPressFragment() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

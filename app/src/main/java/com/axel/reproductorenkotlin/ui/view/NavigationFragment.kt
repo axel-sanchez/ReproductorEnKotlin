@@ -19,7 +19,7 @@ class NavigationFragment: ReproductorFragment() {
     private var itemSelected = firstItem
     lateinit var nombre: String
 
-    override fun OnBackPressFragment()= false
+    override fun onBackPressFragment()= false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

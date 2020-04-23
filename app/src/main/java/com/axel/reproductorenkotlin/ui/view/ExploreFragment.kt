@@ -44,7 +44,7 @@ class ExploreFragment: ReproductorFragment() {
 
     var bearer = ""
 
-    override fun OnBackPressFragment() = false
+    override fun onBackPressFragment() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

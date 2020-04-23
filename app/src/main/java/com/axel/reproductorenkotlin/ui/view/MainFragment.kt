@@ -53,7 +53,7 @@ class MainFragment : ReproductorFragment() {
         var copyPosicion = 0
     }
 
-    override fun OnBackPressFragment() = false
+    override fun onBackPressFragment() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

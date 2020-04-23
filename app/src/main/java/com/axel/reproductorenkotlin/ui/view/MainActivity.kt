@@ -16,13 +16,13 @@ class MainActivity : AppCompatActivity(), INavigationHost {
 
         if (savedInstanceState == null) {
 
-            var fragment: androidx.fragment.app.Fragment = MainFragment()
+            var fragment: Fragment = MainFragment()
 
             replaceTo(fragment, false)
         }
     }
 
-    override fun navigateTo(fragment: androidx.fragment.app.Fragment, addToBackstack: Boolean) {
+    override fun navigateTo(fragment: Fragment, addToBackstack: Boolean) {
         val transaction = supportFragmentManager
             .beginTransaction()
             .add(R.id.container, fragment)
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), INavigationHost {
         transaction.commit()
     }
 
-    override fun replaceTo(fragment: androidx.fragment.app.Fragment, addToBackstack: Boolean) {
+    override fun replaceTo(fragment: Fragment, addToBackstack: Boolean) {
         val transaction = supportFragmentManager
             .beginTransaction()
             .replace(R.id.container, fragment)
@@ -56,7 +56,4 @@ class MainActivity : AppCompatActivity(), INavigationHost {
             super.onBackPressed()
         }
     }
-
 }
-
-
