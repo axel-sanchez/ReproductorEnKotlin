@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.IntentFilter
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.media.MediaPlayer.OnPreparedListener
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -17,7 +16,7 @@ import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.axel.reproductorenkotlin.R
-import com.axel.reproductorenkotlin.data.models.Cancion
+import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.helpers.HeadphonesDisconnectReceiver
 import com.axel.reproductorenkotlin.ui.view.adapter.ItemViewPager
 import com.axel.reproductorenkotlin.ui.view.adapter.ViewPageAdapter
@@ -29,14 +28,14 @@ import java.util.*
 
 class MainFragment : ReproductorFragment() {
 
-    lateinit var playPausa: Button
-    lateinit var btnRepetir: Button
-    lateinit var barraProgreso: SeekBar
-    lateinit var txtMinuto: TextView
-    lateinit var txtDuracion: TextView
-    lateinit var txtNombre: TextView
+    lateinit var btnPlayPause: Button
+    lateinit var btnRepeat: Button
+    lateinit var progressBar: SeekBar
+    lateinit var txtMinute: TextView
+    lateinit var txtDuration: TextView
+    lateinit var txtName: TextView
     lateinit var mediaPlayer: MediaPlayer
-    lateinit var canciones: MutableList<Cancion>
+    lateinit var songsList: MutableList<Song>
     var repetir: Int = 2
     var minutoMilisegundos: Float = 0.0f
     var duracionMilisegundos: Float = 0.0f
@@ -76,48 +75,48 @@ class MainFragment : ReproductorFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playPausa = view.findViewById(R.id.btnPlayPause)
-        btnRepetir = view.findViewById(R.id.btnRepetir)
-        barraProgreso = view.findViewById(R.id.seekBar)
-        txtMinuto = view.findViewById(R.id.txtMinuto)
-        txtDuracion = view.findViewById(R.id.txtDuracion)
-        txtNombre = view.findViewById(R.id.txtNombre)
-        canciones = LinkedList()
+        btnPlayPause = view.findViewById(R.id.btnPlayPause)
+        btnRepeat = view.findViewById(R.id.btnRepetir)
+        progressBar = view.findViewById(R.id.seekBar)
+        txtMinute = view.findViewById(R.id.txtMinuto)
+        txtDuration = view.findViewById(R.id.txtDuracion)
+        txtName = view.findViewById(R.id.txtNombre)
+        songsList = LinkedList()
 
-        view.btnDetener.setOnClickListener { stop() }
+        view.btnDetener.setOnClickListener { stopSong() }
 
         view.btnSiguiente.setOnClickListener { viewpager.currentItem = viewpager.currentItem + 1 }
 
-        view.btnMinimizar.setOnClickListener { listaDeReproduccion() }
+        view.btnMinimizar.setOnClickListener { navigateToPlaylistFragment() }
 
         view.btnAnterior.setOnClickListener { viewpager.currentItem = viewpager.currentItem - 1 }
 
-        view.btnRepetir.setOnClickListener { repetir() }
+        view.btnRepetir.setOnClickListener { repeatSong() }
 
-        view.btnPlayPause.setOnClickListener { playPause() }
+        view.btnPlayPause.setOnClickListener { playPauseSong() }
 
-        canciones.add(Cancion(R.raw.edsheerancastleonthehill, R.drawable.castleonthehill, "Castle on the hill"))
-        canciones.add(Cancion(R.raw.edsheerandive, R.drawable.dive, "Dive"))
-        canciones.add(Cancion(R.raw.edsheerangalwaygirl, R.drawable.galwaygirl, "Galway girl"))
-        canciones.add(Cancion(R.raw.edsheerangivemelove, R.drawable.givemelove, "Give me love"))
-        canciones.add(Cancion(R.raw.edsheeranhowwouldyoufeel, R.drawable.howwouldyoufeel, "How would you feel"))
-        canciones.add(Cancion(R.raw.edsheeranlegohouse, R.drawable.legohouse, "Lego house"))
-        canciones.add(Cancion(R.raw.edsheeranone, R.drawable.one, "One"))
-        canciones.add(Cancion(R.raw.edsheeranperfect, R.drawable.perfect, "Perfect"))
-        canciones.add(Cancion(R.raw.edsheerantheateam, R.drawable.theateam, "The a team"))
-        canciones.add(Cancion(R.raw.edsheeranthinkingoutloud, R.drawable.thinkingoutloud, "Thinking out loud"))
-        canciones.add(Cancion(R.raw.happieredsheeranlyric, R.drawable.happier, "Happier"))
-        canciones.add(Cancion(R.raw.photographedsheeran, R.drawable.photograph, "Photograph"))
+        songsList.add(Song(R.raw.edsheerancastleonthehill, R.drawable.castleonthehill, "Castle on the hill"))
+        songsList.add(Song(R.raw.edsheerandive, R.drawable.dive, "Dive"))
+        songsList.add(Song(R.raw.edsheerangalwaygirl, R.drawable.galwaygirl, "Galway girl"))
+        songsList.add(Song(R.raw.edsheerangivemelove, R.drawable.givemelove, "Give me love"))
+        songsList.add(Song(R.raw.edsheeranhowwouldyoufeel, R.drawable.howwouldyoufeel, "How would you feel"))
+        songsList.add(Song(R.raw.edsheeranlegohouse, R.drawable.legohouse, "Lego house"))
+        songsList.add(Song(R.raw.edsheeranone, R.drawable.one, "One"))
+        songsList.add(Song(R.raw.edsheeranperfect, R.drawable.perfect, "Perfect"))
+        songsList.add(Song(R.raw.edsheerantheateam, R.drawable.theateam, "The a team"))
+        songsList.add(Song(R.raw.edsheeranthinkingoutloud, R.drawable.thinkingoutloud, "Thinking out loud"))
+        songsList.add(Song(R.raw.happieredsheeranlyric, R.drawable.happier, "Happier"))
+        songsList.add(Song(R.raw.photographedsheeran, R.drawable.photograph, "Photograph"))
 
-        mediaPlayer = MediaPlayer.create(this.context, canciones[copyPosicion].getCancion())
+        mediaPlayer = MediaPlayer.create(this.context, songsList[copyPosicion].song)
 
-        txtNombre.text = canciones[copyPosicion].getNombre()
+        txtName.text = songsList[copyPosicion].name
 
         duracionMilisegundos = mediaPlayer.duration.toFloat() //En milisegundos
-        txtDuracion.text = toMinutes(duracionMilisegundos)
-        barraProgreso.max = duracionMilisegundos.toInt()
+        txtDuration.text = millisToMinutesAndSeconds(duracionMilisegundos)
+        progressBar.max = duracionMilisegundos.toInt()
 
-        barraProgreso.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        progressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     iteradorSegundos = progress / 1000f
@@ -129,16 +128,16 @@ class MainFragment : ReproductorFragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        val listado: MutableList<ItemViewPager> = LinkedList()
-        for (i in 0 until (canciones.size)) {
-            listado.add(
+        val listViewPager: MutableList<ItemViewPager> = LinkedList()
+        for (i in 0 until (songsList.size)) {
+            listViewPager.add(
                 ItemViewPager(
                     "cancion $i",
-                    PortadaFragment.newInstance(i, canciones)
+                    PortadaFragment.newInstance(i, songsList)
                 )
             )
         }
-        val adapter = ViewPageAdapter(childFragmentManager, listado)
+        val adapter = ViewPageAdapter(childFragmentManager, listViewPager)
         viewpager.adapter = adapter
 
         viewpager.pageMargin = -64
@@ -147,7 +146,7 @@ class MainFragment : ReproductorFragment() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 if(!isFirstTime) contador++
                 else isFirstTime = false
-                if(posicion == canciones.size - 1 && position == 10 && contador == 2) {
+                if(posicion == songsList.size - 1 && position == 10 && contador == 2) {
                     Toast.makeText(context, "No hay más canciones", Toast.LENGTH_SHORT).show()
                     contador = 0
                 }
@@ -161,8 +160,8 @@ class MainFragment : ReproductorFragment() {
 
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageSelected(position: Int) {
-                if (position < posicion) anterior()
-                else next()
+                if (position < posicion) previousSong()
+                else nextSong()
             }
         })
     }
@@ -172,82 +171,77 @@ class MainFragment : ReproductorFragment() {
         override fun run() {
             while (iteradorSegundos < (duracionMilisegundos / 1000f) && ejecutar) {
                 minutoMilisegundos = iteradorSegundos * 1000 //En milisegundos
-                txtMinuto.text = toMinutes(minutoMilisegundos)
-                barraProgreso.progress = minutoMilisegundos.toInt()
+                txtMinute.text = millisToMinutesAndSeconds(minutoMilisegundos)
+                progressBar.progress = minutoMilisegundos.toInt()
                 iteradorSegundos++
                 SystemClock.sleep(1000)
             }
             if (iteradorSegundos >= (duracionMilisegundos / 1000f)) {
-                nextAuto()
+                nextSongAuto()
             }
         }
     }
 
-    //Método para reproducir y pausar
-    private fun playPause() {
+    private fun playPauseSong() {
         if (mediaPlayer.isPlaying) {
             LocalBroadcastManager.getInstance(context!!).unregisterReceiver(receiver)
             ejecutar = false
             mediaPlayer.pause()
-            playPausa.setBackgroundResource(R.drawable.playy)
+            btnPlayPause.setBackgroundResource(R.drawable.playy)
         } else {
             LocalBroadcastManager.getInstance(context!!).registerReceiver(receiver, intentFilter)
             mediaPlayer.start()
-            playPausa.setBackgroundResource(R.drawable.pause)
+            btnPlayPause.setBackgroundResource(R.drawable.pause)
             ejecutar = true
             threadPlay = ThreadPlay()
             threadPlay.start()
         }
     }
 
-    //Método utilizado para pasar de milisegundos a minutos y segundos
-    fun toMinutes(milis: Float): String {
-        val minutos: Float = (milis / 1000f / 60f)
-        val segundos: Float = (minutos - minutos.toInt()) * 60f
-        val s: String
-        val m: String
+    fun millisToMinutesAndSeconds(millis: Float): String {
+        val minutes: Float = (millis / 1000f / 60f)
+        val seconds: Float = (minutes - minutes.toInt()) * 60f
+        val secondString: String
+        val minuteString: String
 
-        s = if (segundos.toInt() < 10) {
-            "0${segundos.toInt()}"
+        secondString = if (seconds.toInt() < 10) {
+            "0${seconds.toInt()}"
         } else {
-            "${segundos.toInt()}"
+            "${seconds.toInt()}"
         }
 
-        m = if (minutos.toInt() < 10) {
-            "0${minutos.toInt()}"
+        minuteString = if (minutes.toInt() < 10) {
+            "0${minutes.toInt()}"
         } else {
-            "${minutos.toInt()}"
+            "${minutes.toInt()}"
         }
 
-        return "$m:$s"
+        return "$minuteString:$secondString"
     }
 
-    //Método para la lista de reproduccion
-    private fun listaDeReproduccion() {
+    private fun navigateToPlaylistFragment() {
         (activity as INavigationHost).navigateTo(
-            NavigationFragment.newInstance(canciones[posicion].getNombre()),
+            NavigationFragment.newInstance(songsList[posicion].name),
             true
         )
     }
 
-    //Método para repetir la canción
     //todo: por el momento no funciona
-    private fun repetir() {
+    private fun repeatSong() {
         if (repetir == 1) {
-            btnRepetir.setBackgroundResource(R.drawable.repeticion)
+            btnRepeat.setBackgroundResource(R.drawable.repeticion)
             Toast.makeText(this.context, "No repetir", Toast.LENGTH_SHORT).show()
             mediaPlayer.isLooping = false
             repetir = 2
         } else {
-            btnRepetir.setBackgroundResource(R.drawable.repetir)
+            btnRepeat.setBackgroundResource(R.drawable.repetir)
             Toast.makeText(this.context, "Repetir", Toast.LENGTH_SHORT).show()
             mediaPlayer.isLooping = true
             repetir = 1
         }
     }
 
-    //Método para volver a la canción anterior
-    fun anterior() {
+    fun previousSong() {
         if (mediaPlayer.isPlaying) {
             iteradorSegundos = 0.0f
 
@@ -262,29 +256,28 @@ class MainFragment : ReproductorFragment() {
             }
 
             posicion--
-            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
-            barraProgreso.progress = 0
+            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            progressBar.progress = 0
             minutoMilisegundos = 0.0f
-            txtMinuto.text = resources.getString(R.string.minuto)
+            txtMinute.text = resources.getString(R.string.minuto)
             duracionMilisegundos = mediaPlayer.duration.toFloat()
-            barraProgreso.max = duracionMilisegundos.toInt()
-            txtDuracion.text = toMinutes(mediaPlayer.duration.toFloat())
+            progressBar.max = duracionMilisegundos.toInt()
+            txtDuration.text = millisToMinutesAndSeconds(mediaPlayer.duration.toFloat())
             mediaPlayer.start()
 
-            txtNombre.text = canciones[posicion].getNombre()
+            txtName.text = songsList[posicion].name
         } else {
             posicion--
-            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
+            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
             duracionMilisegundos = mediaPlayer.duration.toFloat()
-            txtDuracion.text = toMinutes(duracionMilisegundos)
-            txtMinuto.text = resources.getString(R.string.minuto)
+            txtDuration.text = millisToMinutesAndSeconds(duracionMilisegundos)
+            txtMinute.text = resources.getString(R.string.minuto)
 
-            txtNombre.text = canciones[posicion].getNombre()
+            txtName.text = songsList[posicion].name
         }
     }
 
-    //Método para ir a la siguiente canción
-    fun next() {
+    fun nextSong() {
         if (mediaPlayer.isPlaying) {
             iteradorSegundos = 0.0f
 
@@ -299,30 +292,29 @@ class MainFragment : ReproductorFragment() {
             }
 
             posicion++
-            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
-            barraProgreso.progress = 0
+            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            progressBar.progress = 0
             minutoMilisegundos = 0.0f
-            txtMinuto.text = resources.getString(R.string.minuto)
+            txtMinute.text = resources.getString(R.string.minuto)
             duracionMilisegundos = mediaPlayer.duration.toFloat()
-            barraProgreso.max = duracionMilisegundos.toInt()
-            txtDuracion.text = toMinutes(duracionMilisegundos)
+            progressBar.max = duracionMilisegundos.toInt()
+            txtDuration.text = millisToMinutesAndSeconds(duracionMilisegundos)
             mediaPlayer.start()
 
-            txtNombre.text = canciones[posicion].getNombre()
+            txtName.text = songsList[posicion].name
         } else {
             posicion++
-            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
+            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
             duracionMilisegundos = mediaPlayer.duration.toFloat()
-            txtDuracion.text = toMinutes(duracionMilisegundos)
-            txtMinuto.text = resources.getString(R.string.minuto)
+            txtDuration.text = millisToMinutesAndSeconds(duracionMilisegundos)
+            txtMinute.text = resources.getString(R.string.minuto)
 
-            txtNombre.text = canciones[posicion].getNombre()
+            txtName.text = songsList[posicion].name
         }
     }
 
-    //Método para ir a la canción siguiente cuando termine la canción
-    fun nextAuto() {
-        if (posicion < canciones.size - 1) {
+    fun nextSongAuto() {
+        if (posicion < songsList.size - 1) {
             iteradorSegundos = 0.0f
             try {
                 mediaPlayer.reset()
@@ -334,13 +326,13 @@ class MainFragment : ReproductorFragment() {
             }
 
             posicion++
-            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
-            barraProgreso.progress = 0
+            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            progressBar.progress = 0
             minutoMilisegundos = 0.0f
-            txtMinuto.text = resources.getString(R.string.minuto)
+            txtMinute.text = resources.getString(R.string.minuto)
             duracionMilisegundos = mediaPlayer.duration.toFloat()
-            barraProgreso.max = duracionMilisegundos.toInt()
-            txtDuracion.text = toMinutes(duracionMilisegundos)
+            progressBar.max = duracionMilisegundos.toInt()
+            txtDuration.text = millisToMinutesAndSeconds(duracionMilisegundos)
             mediaPlayer.start()
             ejecutar = false
             threadPlay.interrupt()
@@ -349,15 +341,15 @@ class MainFragment : ReproductorFragment() {
             threadPlay.start()
 
             activity?.runOnUiThread {
-                txtNombre.text = canciones[posicion].getNombre()
+                txtName.text = songsList[posicion].name
                 viewpager.currentItem = viewpager.currentItem + 1
             }
         } else {
             activity?.runOnUiThread {
                 Toast.makeText(context, "No hay más canciones", Toast.LENGTH_SHORT).show()
                 btnPlayPause.setBackgroundResource(R.drawable.playy)
-                barraProgreso.progress = 0
-                txtMinuto.text = resources.getString(R.string.minuto)
+                progressBar.progress = 0
+                txtMinute.text = resources.getString(R.string.minuto)
                 ejecutar = false
                 try {
                     mediaPlayer.reset()
@@ -368,15 +360,14 @@ class MainFragment : ReproductorFragment() {
                     e.printStackTrace()
                 }
                 threadPlay.interrupt()
-                posicion = canciones.size - 2
-                mediaPlayer = MediaPlayer.create(context, canciones[posicion].getCancion())
+                posicion = songsList.size - 2
+                mediaPlayer = MediaPlayer.create(context, songsList[posicion].song)
                 minutoMilisegundos = 0.0f
             }
         }
     }
 
-    //Método para detener la canción
-    private fun stop() {
+    private fun stopSong() {
         if (mediaPlayer.isPlaying) {
             ejecutar = false
             try {
@@ -390,31 +381,31 @@ class MainFragment : ReproductorFragment() {
 
             threadPlay.interrupt()
             posicion = 0
-            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
+            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
 
-            txtMinuto.text = resources.getString(R.string.minuto)
-            barraProgreso.progress = 0
+            txtMinute.text = resources.getString(R.string.minuto)
+            progressBar.progress = 0
             minutoMilisegundos = 0.0f
             iteradorSegundos = 0.0f
 
             duracionMilisegundos = mediaPlayer.duration.toFloat()
-            txtDuracion.text = toMinutes(duracionMilisegundos)
+            txtDuration.text = millisToMinutesAndSeconds(duracionMilisegundos)
 
-            playPausa.setBackgroundResource(R.drawable.playy)
-            txtNombre.text = canciones[posicion].getNombre()
+            btnPlayPause.setBackgroundResource(R.drawable.playy)
+            txtName.text = songsList[posicion].name
         } else {
             ejecutar = false
             posicion = 0
-            mediaPlayer = MediaPlayer.create(this.context, canciones[posicion].getCancion())
-            txtMinuto.text = resources.getString(R.string.minuto)
-            barraProgreso.progress = 0
+            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            txtMinute.text = resources.getString(R.string.minuto)
+            progressBar.progress = 0
             minutoMilisegundos = 0.0f
             iteradorSegundos = 0.0f
             threadPlay.interrupt()
             duracionMilisegundos = mediaPlayer.duration.toFloat()
-            txtDuracion.text = toMinutes(duracionMilisegundos)
+            txtDuration.text = millisToMinutesAndSeconds(duracionMilisegundos)
 
-            txtNombre.text = canciones[posicion].getNombre()
+            txtName.text = songsList[posicion].name
         }
     }
 }

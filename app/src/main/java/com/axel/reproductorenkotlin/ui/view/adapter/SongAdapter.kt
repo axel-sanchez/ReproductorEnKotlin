@@ -4,20 +4,18 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.R
-import com.axel.reproductorenkotlin.data.models.Cancion
-import com.bumptech.glide.Glide
+import com.axel.reproductorenkotlin.data.models.Song
 
-class CancionAdapter (private var activity: Activity,
-                      private var mItems: MutableList<Cancion>,
-                      private val clickListener: (Cancion) -> Unit) : RecyclerView.Adapter<CancionAdapter.ViewHolder>() {
+class SongAdapter (private var activity: Activity,
+                   private var mItems: MutableList<Song>,
+                   private val clickListener: (Song) -> Unit) : RecyclerView.Adapter<SongAdapter.ViewHolder>() {
 
 
-    fun setItems( newItems : MutableList<Cancion>){
+    fun setItems( newItems : MutableList<Song>){
         mItems = newItems
     }
 
@@ -26,12 +24,12 @@ class CancionAdapter (private var activity: Activity,
         private val image: ImageView = itemView.findViewById(R.id.imagen)
         private val name: TextView = itemView.findViewById(R.id.name_song)
 
-        fun bind(position : Int, item: Cancion, clickListener: (Cancion) -> Unit) {
-            name.text = item.getNombre()
+        fun bind(position : Int, item: Song, clickListener: (Song) -> Unit) {
+            name.text = item.name
 
             itemView.setOnClickListener { clickListener(item) }
 
-            image.setImageResource(item.getPortada())
+            image.setImageResource(item.coverPage)
 
         }
     }

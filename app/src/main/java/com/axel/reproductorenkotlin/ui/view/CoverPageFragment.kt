@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.axel.reproductorenkotlin.R
-import com.axel.reproductorenkotlin.data.models.Cancion
+import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
 import kotlinx.android.synthetic.main.fragment_portada.*
 
@@ -14,7 +14,7 @@ const val ARG_POS = "pos"
 class PortadaFragment: ReproductorFragment() {
 
     var position = 0
-    lateinit var canciones: MutableList<Cancion>
+    lateinit var canciones: MutableList<Song>
 
     override fun onBackPressFragment() = false
 
@@ -36,12 +36,12 @@ class PortadaFragment: ReproductorFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        imageView.setImageResource(canciones[position].getPortada())
+        imageView.setImageResource(canciones[position].coverPage)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(position: Int, canciones: MutableList<Cancion>) =
+        fun newInstance(position: Int, canciones: MutableList<Song>) =
             PortadaFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_POS, position)

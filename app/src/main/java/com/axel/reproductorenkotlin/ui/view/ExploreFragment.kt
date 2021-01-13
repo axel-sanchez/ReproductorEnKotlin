@@ -2,7 +2,6 @@ package com.axel.reproductorenkotlin.ui.view
 
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,15 +10,13 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.R
-import com.axel.reproductorenkotlin.data.models.Cancion
+import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.data.models.FeaturedPlaylist
 import com.axel.reproductorenkotlin.data.models.ItemSong
 import com.axel.reproductorenkotlin.data.models.Token
-import com.axel.reproductorenkotlin.ui.view.adapter.CancionAdapter
 import com.axel.reproductorenkotlin.ui.view.adapter.PlaylistAdapter
 import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
 import com.axel.reproductorenkotlin.ui.view.interfaces.ApiService
-import com.axel.reproductorenkotlin.ui.view.interfaces.IOnBackPressFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,7 +29,7 @@ const val BASE_URL = "https://api.spotify.com/v1/"
 
 class ExploreFragment: ReproductorFragment() {
 
-    private lateinit var canciones: MutableList<Cancion>
+    private lateinit var canciones: MutableList<Song>
 
     private lateinit var serviceToken: ApiService
     private lateinit var service: ApiService

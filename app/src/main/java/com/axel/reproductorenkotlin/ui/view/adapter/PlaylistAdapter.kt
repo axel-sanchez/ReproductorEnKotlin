@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import java.lang.Exception
 
 class PlaylistAdapter(
-    private val listaDatos: List<ItemSong>,
+    private val dataList: List<ItemSong>,
     private val itemClick: (ItemSong) -> Unit): RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,10 +38,10 @@ class PlaylistAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position, listaDatos[position], itemClick)
+        holder.bind(position, dataList[position], itemClick)
     }
 
     override fun getItemCount(): Int {
-        return listaDatos.size
+        return dataList.size
     }
 }

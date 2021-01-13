@@ -25,7 +25,7 @@ class NavigationFragment: ReproductorFragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            nombre = it.getString(ARG_ITEM)
+            nombre = it.getString(ARG_ITEM)!!
         }
     }
 

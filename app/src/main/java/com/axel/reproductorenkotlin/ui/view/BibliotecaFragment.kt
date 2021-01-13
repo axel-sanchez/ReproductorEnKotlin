@@ -2,23 +2,18 @@ package com.axel.reproductorenkotlin.ui.view
 
 import android.content.ContentResolver
 import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.R
-import com.axel.reproductorenkotlin.data.models.Cancion
-import com.axel.reproductorenkotlin.ui.view.adapter.CancionAdapter
+import com.axel.reproductorenkotlin.data.models.Song
+import com.axel.reproductorenkotlin.ui.view.adapter.SongAdapter
 import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
-import com.axel.reproductorenkotlin.ui.view.interfaces.IOnBackPressFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.io.File
 
@@ -26,7 +21,7 @@ class BibliotecaFragment : ReproductorFragment() {
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-    private lateinit var canciones: MutableList<Cancion>
+    private lateinit var canciones: MutableList<Song>
 
     override fun onBackPressFragment() = false
 
@@ -57,7 +52,7 @@ class BibliotecaFragment : ReproductorFragment() {
     }
 
     private fun setAdapter() {
-        viewAdapter = CancionAdapter(activity!!, canciones) { itemClick(it) }
+        viewAdapter = SongAdapter(activity!!, canciones) { itemClick(it) }
 
         viewManager = GridLayoutManager(this.requireContext(), 2)
 
@@ -74,8 +69,8 @@ class BibliotecaFragment : ReproductorFragment() {
         }
     }
 
-    private fun itemClick(cancion: Cancion) {
-        println("presiono la canción ${cancion.getNombre()}")
+    private fun itemClick(song: Song) {
+        println("presiono la canción ${song.name}")
     }
 
 
@@ -114,16 +109,18 @@ class BibliotecaFragment : ReproductorFragment() {
         cursor?.close()
     }
 
-    private fun readSongs(root: File): MutableList<File>{
+    private fun readSongs(root: File): MutableList<File> {
         var mutableList = mutableListOf<File>()
         var files = root.listFiles()
 
-        for(file in files){
-            if(file.isDirectory){
-                mutableList.addAll(readSongs(file))
-            } else{
-                if(file.name.endsWith(".mp3")){
-                    mutableList.add(file)
+        files?.let {
+            for (file in files) {
+                if (file.isDirectory) {
+                    mutableList.addAll(readSongs(file))
+                } else {
+                    if (file.name.endsWith(".mp3")) {
+                        mutableList.add(file)
+                    }
                 }
             }
         }
