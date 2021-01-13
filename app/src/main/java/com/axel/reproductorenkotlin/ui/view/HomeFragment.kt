@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.data.models.Song
+import com.axel.reproductorenkotlin.databinding.FragmentHomeBinding
 import com.axel.reproductorenkotlin.ui.view.adapter.SongAdapter
 import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
-import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment: ReproductorFragment() {
 
@@ -65,9 +65,17 @@ class HomeFragment: ReproductorFragment() {
         )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    private var fragmentHomeBinding: FragmentHomeBinding? = null
+    private val binding get() = fragmentHomeBinding!!
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        fragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentHomeBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,7 +89,7 @@ class HomeFragment: ReproductorFragment() {
 
         viewManager = GridLayoutManager(this.requireContext(), 2)
 
-        recyclerView.apply {
+        binding.recyclerView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)

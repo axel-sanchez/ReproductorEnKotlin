@@ -2,14 +2,13 @@ package com.axel.reproductorenkotlin.ui.view
 
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.axel.reproductorenkotlin.R
+import com.axel.reproductorenkotlin.databinding.FragmentPlaylistBinding
 import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
 import com.axel.reproductorenkotlin.ui.view.interfaces.INavigationHost
-import kotlinx.android.synthetic.main.fragment_navigation.*
 
 const val ARG_ITEM = "nombre"
 
@@ -29,11 +28,17 @@ class NavigationFragment: ReproductorFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    private var fragmentPlaylistBinding: FragmentPlaylistBinding? = null
+    private val binding get() = fragmentPlaylistBinding!!
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_navigation, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        fragmentPlaylistBinding = FragmentPlaylistBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentPlaylistBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,13 +51,13 @@ class NavigationFragment: ReproductorFragment() {
         //  setDisplayHomeAsUpEnabled(true)
         //  setDisplayShowTitleEnabled(false)}
 
-        navegador.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        binding.navegador.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        reproductor.setOnClickListener {
+        binding.reproductor.setOnClickListener {
             (activity as INavigationHost).finish()
         }
 
-        reproductor.text = nombre
+        binding.reproductor.text = nombre
 
     }
 
@@ -75,12 +80,12 @@ class NavigationFragment: ReproductorFragment() {
                 itemSelected = item.itemId
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.biblioteca -> {
+            R.id.library -> {
                 itemSelected = item.itemId
-                navigateTo(BibliotecaFragment(), true)
+                navigateTo(LibraryFragment(), true)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.perfil -> {
+            R.id.profile -> {
                 itemSelected = item.itemId
                 return@OnNavigationItemSelectedListener true
             }
@@ -89,7 +94,7 @@ class NavigationFragment: ReproductorFragment() {
         false
     }
 
-    fun navigateTo(fragment: androidx.fragment.app.Fragment, addToBackstack: Boolean) {
+    private fun navigateTo(fragment: androidx.fragment.app.Fragment, addToBackstack: Boolean) {
 
         val transaction = childFragmentManager
             .beginTransaction()
@@ -104,15 +109,15 @@ class NavigationFragment: ReproductorFragment() {
 
     override fun onResume() {
         super.onResume()
-        navegador.selectedItemId = itemSelected
+        binding.navegador.selectedItemId = itemSelected
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(nombre: String) =
+        fun newInstance(name: String) =
             NavigationFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_ITEM, nombre)
+                    putString(ARG_ITEM, name)
                 }
             }
 

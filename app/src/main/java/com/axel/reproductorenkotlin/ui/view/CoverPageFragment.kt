@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.data.models.Song
+import com.axel.reproductorenkotlin.databinding.FragmentCoverPageBinding
 import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
-import kotlinx.android.synthetic.main.fragment_portada.*
 
 const val ARG_POS = "pos"
 
-class PortadaFragment: ReproductorFragment() {
+class CoverPageFragment: ReproductorFragment() {
 
     var position = 0
     lateinit var canciones: MutableList<Song>
@@ -26,23 +25,28 @@ class PortadaFragment: ReproductorFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    private var fragmentCoverPageBinding: FragmentCoverPageBinding? = null
+    private val binding get() = fragmentCoverPageBinding!!
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_portada, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        fragmentCoverPageBinding = FragmentCoverPageBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentCoverPageBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        imageView.setImageResource(canciones[position].coverPage)
+        binding.imageView.setImageResource(canciones[position].coverPage)
     }
 
     companion object {
         @JvmStatic
         fun newInstance(position: Int, canciones: MutableList<Song>) =
-            PortadaFragment().apply {
+            CoverPageFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_POS, position)
                 }

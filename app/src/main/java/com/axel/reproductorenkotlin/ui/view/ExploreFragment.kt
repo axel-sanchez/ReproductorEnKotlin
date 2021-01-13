@@ -9,21 +9,19 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.axel.reproductorenkotlin.R
-import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.data.models.FeaturedPlaylist
 import com.axel.reproductorenkotlin.data.models.ItemSong
+import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.data.models.Token
+import com.axel.reproductorenkotlin.databinding.FragmentHomeBinding
 import com.axel.reproductorenkotlin.ui.view.adapter.PlaylistAdapter
 import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
 import com.axel.reproductorenkotlin.ui.view.interfaces.ApiService
-import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Exception
 
 const val BASE_URL = "https://api.spotify.com/v1/"
 
@@ -115,9 +113,17 @@ class ExploreFragment: ReproductorFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    private var fragmentHomeBinding: FragmentHomeBinding? = null
+    private val binding get() = fragmentHomeBinding!!
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        fragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fragmentHomeBinding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -129,7 +135,7 @@ class ExploreFragment: ReproductorFragment() {
 
         viewManager = GridLayoutManager(this.requireContext(), 2)
 
-        recyclerView.apply {
+        binding.recyclerView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)

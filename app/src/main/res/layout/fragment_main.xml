@@ -46,7 +46,7 @@
                 android:layout_height="40dp">
 
                 <TextView
-                    android:id="@+id/txtNombre"
+                    android:id="@+id/txtName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/app_name"
@@ -103,7 +103,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/txtMinuto"
+            android:id="@+id/txtMinute"
             android:layout_width="50dp"
             android:layout_height="20dp"
             android:layout_weight="1"
@@ -112,14 +112,14 @@
             android:textColor="#353333" />
 
         <SeekBar
-            android:id="@+id/seekBar"
+            android:id="@+id/progressBar"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:progress="0" />
 
         <TextView
-            android:id="@+id/txtDuracion"
+            android:id="@+id/txtDuration"
             android:layout_width="50dp"
             android:layout_height="20dp"
             android:layout_weight="1"
@@ -166,7 +166,7 @@
             android:contentDescription="@string/app_name" />
 
         <Button
-            android:id="@+id/btnRepetir"
+            android:id="@+id/btnRepeat"
             android:layout_width="5dp"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
