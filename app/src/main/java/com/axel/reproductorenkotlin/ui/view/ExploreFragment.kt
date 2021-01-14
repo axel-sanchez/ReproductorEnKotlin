@@ -7,16 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.data.models.FeaturedPlaylist
 import com.axel.reproductorenkotlin.data.models.ItemSong
 import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.data.models.Token
+import com.axel.reproductorenkotlin.data.service.ApiService
 import com.axel.reproductorenkotlin.databinding.FragmentHomeBinding
 import com.axel.reproductorenkotlin.ui.view.adapter.PlaylistAdapter
-import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
-import com.axel.reproductorenkotlin.ui.view.interfaces.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,9 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 const val BASE_URL = "https://api.spotify.com/v1/"
 
-class ExploreFragment: ReproductorFragment() {
-
-    private lateinit var canciones: MutableList<Song>
+class ExploreFragment: Fragment() {
 
     private lateinit var serviceToken: ApiService
     private lateinit var service: ApiService
@@ -38,8 +36,6 @@ class ExploreFragment: ReproductorFragment() {
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     var bearer = ""
-
-    override fun onBackPressFragment() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,10 +120,6 @@ class ExploreFragment: ReproductorFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         fragmentHomeBinding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun setAdapter() {

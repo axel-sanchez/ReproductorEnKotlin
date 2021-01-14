@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view.interfaces
+package com.axel.reproductorenkotlin.data.service
 
 import com.axel.reproductorenkotlin.data.models.FeaturedPlaylist
 import com.axel.reproductorenkotlin.data.models.Token

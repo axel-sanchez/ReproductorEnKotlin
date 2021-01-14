@@ -11,7 +11,7 @@ import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.data.models.Song
 
 class SongAdapter (private var activity: Activity,
-                   private var mItems: MutableList<Song>,
+                   private var mItems: List<Song>,
                    private val clickListener: (Song) -> Unit) : RecyclerView.Adapter<SongAdapter.ViewHolder>() {
 
 

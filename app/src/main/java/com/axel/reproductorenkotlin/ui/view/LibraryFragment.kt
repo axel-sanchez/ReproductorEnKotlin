@@ -8,21 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.databinding.FragmentHomeBinding
 import com.axel.reproductorenkotlin.ui.view.adapter.SongAdapter
-import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
 import java.io.File
 
-class LibraryFragment : ReproductorFragment() {
+class LibraryFragment : Fragment() {
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var canciones: MutableList<Song>
-
-    override fun onBackPressFragment() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +53,7 @@ class LibraryFragment : ReproductorFragment() {
     }
 
     private fun setAdapter() {
-        viewAdapter = SongAdapter(activity!!, canciones) { itemClick(it) }
+        viewAdapter = SongAdapter(requireActivity(), canciones) { itemClick(it) }
 
         viewManager = GridLayoutManager(this.requireContext(), 2)
 
@@ -81,7 +79,7 @@ class LibraryFragment : ReproductorFragment() {
 
         //readSongs(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS))
 
-        val resolver: ContentResolver = activity!!.contentResolver
+        val resolver: ContentResolver = requireActivity().contentResolver
         val uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI
         //val uri = Uri.parse("/storage/emulated/0/Download")
         val cursor: Cursor? = resolver.query(uri, null, null, null, null)

@@ -1,185 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="17dp"
-            android:layout_marginRight="17dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true">
-
-                <Button
-                    android:id="@+id/btnMinimizar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/abajo_relleno"
-                    android:textColor="#353333" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
-
-                <TextView
-                    android:id="@+id/txtName"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/app_name"
-                    android:gravity="bottom|center"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
-                    android:textColor="#353333"
-                    android:textSize="24sp"
-                    android:textStyle="bold|italic"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true">
-
-                <Button
-                    android:id="@+id/btnLista"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/mas"
-                    android:textColor="#353333" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                android:paddingBottom="30dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/container"
-        android:layout_width="375dp"
-        android:layout_height="49dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginLeft="19dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="17dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="113dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/txtMinute"
-            android:layout_width="50dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/minuto"
-            android:textColor="#353333" />
-
-        <SeekBar
-            android:id="@+id/progressBar"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:progress="0" />
-
-        <TextView
-            android:id="@+id/txtDuration"
-            android:layout_width="50dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="#353333" />
-    </LinearLayout>
-
-    <LinearLayout
+    <fragment
+        android:id="@+id/fragment2"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="480dp"
-        android:layout_marginEnd="0dp"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:paddingRight="10dp">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="93dp"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:layout_constraintTop_toTopOf="parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph_buttom_navigation_view"/>
 
-        <Button
-            android:id="@+id/btnAnterior"
-            android:layout_width="5dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/anteriorgris"
-            android:contentDescription="@string/app_name" />
+    <Button
+        android:id="@+id/btnPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/fragment2"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        android:text="Presione para ver el reproductor"
+        android:textColor="@color/colorPrimaryDark" />
 
-        <Button
-            android:id="@+id/btnDetener"
-            android:layout_width="5dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/stop"
-            android:contentDescription="@string/app_name" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:labelVisibilityMode="unlabeled"
+        android:layout_alignParentBottom="true"
+        app:itemTextColor="@android:color/white"
+        app:itemIconTint="@drawable/bottom_navigation_view_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnPlayer"
+        app:menu="@menu/nav_menu"
+        android:background="@color/colorPrimary"/>
 
-        <Button
-            android:id="@+id/btnPlayPause"
-            android:layout_width="20dp"
-            android:layout_height="60dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/playy"
-            android:contentDescription="@string/app_name" />
-
-        <Button
-            android:id="@+id/btnRepeat"
-            android:layout_width="5dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/repeticion"
-            android:contentDescription="@string/app_name" />
-
-        <Button
-            android:id="@+id/btnSiguiente"
-            android:layout_width="5dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/siguientegris"
-            android:contentDescription="@string/app_name" />
-    </LinearLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,18 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.axel.reproductorenkotlin.data.models.Song
+import androidx.fragment.app.Fragment
 import com.axel.reproductorenkotlin.databinding.FragmentCoverPageBinding
-import com.axel.reproductorenkotlin.ui.view.customs.ReproductorFragment
+import com.axel.reproductorenkotlin.helpers.SongHelper.songsList
 
 const val ARG_POS = "pos"
 
-class CoverPageFragment: ReproductorFragment() {
+class CoverPageFragment: Fragment() {
 
     var position = 0
-    lateinit var canciones: MutableList<Song>
-
-    override fun onBackPressFragment() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,17 +37,16 @@ class CoverPageFragment: ReproductorFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.imageView.setImageResource(canciones[position].coverPage)
+        binding.imageView.setImageResource(songsList[position].coverPage)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(position: Int, canciones: MutableList<Song>) =
+        fun newInstance(position: Int) =
             CoverPageFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_POS, position)
                 }
-                this.canciones = canciones
             }
     }
 }
