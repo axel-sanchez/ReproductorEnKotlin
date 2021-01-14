@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.data.models.Song
+import com.bumptech.glide.Glide
 
 class SongAdapter (private var mItems: List<Song>,
                    private val clickListener: (Song) -> Unit) : RecyclerView.Adapter<SongAdapter.ViewHolder>() {
@@ -23,8 +24,9 @@ class SongAdapter (private var mItems: List<Song>,
 
             itemView.setOnClickListener { clickListener(item) }
 
-            image.setImageResource(item.coverPage)
-
+            Glide.with(itemView)
+                .load(item.coverPage)
+                .into(image)
         }
     }
 
