@@ -53,7 +53,7 @@ class LibraryFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        viewAdapter = SongAdapter(requireActivity(), canciones) { itemClick(it) }
+        viewAdapter = SongAdapter(canciones) { itemClick(it) }
 
         viewManager = GridLayoutManager(this.requireContext(), 2)
 

@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.data.models.FeaturedPlaylist
 import com.axel.reproductorenkotlin.data.models.ItemSong
-import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.data.models.Token
 import com.axel.reproductorenkotlin.data.service.ApiService
 import com.axel.reproductorenkotlin.databinding.FragmentHomeBinding
-import com.axel.reproductorenkotlin.ui.view.adapter.PlaylistAdapter
+import com.axel.reproductorenkotlin.ui.view.adapter.ExploreAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -123,7 +122,7 @@ class ExploreFragment: Fragment() {
     }
 
     private fun setAdapter() {
-        viewAdapter = PlaylistAdapter(listItems) { itemClick(it) }
+        viewAdapter = ExploreAdapter(listItems) { itemClick(it) }
 
         viewManager = GridLayoutManager(this.requireContext(), 2)
 

@@ -11,15 +11,15 @@ import com.axel.reproductorenkotlin.data.models.ItemSong
 import com.bumptech.glide.Glide
 import java.lang.Exception
 
-class PlaylistAdapter(
+class ExploreAdapter(
     private val dataList: List<ItemSong>,
-    private val itemClick: (ItemSong) -> Unit): RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
+    private val itemClick: (ItemSong) -> Unit): RecyclerView.Adapter<ExploreAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var image: ImageView = itemView.findViewById(R.id.image)
         private var cardView: CardView = itemView.findViewById(R.id.cardView)
 
-        fun bind(position: Int, item: ItemSong, itemClick: (ItemSong) -> Unit){
+        fun bind(item: ItemSong, itemClick: (ItemSong) -> Unit){
             cardView.setOnClickListener { itemClick(item) }
 
             try {
@@ -38,7 +38,7 @@ class PlaylistAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position, dataList[position], itemClick)
+        holder.bind(dataList[position], itemClick)
     }
 
     override fun getItemCount(): Int {

@@ -45,7 +45,7 @@ class HomeFragment: Fragment() {
     }
 
     private fun setAdapter() {
-        viewAdapter = SongAdapter(requireActivity(), songsList) { itemClick(it) }
+        viewAdapter = SongAdapter(songsList) { itemClick(it) }
 
         viewManager = GridLayoutManager(this.requireContext(), 2)
 
