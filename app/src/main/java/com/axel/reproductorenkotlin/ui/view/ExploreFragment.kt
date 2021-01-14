@@ -1,128 +1,71 @@
 package com.axel.reproductorenkotlin.ui.view
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.axel.reproductorenkotlin.data.models.FeaturedPlaylist
+import com.axel.reproductorenkotlin.common.hide
+import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.ItemSong
-import com.axel.reproductorenkotlin.data.models.Token
-import com.axel.reproductorenkotlin.data.service.ApiService
+import com.axel.reproductorenkotlin.databinding.FragmentExploreBinding
 import com.axel.reproductorenkotlin.databinding.FragmentHomeBinding
 import com.axel.reproductorenkotlin.ui.view.adapter.ExploreAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
-const val BASE_URL = "https://api.spotify.com/v1/"
+import com.axel.reproductorenkotlin.viewmodel.ExploreViewModel
+import org.koin.android.ext.android.inject
 
 class ExploreFragment: Fragment() {
-
-    private lateinit var serviceToken: ApiService
-    private lateinit var service: ApiService
-
-    private var listItems = mutableListOf<ItemSong>()
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    var bearer = ""
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-
-        val retrofitToken: Retrofit = Retrofit.Builder()
-            .baseUrl("https://accounts.spotify.com")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        serviceToken = retrofitToken.create(ApiService::class.java)
-
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        service = retrofit.create(ApiService::class.java)
-
-        getToken()
-
+    private val viewModelFactory: ExploreViewModel.ExploreViewModelFactory by inject()
+    private val viewModel: ExploreViewModel by lazy {
+        ViewModelProviders.of(requireActivity(), viewModelFactory).get(ExploreViewModel::class.java)
     }
 
-    private fun getToken() {
-        //Recibimos el token de spotify
-        serviceToken.getToken().enqueue(object : Callback<Token> {
-            override fun onResponse(call: Call<Token>, response: Response<Token>) {
-                if (response.isSuccessful) {
-                    println("body token: ${response.body()!!.getAccessToken()}")
-                    bearer = response.body()!!.getAccessToken()
-                    //search()
-
-                    getFeaturedPlaylists()
-                } else {
-                    println("response token: $response")
-                }
-            }
-
-            override fun onFailure(call: Call<Token>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
-    }
-
-    fun getFeaturedPlaylists() {
-        try {
-            service.getFeaturedPlaylists(
-                "Bearer $bearer"
-            ).enqueue(object : Callback<FeaturedPlaylist> {
-                @RequiresApi(Build.VERSION_CODES.N)
-                override fun onResponse(call: Call<FeaturedPlaylist>, response: Response<FeaturedPlaylist>) {
-                    if (response.isSuccessful) {
-                        var body = response.body()
-
-                        listItems = body!!.getPlaylists().getItems().toMutableList()
-
-                        listItems.removeIf { x -> x.getImages()[0].getUrl().isNullOrEmpty() }
-
-                        setAdapter()
-                    } else {
-                        println("error response song: $response")
-                    }
-                }
-
-                override fun onFailure(call: Call<FeaturedPlaylist>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-    }
-
-    private var fragmentHomeBinding: FragmentHomeBinding? = null
-    private val binding get() = fragmentHomeBinding!!
+    private var fragmentExploreBinding: FragmentExploreBinding? = null
+    private val binding get() = fragmentExploreBinding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        fragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
+        fragmentExploreBinding = FragmentExploreBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        fragmentHomeBinding = null
+        fragmentExploreBinding = null
     }
 
-    private fun setAdapter() {
-        viewAdapter = ExploreAdapter(listItems) { itemClick(it) }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.recyclerView.hide()
+        binding.progress.playAnimation()
+
+        setUpObserveViewModel()
+    }
+
+    private fun setUpObserveViewModel() {
+        viewModel.getItemSongListLiveData().observe(viewLifecycleOwner, {
+            binding.progress.cancelAnimation()
+            binding.progress.hide()
+            binding.recyclerView.show()
+            setAdapter(it)
+        })
+    }
+
+    private fun setAdapter(itemSongList: MutableList<ItemSong?>) {
+        viewAdapter = ExploreAdapter(itemSongList) { itemClick(it) }
 
         viewManager = GridLayoutManager(this.requireContext(), 2)
 

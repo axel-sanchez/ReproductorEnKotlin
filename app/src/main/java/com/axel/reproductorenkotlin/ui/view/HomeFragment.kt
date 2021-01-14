@@ -22,7 +22,6 @@ class HomeFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
 
     private var fragmentHomeBinding: FragmentHomeBinding? = null
