@@ -6,15 +6,15 @@ import com.axel.reproductorenkotlin.domain.ExploreUseCase
 import kotlinx.coroutines.launch
 
 /**
- * View model de [MyFragment]
+ * View model de [ExploreFragment]
  * @author Axel Sanchez
  */
 class ExploreViewModel(private val exploreUseCase: ExploreUseCase) : ViewModel() {
 
-    private val listData = MutableLiveData<MutableList<ItemSong?>>()
-
-    init {
-        getItemSongList()
+    private val listData: MutableLiveData<MutableList<ItemSong?>> by lazy {
+        MutableLiveData<MutableList<ItemSong?>>().also {
+            getItemSongList()
+        }
     }
 
     private fun setListData(itemSongList: MutableList<ItemSong?>) {

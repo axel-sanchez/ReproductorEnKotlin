@@ -32,5 +32,4 @@ val moduleApp = module {
     single(name = "service") { (get(name = "retrofit") as Retrofit).create(ApiService::class.java) }
 
     single { ExploreUseCase() }
-    single { ExploreViewModel.ExploreViewModelFactory(get()) }
 }

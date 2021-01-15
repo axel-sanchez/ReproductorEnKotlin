@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.common.hide
 import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.ItemSong
 import com.axel.reproductorenkotlin.databinding.FragmentExploreBinding
-import com.axel.reproductorenkotlin.databinding.FragmentHomeBinding
+import com.axel.reproductorenkotlin.domain.ExploreUseCase
 import com.axel.reproductorenkotlin.ui.view.adapter.ExploreAdapter
 import com.axel.reproductorenkotlin.viewmodel.ExploreViewModel
 import org.koin.android.ext.android.inject
@@ -23,10 +23,10 @@ class ExploreFragment: Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private val viewModelFactory: ExploreViewModel.ExploreViewModelFactory by inject()
-    private val viewModel: ExploreViewModel by lazy {
-        ViewModelProviders.of(requireActivity(), viewModelFactory).get(ExploreViewModel::class.java)
-    }
+    private val exploreUseCase: ExploreUseCase by inject()
+    private val viewModel: ExploreViewModel by activityViewModels(
+        factoryProducer = { ExploreViewModel.ExploreViewModelFactory(exploreUseCase) }
+    )
 
     private var fragmentExploreBinding: FragmentExploreBinding? = null
     private val binding get() = fragmentExploreBinding!!
