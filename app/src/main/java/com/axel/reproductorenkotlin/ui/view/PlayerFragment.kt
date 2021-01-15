@@ -5,13 +5,13 @@ import android.content.IntentFilter
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
@@ -22,26 +22,20 @@ import com.axel.reproductorenkotlin.helpers.PlayerHelper.millisToMinutesAndSecon
 import com.axel.reproductorenkotlin.helpers.SongHelper.songsList
 import com.axel.reproductorenkotlin.ui.view.adapter.ItemViewPager
 import com.axel.reproductorenkotlin.ui.view.adapter.ViewPageAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.axel.reproductorenkotlin.viewmodel.PlayerViewModel
 import java.util.*
 
 class PlayerFragment : Fragment() {
 
     lateinit var mediaPlayer: MediaPlayer
     var repeat: Int = 2
-    var minuteMilliSeconds: Float = 0.0f
-    var durationMilliSeconds: Float = 0.0f
-    var ejecutar = true
-    var iteratorSeconds: Float = 0.0f
     var posicion: Int = 0
     private lateinit var intentFilter: IntentFilter
     private lateinit var receiver: BroadcastReceiver
     var contador = 0
     var isFirstTime = true
 
-    private var canChangeView = true
+    private val viewModel: PlayerViewModel by activityViewModels()
 
     companion object {
         var copyPosition = 0
@@ -72,13 +66,19 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpObserverPlayer()
+
         binding.btnDetener.setOnClickListener { stopSong() }
 
-        binding.btnSiguiente.setOnClickListener { binding.viewpager.currentItem = binding.viewpager.currentItem + 1 }
+        binding.btnSiguiente.setOnClickListener {
+            binding.viewpager.currentItem = binding.viewpager.currentItem + 1
+        }
 
         binding.btnMinimizar.setOnClickListener { navigateToPlaylistFragment() }
 
-        binding.btnAnterior.setOnClickListener { binding.viewpager.currentItem = binding.viewpager.currentItem - 1 }
+        binding.btnAnterior.setOnClickListener {
+            binding.viewpager.currentItem = binding.viewpager.currentItem - 1
+        }
 
         binding.btnRepeat.setOnClickListener { repeatSong() }
 
@@ -88,14 +88,14 @@ class PlayerFragment : Fragment() {
 
         binding.txtName.text = songsList[copyPosition].name
 
-        durationMilliSeconds = mediaPlayer.duration.toFloat() //En milisegundos
-        binding.txtDuration.text = millisToMinutesAndSeconds(durationMilliSeconds)
-        binding.progressBar.max = durationMilliSeconds.toInt()
+        viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat() //En milisegundos
+        binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
+        binding.progressBar.max = viewModel.time.durationMilliSeconds.toInt()
 
         binding.progressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    iteratorSeconds = progress / 1000f
+                    viewModel.time.iteratorSeconds = progress / 1000f
                     mediaPlayer.seekTo(progress)
                 }
             }
@@ -119,18 +119,22 @@ class PlayerFragment : Fragment() {
         binding.viewpager.pageMargin = -64
 
         binding.viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                if(!isFirstTime) contador++
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                if (!isFirstTime) contador++
                 else isFirstTime = false
-                if(posicion == songsList.size - 1 && position == 10 && contador == 2) {
+                if (posicion == songsList.size - 1 && position == 10 && contador == 2) {
                     Toast.makeText(context, "No hay más canciones", Toast.LENGTH_SHORT).show()
                     contador = 0
-                }
-                else if(position == 0 && positionOffset == 0.0f && positionOffsetPixels == 0 && contador == 2){
-                    Toast.makeText(context, "No hay canciones anteriores", Toast.LENGTH_SHORT).show()
+                } else if (position == 0 && positionOffset == 0.0f && positionOffsetPixels == 0 && contador == 2) {
+                    Toast.makeText(context, "No hay canciones anteriores", Toast.LENGTH_SHORT)
+                        .show()
                     contador = 0
                 }
-                if(contador == 3) contador = 0
+                if (contador == 3) contador = 0
                 //TODO: ESTO NO ESTÁ ANDANDO BIEN
             }
 
@@ -142,43 +146,32 @@ class PlayerFragment : Fragment() {
         })
     }
 
+    private fun setUpObserverPlayer() {
+        viewModel.getTimeLiveData().observe(viewLifecycleOwner, {
+            binding.txtMinute.text = millisToMinutesAndSeconds(it.minuteMilliSeconds)
+            binding.progressBar.progress = it.minuteMilliSeconds.toInt()
+
+            if (it.requireNextSong) nextSongAuto()
+        })
+    }
+
     private fun playPauseSong() {
         if (mediaPlayer.isPlaying) {
             LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
-            ejecutar = false
+            viewModel.canExecute = false
             mediaPlayer.pause()
             binding.btnPlayPause.setBackgroundResource(R.drawable.playy)
         } else {
             LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, intentFilter)
             mediaPlayer.start()
             binding.btnPlayPause.setBackgroundResource(R.drawable.pause)
-            ejecutar = true
-            CoroutineScope(Dispatchers.IO).launch{
-                //TODO: DEBERÍA DE IMPLEMENTAR UN VIEW MODEL
-                while (iteratorSeconds < (durationMilliSeconds / 1000f) && ejecutar) {
-                    minuteMilliSeconds = iteratorSeconds * 1000 //En milisegundos
-                    if(canChangeView){
-                        binding.txtMinute.text = millisToMinutesAndSeconds(minuteMilliSeconds)
-                        binding.progressBar.progress = minuteMilliSeconds.toInt()
-                    }
-                    iteratorSeconds++
-                    SystemClock.sleep(1000)
-                }
-                if (iteratorSeconds >= (durationMilliSeconds / 1000f)) {
-                    nextSongAuto()
-                }
-            }
+            viewModel.canExecute = true
+
+            binding.txtMinute.text = millisToMinutesAndSeconds(viewModel.time.minuteMilliSeconds)
+            binding.progressBar.progress = viewModel.time.minuteMilliSeconds.toInt()
+            viewModel.getTime()
+
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        canChangeView = false
-    }
-
-    override fun onResume() {
-        super.onResume()
-        canChangeView = true
     }
 
     private fun navigateToPlaylistFragment() {
@@ -202,7 +195,7 @@ class PlayerFragment : Fragment() {
 
     fun previousSong() {
         if (mediaPlayer.isPlaying) {
-            iteratorSeconds = 0.0f
+            viewModel.time.iteratorSeconds = 0.0f
 
             try {
                 mediaPlayer.reset()
@@ -217,10 +210,10 @@ class PlayerFragment : Fragment() {
             posicion--
             mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
             binding.progressBar.progress = 0
-            minuteMilliSeconds = 0.0f
+            viewModel.time.minuteMilliSeconds = 0.0f
             binding.txtMinute.text = resources.getString(R.string.minuto)
-            durationMilliSeconds = mediaPlayer.duration.toFloat()
-            binding.progressBar.max = durationMilliSeconds.toInt()
+            viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
+            binding.progressBar.max = viewModel.time.durationMilliSeconds.toInt()
             binding.txtDuration.text = millisToMinutesAndSeconds(mediaPlayer.duration.toFloat())
             mediaPlayer.start()
 
@@ -228,8 +221,8 @@ class PlayerFragment : Fragment() {
         } else {
             posicion--
             mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
-            durationMilliSeconds = mediaPlayer.duration.toFloat()
-            binding.txtDuration.text = millisToMinutesAndSeconds(durationMilliSeconds)
+            viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
+            binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
             binding.txtMinute.text = resources.getString(R.string.minuto)
 
             binding.txtName.text = songsList[posicion].name
@@ -238,7 +231,7 @@ class PlayerFragment : Fragment() {
 
     fun nextSong() {
         if (mediaPlayer.isPlaying) {
-            iteratorSeconds = 0.0f
+            viewModel.time.iteratorSeconds = 0.0f
 
             try {
                 mediaPlayer.reset()
@@ -253,19 +246,19 @@ class PlayerFragment : Fragment() {
             posicion++
             mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
             binding.progressBar.progress = 0
-            minuteMilliSeconds = 0.0f
+            viewModel.time.minuteMilliSeconds = 0.0f
             binding.txtMinute.text = resources.getString(R.string.minuto)
-            durationMilliSeconds = mediaPlayer.duration.toFloat()
-            binding.progressBar.max = durationMilliSeconds.toInt()
-            binding.txtDuration.text = millisToMinutesAndSeconds(durationMilliSeconds)
+            viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
+            binding.progressBar.max = viewModel.time.durationMilliSeconds.toInt()
+            binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
             mediaPlayer.start()
 
             binding.txtName.text = songsList[posicion].name
         } else {
             posicion++
             mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
-            durationMilliSeconds = mediaPlayer.duration.toFloat()
-            binding.txtDuration.text = millisToMinutesAndSeconds(durationMilliSeconds)
+            viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
+            binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
             binding.txtMinute.text = resources.getString(R.string.minuto)
 
             binding.txtName.text = songsList[posicion].name
@@ -274,7 +267,7 @@ class PlayerFragment : Fragment() {
 
     private fun nextSongAuto() {
         if (posicion < songsList.size - 1) {
-            iteratorSeconds = 0.0f
+            viewModel.time.iteratorSeconds = 0.0f
             try {
                 mediaPlayer.reset()
                 mediaPlayer.prepareAsync()
@@ -287,18 +280,16 @@ class PlayerFragment : Fragment() {
             posicion++
             mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
             binding.progressBar.progress = 0
-            minuteMilliSeconds = 0.0f
+            viewModel.time.minuteMilliSeconds = 0.0f
             binding.txtMinute.text = resources.getString(R.string.minuto)
-            durationMilliSeconds = mediaPlayer.duration.toFloat()
-            binding.progressBar.max = durationMilliSeconds.toInt()
-            binding.txtDuration.text = millisToMinutesAndSeconds(durationMilliSeconds)
+            viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
+            binding.progressBar.max = viewModel.time.durationMilliSeconds.toInt()
+            binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
             mediaPlayer.start()
 
             activity?.runOnUiThread {
-                if(canChangeView){
-                    binding.txtName.text = songsList[posicion].name
-                    binding.viewpager.currentItem = binding.viewpager.currentItem + 1
-                }
+                binding.txtName.text = songsList[posicion].name
+                binding.viewpager.currentItem = binding.viewpager.currentItem + 1
             }
         } else {
             activity?.runOnUiThread {
@@ -306,7 +297,7 @@ class PlayerFragment : Fragment() {
                 binding.btnPlayPause.setBackgroundResource(R.drawable.playy)
                 binding.progressBar.progress = 0
                 binding.txtMinute.text = resources.getString(R.string.minuto)
-                ejecutar = false
+                viewModel.canExecute = false
                 try {
                     mediaPlayer.reset()
                     mediaPlayer.prepareAsync()
@@ -317,14 +308,14 @@ class PlayerFragment : Fragment() {
                 }
                 posicion = songsList.size - 2
                 mediaPlayer = MediaPlayer.create(context, songsList[posicion].song)
-                minuteMilliSeconds = 0.0f
+                viewModel.time.minuteMilliSeconds = 0.0f
             }
         }
     }
 
     private fun stopSong() {
         if (mediaPlayer.isPlaying) {
-            ejecutar = false
+            viewModel.canExecute = false
             try {
                 mediaPlayer.reset()
                 mediaPlayer.prepareAsync()
@@ -339,24 +330,24 @@ class PlayerFragment : Fragment() {
 
             binding.txtMinute.text = resources.getString(R.string.minuto)
             binding.progressBar.progress = 0
-            minuteMilliSeconds = 0.0f
-            iteratorSeconds = 0.0f
+            viewModel.time.minuteMilliSeconds = 0.0f
+            viewModel.time.iteratorSeconds = 0.0f
 
-            durationMilliSeconds = mediaPlayer.duration.toFloat()
-            binding.txtDuration.text = millisToMinutesAndSeconds(durationMilliSeconds)
+            viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
+            binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
 
             binding.btnPlayPause.setBackgroundResource(R.drawable.playy)
             binding.txtName.text = songsList[posicion].name
         } else {
-            ejecutar = false
+            viewModel.canExecute = false
             posicion = 0
             mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
             binding.txtMinute.text = resources.getString(R.string.minuto)
             binding.progressBar.progress = 0
-            minuteMilliSeconds = 0.0f
-            iteratorSeconds = 0.0f
-            durationMilliSeconds = mediaPlayer.duration.toFloat()
-            binding.txtDuration.text = millisToMinutesAndSeconds(durationMilliSeconds)
+            viewModel.time.minuteMilliSeconds = 0.0f
+            viewModel.time.iteratorSeconds = 0.0f
+            viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
+            binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
 
             binding.txtName.text = songsList[posicion].name
         }
