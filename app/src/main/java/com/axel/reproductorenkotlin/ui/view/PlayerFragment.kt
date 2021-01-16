@@ -35,10 +35,6 @@ class PlayerFragment : Fragment() {
 
     private val viewModel: PlayerViewModel by activityViewModels()
 
-    companion object {
-        var copyPosition = 0
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -51,11 +47,7 @@ class PlayerFragment : Fragment() {
     private var fragmentPlayerBinding: FragmentPlayerBinding? = null
     private val binding get() = fragmentPlayerBinding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentPlayerBinding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -72,8 +64,8 @@ class PlayerFragment : Fragment() {
 
         setUpListeners()
 
-        mediaPlayer = MediaPlayer.create(this.context, songsList[copyPosition].song)
-        binding.txtName.text = songsList[copyPosition].name
+        mediaPlayer = MediaPlayer.create(this.context, songsList[position].song)
+        binding.txtName.text = songsList[position].name
 
         adapterViewPager()
 
@@ -135,6 +127,9 @@ class PlayerFragment : Fragment() {
                 if (fromUser) {
                     viewModel.time.iteratorSeconds = progress / 1000f
                     mediaPlayer.seekTo(progress)
+                    viewModel.time.minuteMilliSeconds = viewModel.time.iteratorSeconds * 1000
+                    binding.txtMinute.text = millisToMinutesAndSeconds(viewModel.time.minuteMilliSeconds)
+                    binding.progressBar.progress = viewModel.time.minuteMilliSeconds.toInt()
                 }
             }
 
@@ -168,7 +163,6 @@ class PlayerFragment : Fragment() {
             binding.txtMinute.text = millisToMinutesAndSeconds(viewModel.time.minuteMilliSeconds)
             binding.progressBar.progress = viewModel.time.minuteMilliSeconds.toInt()
             viewModel.getTime()
-
         }
     }
 
