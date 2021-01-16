@@ -5,14 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.databinding.FragmentMainBinding
 import com.axel.reproductorenkotlin.helpers.SongHelper
+import com.axel.reproductorenkotlin.viewmodel.PlayerViewModel
 
 class MainFragment : Fragment() {
+
+    private val viewModelPlayer: PlayerViewModel by activityViewModels(
+        factoryProducer = { PlayerViewModel.PlayerViewModelFactory(requireActivity().applicationContext) }
+    )
 
     private var fragmentMainBinding: FragmentMainBinding? = null
     private val binding get() = fragmentMainBinding!!
@@ -35,7 +41,7 @@ class MainFragment : Fragment() {
 
         setUpListenerPlayer()
 
-        updateTextInBtnPlayer(SongHelper.songsList[0].name)
+        updateTextInBtnPlayer(SongHelper.songsList[viewModelPlayer.getPosition()].name)
     }
 
     private fun setUpListenerPlayer() {
@@ -44,7 +50,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    fun updateTextInBtnPlayer(name: String){
+    private fun updateTextInBtnPlayer(name: String){
         binding.btnPlayer.text = name
     }
 }
