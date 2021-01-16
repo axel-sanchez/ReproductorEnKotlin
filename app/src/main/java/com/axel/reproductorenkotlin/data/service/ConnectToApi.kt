@@ -41,7 +41,7 @@ class ConnectToApi : KoinComponent {
 
         token?.let {
             try {
-                val response = service.getFeaturedPlaylists("Bearer $token")
+                val response = service.getFeaturedPlaylists("Bearer $token", "AR")
                 if (response.isSuccessful) {
                     Log.i("Successful Response", response.body().toString())
                     mutableLiveData.value = response.body()?.getPlaylists()?.getItems()?.toMutableList() ?: mutableListOf()

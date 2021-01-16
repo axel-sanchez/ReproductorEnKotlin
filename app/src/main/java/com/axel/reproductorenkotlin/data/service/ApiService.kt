@@ -4,10 +4,7 @@ import com.axel.reproductorenkotlin.data.models.FeaturedPlaylist
 import com.axel.reproductorenkotlin.data.models.Token
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -16,5 +13,5 @@ interface ApiService {
     suspend fun getToken(): Response<Token>
 
     @GET("browse/featured-playlists")
-    suspend fun getFeaturedPlaylists(@Header("Authorization") token: String): Response<FeaturedPlaylist>
+    suspend fun getFeaturedPlaylists(@Header("Authorization") token: String, @Query("country") country: String): Response<FeaturedPlaylist>
 }
