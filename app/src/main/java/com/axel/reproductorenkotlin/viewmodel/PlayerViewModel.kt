@@ -43,7 +43,7 @@ class PlayerViewModel(private val context: Context) : ViewModel() {
         initializeMediaPlayer()
     }
 
-    private lateinit var job: Job
+    lateinit var job: Job
 
     private val listData = MutableLiveData<MyTime>()
 

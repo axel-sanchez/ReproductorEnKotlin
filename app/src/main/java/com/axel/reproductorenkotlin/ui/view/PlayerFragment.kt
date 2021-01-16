@@ -105,6 +105,7 @@ class PlayerFragment : Fragment() {
         binding.viewpager.adapter = adapter
 
         binding.viewpager.pageMargin = -64
+        binding.viewpager.currentItem = viewModel.getPosition()
     }
 
     private fun setUpListeners(){

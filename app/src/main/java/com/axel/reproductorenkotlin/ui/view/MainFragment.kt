@@ -36,6 +36,8 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mainFragmentInstance = this
+
         val navController = requireActivity().findNavController(R.id.fragment2)
         binding.bottomNavigationView.setupWithNavController(navController)
 
@@ -52,5 +54,9 @@ class MainFragment : Fragment() {
 
     private fun updateTextInBtnPlayer(name: String){
         binding.btnPlayer.text = name
+    }
+
+    companion object{
+        lateinit var mainFragmentInstance: MainFragment
     }
 }

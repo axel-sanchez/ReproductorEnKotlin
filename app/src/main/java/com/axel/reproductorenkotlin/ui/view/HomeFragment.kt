@@ -6,15 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.databinding.FragmentHomeBinding
+import com.axel.reproductorenkotlin.helpers.PlayerHelper
 import com.axel.reproductorenkotlin.helpers.SongHelper.songsList
 import com.axel.reproductorenkotlin.ui.view.adapter.SongAdapter
+import com.axel.reproductorenkotlin.viewmodel.PlayerViewModel
 
-class HomeFragment: Fragment() {
+class HomeFragment : Fragment() {
+
+    private val viewModelPlayer: PlayerViewModel by activityViewModels(
+        factoryProducer = { PlayerViewModel.PlayerViewModelFactory(requireActivity().applicationContext) }
+    )
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -61,7 +69,33 @@ class HomeFragment: Fragment() {
         }
     }
 
-    private fun itemClick(song: Song){
-        Toast.makeText(context, "presiono la canción ${song.name}", Toast.LENGTH_SHORT).show()
+    private fun itemClick(song: Song) {
+        //Toast.makeText(context, "presiono la canción ${song.name}", Toast.LENGTH_SHORT).show()
+        prepareSongSelected(song)
+        MainFragment.mainFragmentInstance.findNavController().navigate(R.id.toPlayerFragment)
+    }
+
+    private fun prepareSongSelected(song: Song) {
+        if (viewModelPlayer.mediaPlayerIsPlaying()) {
+            viewModelPlayer.getTime().iteratorSeconds = 0.0f
+
+            viewModelPlayer.resetAndPrepareMediaPlayer()
+
+            viewModelPlayer.setPosition(songsList.indexOf(song))
+            viewModelPlayer.initializeMediaPlayer()
+            viewModelPlayer.getTime().minuteMilliSeconds = 0.0f
+            viewModelPlayer.getTime().durationMilliSeconds = viewModelPlayer.getSongDuration()
+            viewModelPlayer.playSong()
+        } else {
+            viewModelPlayer.getTime().iteratorSeconds = 0.0f
+            viewModelPlayer.setPosition(songsList.indexOf(song))
+            viewModelPlayer.initializeMediaPlayer()
+            viewModelPlayer.getTime().minuteMilliSeconds = 0.0f
+            viewModelPlayer.getTime().durationMilliSeconds = viewModelPlayer.getSongDuration()
+            viewModelPlayer.setCanExecute(true)
+            viewModelPlayer.playSong()
+            viewModelPlayer.job.cancel()
+            viewModelPlayer.runSong()
+        }
     }
 }
