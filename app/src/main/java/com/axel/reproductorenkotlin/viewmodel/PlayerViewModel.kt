@@ -17,6 +17,8 @@ import kotlin.coroutines.coroutineContext
  */
 class PlayerViewModel(private val context: Context) : ViewModel() {
 
+    var job: Job? = null
+
     private var canExecute = true
     fun setCanExecute(newCanExecute: Boolean){
         canExecute = newCanExecute
@@ -42,8 +44,6 @@ class PlayerViewModel(private val context: Context) : ViewModel() {
     init {
         initializeMediaPlayer()
     }
-
-    lateinit var job: Job
 
     private val listData = MutableLiveData<MyTime>()
 
@@ -76,7 +76,7 @@ class PlayerViewModel(private val context: Context) : ViewModel() {
                 delay(1000)
             }
         }
-        job.cancel()
+        job?.cancel()
     }
 
     fun playSong() {

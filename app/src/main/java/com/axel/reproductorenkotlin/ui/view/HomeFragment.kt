@@ -70,7 +70,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun itemClick(song: Song) {
-        //Toast.makeText(context, "presiono la canción ${song.name}", Toast.LENGTH_SHORT).show()
         prepareSongSelected(song)
         MainFragment.mainFragmentInstance.findNavController().navigate(R.id.toPlayerFragment)
     }
@@ -94,7 +93,7 @@ class HomeFragment : Fragment() {
             viewModelPlayer.getTime().durationMilliSeconds = viewModelPlayer.getSongDuration()
             viewModelPlayer.setCanExecute(true)
             viewModelPlayer.playSong()
-            viewModelPlayer.job.cancel()
+            viewModelPlayer.job?.cancel()
             viewModelPlayer.runSong()
         }
     }
