@@ -1,23 +1,47 @@
 package com.axel.reproductorenkotlin.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.content.Context
+import android.media.MediaPlayer
+import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.MyTime
+import com.axel.reproductorenkotlin.helpers.SongHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.dsl.module.applicationContext
+import kotlin.coroutines.coroutineContext
 
 /**
  * View model de [PlayerFragment]
  * @author Axel Sanchez
  */
-class PlayerViewModel : ViewModel() {
+class PlayerViewModel(private val context: Context) : ViewModel() {
 
-    var canExecute = true
+    private var canExecute = true
+    fun setCanExecute(newCanExecute: Boolean){
+        canExecute = newCanExecute
+    }
+    fun setNextPosition(){
+        position++
+    }
+    fun setPreviousPosition(){
+        position--
+    }
 
-    var time = MyTime()
+    private var position: Int = 0
+    fun getPosition() = position
+    fun setPosition(newPosition: Int) {
+        position = newPosition
+    }
+
+    private var time = MyTime()
+    fun getTime() = time
+
+    private lateinit var mediaPlayer: MediaPlayer
+
+    init {
+        initializeMediaPlayer()
+    }
 
     private lateinit var job: Job
 
@@ -27,7 +51,7 @@ class PlayerViewModel : ViewModel() {
         listData.postValue(myTime)
     }
 
-    fun getTime() {
+    fun runSong() {
         job = viewModelScope.launch {
             countTimer()
         }
@@ -42,11 +66,10 @@ class PlayerViewModel : ViewModel() {
 
             time.requireNextSong = time.iteratorSeconds >= (time.durationMilliSeconds / 1000f)
 
-            if(time.requireNextSong){
+            if (time.requireNextSong) {
                 setListData(time)
                 delay(1000)
-            }
-            else{
+            } else {
                 time.minuteMilliSeconds = time.iteratorSeconds * 1000
                 time.iteratorSeconds++
                 setListData(time)
@@ -54,5 +77,48 @@ class PlayerViewModel : ViewModel() {
             }
         }
         job.cancel()
+    }
+
+    fun playSong() {
+        mediaPlayer.start()
+    }
+
+    fun pauseSong() {
+        mediaPlayer.pause()
+    }
+
+    fun initializeMediaPlayer() {
+        mediaPlayer = MediaPlayer.create(context, SongHelper.songsList[position].song)
+    }
+
+    fun mediaPlayerIsPlaying() = mediaPlayer.isPlaying
+
+    fun getSongDuration() = mediaPlayer.duration.toFloat()
+
+    fun resetAndPrepareMediaPlayer() {
+        try {
+            mediaPlayer.reset()
+            mediaPlayer.prepareAsync()
+            mediaPlayer.stop()
+            mediaPlayer.release()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun setMediaPlayerLooping(isLooping: Boolean) {
+        mediaPlayer.isLooping = isLooping
+    }
+
+    fun setNewProgress(progress: Int) {
+        mediaPlayer.seekTo(progress)
+    }
+
+    class PlayerViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return modelClass.getConstructor(Context::class.java).newInstance(context)
+        }
     }
 }
