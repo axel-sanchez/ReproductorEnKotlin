@@ -29,11 +29,9 @@ class PlayerFragment : Fragment() {
 
     lateinit var mediaPlayer: MediaPlayer
     var repeat: Int = 2
-    var posicion: Int = 0
+    var position: Int = 0
     private lateinit var intentFilter: IntentFilter
     private lateinit var receiver: BroadcastReceiver
-    var contador = 0
-    var isFirstTime = true
 
     private val viewModel: PlayerViewModel by activityViewModels()
 
@@ -84,23 +82,10 @@ class PlayerFragment : Fragment() {
 
     private fun setOnPageChangeListener() {
         binding.viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                if (!isFirstTime) contador++
-                else isFirstTime = false
-                if (posicion == songsList.size - 1 && position == 10 && contador == 2) {
-                    Toast.makeText(context, "No hay más canciones", Toast.LENGTH_SHORT).show()
-                    contador = 0
-                } else if (position == 0 && positionOffset == 0.0f && positionOffsetPixels == 0 && contador == 2) {
-                    Toast.makeText(context, "No hay canciones anteriores", Toast.LENGTH_SHORT).show()
-                    contador = 0
-                }
-                if (contador == 3) contador = 0
-                //TODO: ESTO NO ESTÁ ANDANDO BIEN
-            }
-
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageSelected(position: Int) {
-                if (position < posicion) previousSong()
+                if (position < this@PlayerFragment.position) previousSong()
                 else nextSong()
             }
         })
@@ -130,13 +115,15 @@ class PlayerFragment : Fragment() {
         binding.btnDetener.setOnClickListener { stopSong() }
 
         binding.btnSiguiente.setOnClickListener {
-            binding.viewpager.currentItem = binding.viewpager.currentItem + 1
+            if(position == songsList.size -1) Toast.makeText(requireContext(), "There aren't next songs", Toast.LENGTH_SHORT).show()
+            else binding.viewpager.currentItem = binding.viewpager.currentItem + 1
         }
 
         binding.btnMinimizar.setOnClickListener { navigateToPlaylistFragment() }
 
         binding.btnAnterior.setOnClickListener {
-            binding.viewpager.currentItem = binding.viewpager.currentItem - 1
+            if(position == 0) Toast.makeText(requireContext(), "There aren't previous songs", Toast.LENGTH_SHORT).show()
+            else binding.viewpager.currentItem = binding.viewpager.currentItem - 1
         }
 
         binding.btnRepeat.setOnClickListener { repeatSong() }
@@ -204,7 +191,7 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    fun previousSong() {
+    private fun previousSong() {
         if (mediaPlayer.isPlaying) {
             viewModel.time.iteratorSeconds = 0.0f
 
@@ -218,8 +205,8 @@ class PlayerFragment : Fragment() {
                 e.printStackTrace()
             }
 
-            posicion--
-            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            position--
+            mediaPlayer = MediaPlayer.create(this.context, songsList[position].song)
             binding.progressBar.progress = 0
             viewModel.time.minuteMilliSeconds = 0.0f
             binding.txtMinute.text = resources.getString(R.string.minuto)
@@ -228,19 +215,19 @@ class PlayerFragment : Fragment() {
             binding.txtDuration.text = millisToMinutesAndSeconds(mediaPlayer.duration.toFloat())
             mediaPlayer.start()
 
-            binding.txtName.text = songsList[posicion].name
+            binding.txtName.text = songsList[position].name
         } else {
-            posicion--
-            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            position--
+            mediaPlayer = MediaPlayer.create(this.context, songsList[position].song)
             viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
             binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
             binding.txtMinute.text = resources.getString(R.string.minuto)
 
-            binding.txtName.text = songsList[posicion].name
+            binding.txtName.text = songsList[position].name
         }
     }
 
-    fun nextSong() {
+    private fun nextSong() {
         if (mediaPlayer.isPlaying || viewModel.time.requireNextSong) {
             viewModel.time.iteratorSeconds = 0.0f
 
@@ -254,8 +241,8 @@ class PlayerFragment : Fragment() {
                 e.printStackTrace()
             }
 
-            posicion++
-            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            position++
+            mediaPlayer = MediaPlayer.create(this.context, songsList[position].song)
             binding.progressBar.progress = 0
             viewModel.time.minuteMilliSeconds = 0.0f
             binding.txtMinute.text = resources.getString(R.string.minuto)
@@ -264,20 +251,20 @@ class PlayerFragment : Fragment() {
             binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
             mediaPlayer.start()
 
-            binding.txtName.text = songsList[posicion].name
+            binding.txtName.text = songsList[position].name
         } else {
-            posicion++
-            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            position++
+            mediaPlayer = MediaPlayer.create(this.context, songsList[position].song)
             viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
             binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
             binding.txtMinute.text = resources.getString(R.string.minuto)
 
-            binding.txtName.text = songsList[posicion].name
+            binding.txtName.text = songsList[position].name
         }
     }
 
     private fun nextSongAuto() {
-        if (posicion < songsList.size - 1) {
+        if (position < songsList.size - 1) {
             binding.viewpager.currentItem = binding.viewpager.currentItem + 1
         } else {
             activity?.runOnUiThread {
@@ -294,8 +281,8 @@ class PlayerFragment : Fragment() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                posicion = songsList.size - 2
-                mediaPlayer = MediaPlayer.create(context, songsList[posicion].song)
+                position = songsList.size - 2
+                mediaPlayer = MediaPlayer.create(context, songsList[position].song)
                 viewModel.time.minuteMilliSeconds = 0.0f
             }
         }
@@ -313,8 +300,7 @@ class PlayerFragment : Fragment() {
                 e.printStackTrace()
             }
 
-            posicion = 0
-            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            mediaPlayer = MediaPlayer.create(this.context, songsList[position].song)
 
             binding.txtMinute.text = resources.getString(R.string.minuto)
             binding.progressBar.progress = 0
@@ -325,11 +311,10 @@ class PlayerFragment : Fragment() {
             binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
 
             binding.btnPlayPause.setBackgroundResource(R.drawable.playy)
-            binding.txtName.text = songsList[posicion].name
+            binding.txtName.text = songsList[position].name
         } else {
             viewModel.canExecute = false
-            posicion = 0
-            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
+            mediaPlayer = MediaPlayer.create(this.context, songsList[position].song)
             binding.txtMinute.text = resources.getString(R.string.minuto)
             binding.progressBar.progress = 0
             viewModel.time.minuteMilliSeconds = 0.0f
@@ -337,7 +322,7 @@ class PlayerFragment : Fragment() {
             viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
             binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
 
-            binding.txtName.text = songsList[posicion].name
+            binding.txtName.text = songsList[position].name
         }
     }
 }
