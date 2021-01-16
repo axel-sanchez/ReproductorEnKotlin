@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.axel.reproductorenkotlin.data.models.MyTime
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -18,6 +19,8 @@ class PlayerViewModel : ViewModel() {
 
     var time = MyTime()
 
+    private lateinit var job: Job
+
     private val listData = MutableLiveData<MyTime>()
 
     private fun setListData(myTime: MyTime) {
@@ -25,7 +28,7 @@ class PlayerViewModel : ViewModel() {
     }
 
     fun getTime() {
-        viewModelScope.launch {
+        job = viewModelScope.launch {
             countTimer()
         }
     }
@@ -35,18 +38,21 @@ class PlayerViewModel : ViewModel() {
     }
 
     private suspend fun countTimer() {
-        while (time.iteratorSeconds < (time.durationMilliSeconds / 1000f) && canExecute) {
-            time.minuteMilliSeconds = time.iteratorSeconds * 1000 //En milisegundos
-            time.iteratorSeconds++
-            setListData(time)
-            delay(1000)
+        while (canExecute) {
+
+            time.requireNextSong = time.iteratorSeconds >= (time.durationMilliSeconds / 1000f)
+
+            if(time.requireNextSong){
+                setListData(time)
+                delay(1000)
+            }
+            else{
+                time.minuteMilliSeconds = time.iteratorSeconds * 1000
+                time.iteratorSeconds++
+                setListData(time)
+                delay(1000)
+            }
         }
-        if (time.iteratorSeconds >= (time.durationMilliSeconds / 1000f)) {
-            time.requireNextSong = true
-            setListData(time)
-        } else{
-            time.requireNextSong = false
-            setListData(time)
-        }
+        job.cancel()
     }
 }

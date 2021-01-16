@@ -53,7 +53,11 @@ class PlayerFragment : Fragment() {
     private var fragmentPlayerBinding: FragmentPlayerBinding? = null
     private val binding get() = fragmentPlayerBinding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         fragmentPlayerBinding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -68,6 +72,61 @@ class PlayerFragment : Fragment() {
 
         setUpObserverPlayer()
 
+        setUpListeners()
+
+        mediaPlayer = MediaPlayer.create(this.context, songsList[copyPosition].song)
+        binding.txtName.text = songsList[copyPosition].name
+
+        adapterViewPager()
+
+        setOnPageChangeListener()
+    }
+
+    private fun setOnPageChangeListener() {
+        binding.viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                if (!isFirstTime) contador++
+                else isFirstTime = false
+                if (posicion == songsList.size - 1 && position == 10 && contador == 2) {
+                    Toast.makeText(context, "No hay más canciones", Toast.LENGTH_SHORT).show()
+                    contador = 0
+                } else if (position == 0 && positionOffset == 0.0f && positionOffsetPixels == 0 && contador == 2) {
+                    Toast.makeText(context, "No hay canciones anteriores", Toast.LENGTH_SHORT).show()
+                    contador = 0
+                }
+                if (contador == 3) contador = 0
+                //TODO: ESTO NO ESTÁ ANDANDO BIEN
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {}
+            override fun onPageSelected(position: Int) {
+                if (position < posicion) previousSong()
+                else nextSong()
+            }
+        })
+    }
+
+    private fun adapterViewPager() {
+        viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat() //En milisegundos
+        binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
+        binding.progressBar.max = viewModel.time.durationMilliSeconds.toInt()
+
+        val listViewPager: MutableList<ItemViewPager> = LinkedList()
+        for (i in 0 until (songsList.size)) {
+            listViewPager.add(
+                ItemViewPager(
+                    "cancion $i",
+                    CoverPageFragment.newInstance(i)
+                )
+            )
+        }
+        val adapter = ViewPageAdapter(childFragmentManager, listViewPager)
+        binding.viewpager.adapter = adapter
+
+        binding.viewpager.pageMargin = -64
+    }
+
+    private fun setUpListeners(){
         binding.btnDetener.setOnClickListener { stopSong() }
 
         binding.btnSiguiente.setOnClickListener {
@@ -84,14 +143,6 @@ class PlayerFragment : Fragment() {
 
         binding.btnPlayPause.setOnClickListener { playPauseSong() }
 
-        mediaPlayer = MediaPlayer.create(this.context, songsList[copyPosition].song)
-
-        binding.txtName.text = songsList[copyPosition].name
-
-        viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat() //En milisegundos
-        binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
-        binding.progressBar.max = viewModel.time.durationMilliSeconds.toInt()
-
         binding.progressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
@@ -103,55 +154,15 @@ class PlayerFragment : Fragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
-
-        val listViewPager: MutableList<ItemViewPager> = LinkedList()
-        for (i in 0 until (songsList.size)) {
-            listViewPager.add(
-                ItemViewPager(
-                    "cancion $i",
-                    CoverPageFragment.newInstance(i)
-                )
-            )
-        }
-        val adapter = ViewPageAdapter(childFragmentManager, listViewPager)
-        binding.viewpager.adapter = adapter
-
-        binding.viewpager.pageMargin = -64
-
-        binding.viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                if (!isFirstTime) contador++
-                else isFirstTime = false
-                if (posicion == songsList.size - 1 && position == 10 && contador == 2) {
-                    Toast.makeText(context, "No hay más canciones", Toast.LENGTH_SHORT).show()
-                    contador = 0
-                } else if (position == 0 && positionOffset == 0.0f && positionOffsetPixels == 0 && contador == 2) {
-                    Toast.makeText(context, "No hay canciones anteriores", Toast.LENGTH_SHORT)
-                        .show()
-                    contador = 0
-                }
-                if (contador == 3) contador = 0
-                //TODO: ESTO NO ESTÁ ANDANDO BIEN
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageSelected(position: Int) {
-                if (position < posicion) previousSong()
-                else nextSong()
-            }
-        })
     }
 
     private fun setUpObserverPlayer() {
         viewModel.getTimeLiveData().observe(viewLifecycleOwner, {
-            binding.txtMinute.text = millisToMinutesAndSeconds(it.minuteMilliSeconds)
-            binding.progressBar.progress = it.minuteMilliSeconds.toInt()
-
             if (it.requireNextSong) nextSongAuto()
+            else{
+                binding.txtMinute.text = millisToMinutesAndSeconds(it.minuteMilliSeconds)
+                binding.progressBar.progress = it.minuteMilliSeconds.toInt()
+            }
         })
     }
 
@@ -230,7 +241,7 @@ class PlayerFragment : Fragment() {
     }
 
     fun nextSong() {
-        if (mediaPlayer.isPlaying) {
+        if (mediaPlayer.isPlaying || viewModel.time.requireNextSong) {
             viewModel.time.iteratorSeconds = 0.0f
 
             try {
@@ -267,30 +278,7 @@ class PlayerFragment : Fragment() {
 
     private fun nextSongAuto() {
         if (posicion < songsList.size - 1) {
-            viewModel.time.iteratorSeconds = 0.0f
-            try {
-                mediaPlayer.reset()
-                mediaPlayer.prepareAsync()
-                mediaPlayer.stop()
-                mediaPlayer.release()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            posicion++
-            mediaPlayer = MediaPlayer.create(this.context, songsList[posicion].song)
-            binding.progressBar.progress = 0
-            viewModel.time.minuteMilliSeconds = 0.0f
-            binding.txtMinute.text = resources.getString(R.string.minuto)
-            viewModel.time.durationMilliSeconds = mediaPlayer.duration.toFloat()
-            binding.progressBar.max = viewModel.time.durationMilliSeconds.toInt()
-            binding.txtDuration.text = millisToMinutesAndSeconds(viewModel.time.durationMilliSeconds)
-            mediaPlayer.start()
-
-            activity?.runOnUiThread {
-                binding.txtName.text = songsList[posicion].name
-                binding.viewpager.currentItem = binding.viewpager.currentItem + 1
-            }
+            binding.viewpager.currentItem = binding.viewpager.currentItem + 1
         } else {
             activity?.runOnUiThread {
                 Toast.makeText(context, "No hay más canciones", Toast.LENGTH_SHORT).show()
