@@ -1,9 +1,6 @@
 package com.axel.reproductorenkotlin.data.service
 
-import com.axel.reproductorenkotlin.data.models.FeaturedPlaylist
-import com.axel.reproductorenkotlin.data.models.Token
-import com.axel.reproductorenkotlin.data.models.User
-import com.axel.reproductorenkotlin.data.models.UserPlaylists
+import com.axel.reproductorenkotlin.data.models.*
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -22,4 +19,7 @@ interface ApiService {
 
     @GET("me/playlists")
     suspend fun getUserPlaylists(@Header("Authorization") token: String): Response<UserPlaylists?>
+
+    @GET("playlists/{playlist_id}/tracks")
+    suspend fun getSongsFromPlaylist(@Header("Authorization") token: String, @Path("playlist_id") idPlaylist: String, @Query("market") market: String): Response<PlaylistSongs?>
 }

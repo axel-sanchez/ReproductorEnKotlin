@@ -33,7 +33,7 @@ class SongAdapter (private var mItems: List<Song>,
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // create a new view
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cancion, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_song, parent, false)
         // set the view's size, margins, paddings and layout parameters ...
         return ViewHolder(view)
     }

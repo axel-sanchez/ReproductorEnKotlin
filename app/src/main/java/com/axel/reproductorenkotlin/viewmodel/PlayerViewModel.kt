@@ -1,6 +1,7 @@
 package com.axel.reproductorenkotlin.viewmodel
 
 import android.content.Context
+import android.media.AudioManager
 import android.media.MediaPlayer
 import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.MyTime
@@ -43,6 +44,12 @@ class PlayerViewModel(private val context: Context) : ViewModel() {
 
     init {
         initializeMediaPlayer()
+        /*val url = "https://p.scdn.co/mp3-preview/6ab93655e4ee0499785287a246be7ab309b93230?cid=774b29d4f13844c495f206cafdad9c86"
+        mediaPlayer = MediaPlayer().apply {
+            setAudioStreamType(AudioManager.STREAM_MUSIC)
+            setDataSource(url)
+            prepare() // might take long! (for buffering, etc)
+        }*/
     }
 
     private val listData = MutableLiveData<MyTime>()

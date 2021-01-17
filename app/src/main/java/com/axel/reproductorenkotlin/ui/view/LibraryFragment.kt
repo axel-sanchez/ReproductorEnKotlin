@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.common.hide
 import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.UserPlaylists
@@ -84,6 +87,8 @@ class LibraryFragment : Fragment() {
     }
 
     private fun itemClick(playlist: UserPlaylists.Item?) {
-        Toast.makeText(requireContext(), "presiono la playlist ${playlist?.name}", Toast.LENGTH_SHORT).show()
+        val bundle = bundleOf("idPlaylist" to playlist?.id)
+        findNavController().navigate(R.id.toSongsFragment, bundle, null, null)
+        //Toast.makeText(requireContext(), "presiono la playlist ${playlist?.name}", Toast.LENGTH_SHORT).show()
     }
 }

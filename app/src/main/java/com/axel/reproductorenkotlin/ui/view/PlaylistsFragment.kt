@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.axel.reproductorenkotlin.databinding.FragmentPlaylistBinding
 
-class PlaylistFragment: Fragment() {
+class PlaylistsFragment: Fragment() {
 
     private var fragmentPlaylistBinding: FragmentPlaylistBinding? = null
     private val binding get() = fragmentPlaylistBinding!!

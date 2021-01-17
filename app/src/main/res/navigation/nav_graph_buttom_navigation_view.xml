@@ -23,5 +23,19 @@
         android:id="@+id/libraryFragment"
         android:name="com.axel.reproductorenkotlin.ui.view.LibraryFragment"
         android:label="LibraryFragment"
-        tools:layout="@layout/fragment_library"/>
+        tools:layout="@layout/fragment_library">
+        <action
+            android:id="@+id/toSongsFragment"
+            app:destination="@id/songsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/songsFragment"
+        android:name="com.axel.reproductorenkotlin.ui.view.SongsFragment"
+        android:label="fragment_songs"
+        tools:layout="@layout/fragment_songs" >
+        <argument
+            android:name="idPlaylist"
+            app:argType="string"
+            android:defaultValue='""' />
+    </fragment>
 </navigation>
