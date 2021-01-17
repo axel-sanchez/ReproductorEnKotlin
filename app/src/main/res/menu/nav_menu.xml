@@ -28,7 +28,7 @@
             android:title="@string/library"/>
 
         <item
-            android:id="@+id/profile"
+            android:id="@+id/profileFragment"
             android:checkable="true"
             android:title="@string/profile"
             android:icon="@drawable/ic_person_gray_24dp"/>

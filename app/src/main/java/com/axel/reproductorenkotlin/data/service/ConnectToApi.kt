@@ -3,6 +3,7 @@ package com.axel.reproductorenkotlin.data.service
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axel.reproductorenkotlin.data.models.ItemSong
+import com.axel.reproductorenkotlin.data.models.User
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
@@ -37,25 +38,49 @@ class ConnectToApi : KoinComponent {
 
     suspend fun getItemSongList(): MutableLiveData<MutableList<ItemSong?>> {
         var mutableLiveData = MutableLiveData<MutableList<ItemSong?>>()
-        val token = getToken().value
+        //val token = getToken().value
 
-        token?.let {
-            try {
-                val response = service.getFeaturedPlaylists("Bearer $token", "AR")
-                if (response.isSuccessful) {
-                    Log.i("Successful Response", response.body().toString())
-                    mutableLiveData.value = response.body()?.getPlaylists()?.getItems()?.toMutableList() ?: mutableListOf()
-                } else {
-                    Log.i("Error Response", response.errorBody().toString())
-                    mutableLiveData.value = mutableListOf()
-                }
-            } catch (e: Exception) {
+        try {
+            val response = service.getFeaturedPlaylists("Bearer $token", "AR")
+            if (response.isSuccessful) {
+                Log.i("Successful Response", response.body().toString())
+                mutableLiveData.value =
+                    response.body()?.getPlaylists()?.getItems()?.toMutableList() ?: mutableListOf()
+            } else {
+                Log.i("Error Response", response.errorBody().toString())
                 mutableLiveData.value = mutableListOf()
-                Log.e("ConnectToApi", "Error al obtener las playlists y guardarlos en el livedata")
-                e.printStackTrace()
             }
-        } ?: kotlin.run { mutableLiveData.value = mutableListOf() }
+        } catch (e: Exception) {
+            mutableLiveData.value = mutableListOf()
+            Log.e("ConnectToApi", "Error al obtener las playlists y guardarlos en el livedata")
+            e.printStackTrace()
+        }
 
         return mutableLiveData
+    }
+
+    suspend fun getUser(): MutableLiveData<User?> {
+        var mutableLiveData = MutableLiveData<User?>()
+
+        try {
+            val response = service.getUser("Bearer $token")
+            if (response.isSuccessful) {
+                Log.i("Successful Response", response.body().toString())
+                mutableLiveData.value = response.body()
+            } else {
+                Log.i("Error Response", response.errorBody().toString())
+                mutableLiveData.value = null
+            }
+        } catch (e: Exception) {
+            mutableLiveData.value = null
+            Log.e("ConnectToApi", "Error al obtener el usuario y guardarlos en el livedata")
+            e.printStackTrace()
+        }
+
+        return mutableLiveData
+    }
+
+    companion object {
+        var token = ""
     }
 }

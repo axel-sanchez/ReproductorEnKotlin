@@ -2,6 +2,7 @@ package com.axel.reproductorenkotlin.data.service
 
 import com.axel.reproductorenkotlin.data.models.FeaturedPlaylist
 import com.axel.reproductorenkotlin.data.models.Token
+import com.axel.reproductorenkotlin.data.models.User
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -14,4 +15,7 @@ interface ApiService {
 
     @GET("browse/featured-playlists")
     suspend fun getFeaturedPlaylists(@Header("Authorization") token: String, @Query("country") country: String): Response<FeaturedPlaylist>
+
+    @GET("me")
+    suspend fun getUser(@Header("Authorization") token: String): Response<User>
 }

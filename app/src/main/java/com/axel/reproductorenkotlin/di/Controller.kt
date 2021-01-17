@@ -3,6 +3,7 @@ package com.axel.reproductorenkotlin.di
 import com.axel.reproductorenkotlin.data.service.ApiService
 import com.axel.reproductorenkotlin.data.service.ConnectToApi
 import com.axel.reproductorenkotlin.domain.ExploreUseCase
+import com.axel.reproductorenkotlin.domain.ProfileUseCase
 import com.axel.reproductorenkotlin.viewmodel.ExploreViewModel
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -32,4 +33,5 @@ val moduleApp = module {
     single(name = "service") { (get(name = "retrofit") as Retrofit).create(ApiService::class.java) }
 
     single { ExploreUseCase() }
+    single { ProfileUseCase() }
 }

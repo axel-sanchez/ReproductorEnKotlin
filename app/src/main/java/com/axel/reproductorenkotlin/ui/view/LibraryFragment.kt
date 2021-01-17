@@ -46,12 +46,6 @@ class LibraryFragment : Fragment() {
         fragmentHomeBinding = null
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        //setAdapter()
-    }
-
     private fun setAdapter() {
         viewAdapter = SongAdapter(canciones) { itemClick(it) }
 
