@@ -3,6 +3,7 @@ package com.axel.reproductorenkotlin.di
 import com.axel.reproductorenkotlin.data.service.ApiService
 import com.axel.reproductorenkotlin.data.service.ConnectToApi
 import com.axel.reproductorenkotlin.domain.ExploreUseCase
+import com.axel.reproductorenkotlin.domain.LibraryUseCase
 import com.axel.reproductorenkotlin.domain.ProfileUseCase
 import com.axel.reproductorenkotlin.viewmodel.ExploreViewModel
 import org.koin.dsl.module.module
@@ -34,4 +35,5 @@ val moduleApp = module {
 
     single { ExploreUseCase() }
     single { ProfileUseCase() }
+    single { LibraryUseCase() }
 }

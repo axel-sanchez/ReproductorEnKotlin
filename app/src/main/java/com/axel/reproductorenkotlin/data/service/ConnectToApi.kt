@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axel.reproductorenkotlin.data.models.ItemSong
 import com.axel.reproductorenkotlin.data.models.User
+import com.axel.reproductorenkotlin.data.models.UserPlaylists
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
@@ -38,7 +39,6 @@ class ConnectToApi : KoinComponent {
 
     suspend fun getItemSongList(): MutableLiveData<MutableList<ItemSong?>> {
         var mutableLiveData = MutableLiveData<MutableList<ItemSong?>>()
-        //val token = getToken().value
 
         try {
             val response = service.getFeaturedPlaylists("Bearer $token", "AR")
@@ -74,6 +74,27 @@ class ConnectToApi : KoinComponent {
         } catch (e: Exception) {
             mutableLiveData.value = null
             Log.e("ConnectToApi", "Error al obtener el usuario y guardarlos en el livedata")
+            e.printStackTrace()
+        }
+
+        return mutableLiveData
+    }
+
+    suspend fun getUserPlaylists(): MutableLiveData<UserPlaylists?> {
+        var mutableLiveData = MutableLiveData<UserPlaylists?>()
+
+        try {
+            val response = service.getUserPlaylists("Bearer $token")
+            if (response.isSuccessful) {
+                Log.i("Successful Response", response.body().toString())
+                mutableLiveData.value = response.body()
+            } else {
+                Log.i("Error Response", response.errorBody().toString())
+                mutableLiveData.value = null
+            }
+        } catch (e: Exception) {
+            mutableLiveData.value = null
+            Log.e("ConnectToApi", "Error al obtener las playlists del usuario y guardarlos en el livedata")
             e.printStackTrace()
         }
 

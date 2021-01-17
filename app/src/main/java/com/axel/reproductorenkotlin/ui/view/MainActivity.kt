@@ -10,10 +10,13 @@ import com.spotify.sdk.android.authentication.AuthenticationClient
 import com.spotify.sdk.android.authentication.AuthenticationRequest
 import com.spotify.sdk.android.authentication.AuthenticationResponse
 
-class MainActivity : AppCompatActivity() {
+const val REQUEST_CODE = 1337
+const val REDIRECT_URI = "https://open.spotify.com/playlist/37i9dQZF1EteSOeE3vmqJb"
 
-    val REQUEST_CODE = 1337
-    val REDIRECT_URI = "https://open.spotify.com/playlist/37i9dQZF1EteSOeE3vmqJb"
+/**
+ * @author Axel Sanchez
+ */
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             REDIRECT_URI
         )
 
-        builder.setScopes(arrayOf("streaming"))
+        builder.setScopes(arrayOf("streaming", "playlist-read-private"))
         val request = builder.build()
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request)
