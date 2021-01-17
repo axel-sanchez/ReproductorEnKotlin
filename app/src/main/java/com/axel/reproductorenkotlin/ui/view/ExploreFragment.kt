@@ -35,11 +35,7 @@ class ExploreFragment : Fragment() {
     private var fragmentExploreBinding: FragmentExploreBinding? = null
     private val binding get() = fragmentExploreBinding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentExploreBinding = FragmentExploreBinding.inflate(inflater, container, false)
         return binding.root
     }

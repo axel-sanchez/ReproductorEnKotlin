@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide
 class SongAdapter (private var mItems: List<Song>,
                    private val clickListener: (Song) -> Unit) : RecyclerView.Adapter<SongAdapter.ViewHolder>() {
 
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val image: ImageView = itemView.findViewById(R.id.imagen)

@@ -1,13 +1,18 @@
 package com.axel.reproductorenkotlin.ui.view
 
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout.VERTICAL
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.common.hide
@@ -18,6 +23,8 @@ import com.axel.reproductorenkotlin.domain.SongsUseCase
 import com.axel.reproductorenkotlin.ui.view.adapter.LibraryAdapter
 import com.axel.reproductorenkotlin.ui.view.adapter.TrackAdapter
 import com.axel.reproductorenkotlin.viewmodel.SongsViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class SongsFragment : Fragment() {
@@ -71,14 +78,18 @@ class SongsFragment : Fragment() {
     }
 
     private fun setAdapter(songs: List<PlaylistSongs.Item.Track?>) {
-        viewAdapter = TrackAdapter(songs) { itemClick(it) }
+        viewAdapter = TrackAdapter(songs, lifecycleScope) { itemClick(it) }
 
-        viewManager = GridLayoutManager(this.requireContext(), 2)
+        viewManager = GridLayoutManager(this.requireContext(), 1)
+
+        val dividerItemDecoration = DividerItemDecoration(requireContext(), VERTICAL)
 
         binding.recyclerView.apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
+
+            addItemDecoration(dividerItemDecoration)
 
             // use a linear layout manager
             layoutManager = viewManager
@@ -89,7 +100,7 @@ class SongsFragment : Fragment() {
     }
 
     private fun itemClick(song: PlaylistSongs.Item.Track?) {
-        Toast.makeText(requireContext(), "Presionó la canción ${song?.name}", Toast.LENGTH_SHORT).show()
+
     }
 
     override fun onDestroyView() {
