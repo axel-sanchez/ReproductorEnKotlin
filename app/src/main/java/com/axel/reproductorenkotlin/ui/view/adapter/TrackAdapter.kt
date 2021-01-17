@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class TrackAdapter(
     private val dataList: List<PlaylistSongs.Item.Track?>,
     private val scope: LifecycleCoroutineScope,
-    private val itemClick: (PlaylistSongs.Item.Track?) -> Unit
+    private val spotifyClickListener: (PlaylistSongs.Item.Track?) -> Unit
 ) : RecyclerView.Adapter<TrackAdapter.ViewHolder>() {
 
     private var job: Job? = null
@@ -28,7 +28,7 @@ class TrackAdapter(
 
     inner class ViewHolder(private val binding: ItemTrackBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(song: PlaylistSongs.Item.Track?, itemClick: (PlaylistSongs.Item.Track?) -> Unit) {
+        fun bind(song: PlaylistSongs.Item.Track?, spotifyClickListener: (PlaylistSongs.Item.Track?) -> Unit) {
 
             var isPlaying = false
 
@@ -48,6 +48,10 @@ class TrackAdapter(
                         true
                     }
                     itemClickPlayPause(song, binding.btnPlayPause, setIsPlayingFalse)
+                }
+
+                binding.btnSpotify.setOnClickListener {
+                    spotifyClickListener(song)
                 }
 
                 Glide.with(itemView)
@@ -91,7 +95,7 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(dataList[position], itemClick)
+        holder.bind(dataList[position], spotifyClickListener)
     }
 
     override fun getItemCount(): Int {

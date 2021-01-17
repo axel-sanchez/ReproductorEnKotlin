@@ -1,15 +1,13 @@
 package com.axel.reproductorenkotlin.ui.view
 
-import android.media.AudioManager
-import android.media.MediaPlayer
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout.VERTICAL
-import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,11 +18,8 @@ import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.PlaylistSongs
 import com.axel.reproductorenkotlin.databinding.FragmentSongsBinding
 import com.axel.reproductorenkotlin.domain.SongsUseCase
-import com.axel.reproductorenkotlin.ui.view.adapter.LibraryAdapter
 import com.axel.reproductorenkotlin.ui.view.adapter.TrackAdapter
 import com.axel.reproductorenkotlin.viewmodel.SongsViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class SongsFragment : Fragment() {
@@ -78,7 +73,7 @@ class SongsFragment : Fragment() {
     }
 
     private fun setAdapter(songs: List<PlaylistSongs.Item.Track?>) {
-        viewAdapter = TrackAdapter(songs, lifecycleScope) { itemClick(it) }
+        viewAdapter = TrackAdapter(songs, lifecycleScope) { spotifyClickListener(it) }
 
         viewManager = GridLayoutManager(this.requireContext(), 1)
 
@@ -99,8 +94,15 @@ class SongsFragment : Fragment() {
         }
     }
 
-    private fun itemClick(song: PlaylistSongs.Item.Track?) {
-
+    private fun spotifyClickListener(song: PlaylistSongs.Item.Track?) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        //intent.data = Uri.parse("spotify:album:0sNOF9WDwhWunNAHPD3Baj")
+        intent.data = Uri.parse(song?.uri)
+        intent.putExtra(
+            Intent.EXTRA_REFERRER,
+            Uri.parse("android-app://" + requireActivity().packageName)
+        )
+        this.startActivity(intent)
     }
 
     override fun onDestroyView() {
