@@ -2,12 +2,14 @@ package com.axel.reproductorenkotlin.ui.view
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout.VERTICAL
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -49,6 +51,7 @@ class SongsFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,6 +63,7 @@ class SongsFragment : Fragment() {
         viewModel.getPlaylistSongs(idPlaylist)
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun setUpObserveSongs() {
         viewModel.getPlaylistSongsLiveData().observe(viewLifecycleOwner, {
             binding.progress.cancelAnimation()
@@ -72,6 +76,7 @@ class SongsFragment : Fragment() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun setAdapter(songs: List<PlaylistSongs.Item.Track?>) {
         viewAdapter = TrackAdapter(songs, lifecycleScope) { spotifyClickListener(it) }
 
@@ -94,9 +99,9 @@ class SongsFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun spotifyClickListener(song: PlaylistSongs.Item.Track?) {
         val intent = Intent(Intent.ACTION_VIEW)
-        //intent.data = Uri.parse("spotify:album:0sNOF9WDwhWunNAHPD3Baj")
         intent.data = Uri.parse(song?.uri)
         intent.putExtra(
             Intent.EXTRA_REFERRER,
