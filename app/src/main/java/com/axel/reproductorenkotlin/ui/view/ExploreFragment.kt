@@ -5,20 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.common.hide
 import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.ItemSong
+import com.axel.reproductorenkotlin.data.models.UserPlaylists
 import com.axel.reproductorenkotlin.databinding.FragmentExploreBinding
 import com.axel.reproductorenkotlin.domain.ExploreUseCase
 import com.axel.reproductorenkotlin.ui.view.adapter.ExploreAdapter
 import com.axel.reproductorenkotlin.viewmodel.ExploreViewModel
 import org.koin.android.ext.android.inject
 
-class ExploreFragment: Fragment() {
+class ExploreFragment : Fragment() {
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -31,7 +35,11 @@ class ExploreFragment: Fragment() {
     private var fragmentExploreBinding: FragmentExploreBinding? = null
     private val binding get() = fragmentExploreBinding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         fragmentExploreBinding = FragmentExploreBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -82,7 +90,8 @@ class ExploreFragment: Fragment() {
         }
     }
 
-    private fun itemClick(playlist: ItemSong){
-        Toast.makeText(context, "Presionó la lista ${playlist.getName()}", Toast.LENGTH_SHORT).show()
+    private fun itemClick(playlist: ItemSong) {
+        val bundle = bundleOf("idPlaylist" to playlist.getId())
+        findNavController().navigate(R.id.toSongsFragment, bundle, null, null)
     }
 }

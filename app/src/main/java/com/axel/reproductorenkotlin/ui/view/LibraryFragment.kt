@@ -89,6 +89,5 @@ class LibraryFragment : Fragment() {
     private fun itemClick(playlist: UserPlaylists.Item?) {
         val bundle = bundleOf("idPlaylist" to playlist?.id)
         findNavController().navigate(R.id.toSongsFragment, bundle, null, null)
-        //Toast.makeText(requireContext(), "presiono la playlist ${playlist?.name}", Toast.LENGTH_SHORT).show()
     }
 }

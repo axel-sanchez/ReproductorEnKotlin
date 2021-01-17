@@ -8,7 +8,11 @@
         android:id="@+id/exploreFragment"
         android:name="com.axel.reproductorenkotlin.ui.view.ExploreFragment"
         android:label="ExploreFragment"
-        tools:layout="@layout/fragment_explore"/>
+        tools:layout="@layout/fragment_explore">
+        <action
+            android:id="@+id/toSongsFragment"
+            app:destination="@id/songsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.axel.reproductorenkotlin.ui.view.HomeFragment"
