@@ -14,7 +14,6 @@ import com.axel.reproductorenkotlin.viewmodel.ProfileViewModel
 import com.bumptech.glide.Glide
 import org.koin.android.ext.android.inject
 
-
 /**
  * Fragment of users profile
  */

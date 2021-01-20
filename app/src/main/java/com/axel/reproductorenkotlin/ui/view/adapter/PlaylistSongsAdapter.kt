@@ -5,6 +5,8 @@ import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.R
@@ -17,18 +19,22 @@ import kotlinx.coroutines.launch
 /**
  * @author Axel Sanchez
  */
-class TrackAdapter(
+class PlaylistSongsAdapter(
     private val dataList: List<PlaylistSongs.Item.Track?>,
     private val scope: LifecycleCoroutineScope,
     private val spotifyClickListener: (PlaylistSongs.Item.Track?) -> Unit
-) : RecyclerView.Adapter<TrackAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<PlaylistSongsAdapter.ViewHolder>() {
 
     private var job: Job? = null
     private var mediaPlayer: MediaPlayer? = null
 
-    inner class ViewHolder(private val binding: ItemTrackBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemTrackBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(song: PlaylistSongs.Item.Track?, spotifyClickListener: (PlaylistSongs.Item.Track?) -> Unit) {
+        fun bind(
+            song: PlaylistSongs.Item.Track?,
+            spotifyClickListener: (PlaylistSongs.Item.Track?) -> Unit
+        ) {
 
             var isPlaying = false
 
@@ -40,14 +46,18 @@ class TrackAdapter(
                 binding.nameSong.text = song.name
                 binding.nameArtist.text = song.artists?.map { it?.name }.toString()
                 binding.btnPlayPause.setOnClickListener {
-                    isPlaying = if(isPlaying){
-                        binding.btnPlayPause.setBackgroundResource(R.drawable.ic_play_transparent)
-                        false
-                    } else{
-                        binding.btnPlayPause.setBackgroundResource(R.drawable.ic_pause_transparent)
-                        true
+                    song.preview_url?.let {
+                        isPlaying = if (isPlaying) {
+                            binding.btnPlayPause.setBackgroundResource(R.drawable.ic_play_transparent)
+                            false
+                        } else {
+                            binding.btnPlayPause.setBackgroundResource(R.drawable.ic_pause_transparent)
+                            true
+                        }
+                        itemClickPlayPause(it, binding.btnPlayPause, setIsPlayingFalse)
+                    } ?: kotlin.run {
+                        Toast.makeText(binding.root.context, "Can't be played", Toast.LENGTH_SHORT).show()
                     }
-                    itemClickPlayPause(song, binding.btnPlayPause, setIsPlayingFalse)
                 }
 
                 binding.btnSpotify.setOnClickListener {
@@ -61,18 +71,17 @@ class TrackAdapter(
         }
     }
 
-    private fun itemClickPlayPause(song: PlaylistSongs.Item.Track, btnPlayPause: Button, setIsPlayingFalse: () -> Unit) {
+    private fun itemClickPlayPause(preview_url: String, btnPlayPause: Button, setIsPlayingFalse: () -> Unit) {
         mediaPlayer?.let {
             it.stop()
             mediaPlayer = null
             job?.cancel()
             job = null
-        }?: kotlin.run {
+        } ?: kotlin.run {
             job = scope.launch {
-                val url = song.preview_url
                 mediaPlayer = MediaPlayer().apply {
                     setAudioStreamType(AudioManager.STREAM_MUSIC)
-                    setDataSource(url)
+                    setDataSource(preview_url)
                     prepare() // might take long! (for buffering, etc)
                     start()
                     setOnCompletionListener {
@@ -86,11 +95,13 @@ class TrackAdapter(
                 }
             }
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val recyclerRowBinding: ItemTrackBinding = ItemTrackBinding.inflate(layoutInflater, parent, false)
+        val recyclerRowBinding: ItemTrackBinding =
+            ItemTrackBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(recyclerRowBinding)
     }
 

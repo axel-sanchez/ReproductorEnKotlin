@@ -22,4 +22,7 @@ interface ApiService {
 
     @GET("playlists/{playlist_id}/tracks")
     suspend fun getSongsFromPlaylist(@Header("Authorization") token: String, @Path("playlist_id") idPlaylist: String, @Query("market") market: String): Response<PlaylistSongs?>
+
+    @GET("search")
+    suspend fun getSongsBySearch(@Header("Authorization") token: String, @Query("q") query: String, @Query("type") type: String = "track"): Response<Search?>
 }

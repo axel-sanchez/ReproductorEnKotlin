@@ -87,7 +87,7 @@ class ExploreFragment : Fragment() {
     }
 
     private fun itemClick(playlist: ItemSong) {
-        val bundle = bundleOf("idPlaylist" to playlist.getId())
-        findNavController().navigate(R.id.toSongsFragment, bundle, null, null)
+        val action = ExploreFragmentDirections.toSongsFragment(idPlaylist = playlist.getId(), isSearch = false)
+        findNavController().navigate(action)
     }
 }
