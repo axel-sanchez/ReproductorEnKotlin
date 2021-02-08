@@ -20,7 +20,8 @@ import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.PlaylistSongs
 import com.axel.reproductorenkotlin.data.models.Search
 import com.axel.reproductorenkotlin.databinding.FragmentSongsBinding
-import com.axel.reproductorenkotlin.domain.SongsUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetPlaylistSongsUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetSongsBySearchUseCase
 import com.axel.reproductorenkotlin.ui.view.adapter.PlaylistSongsAdapter
 import com.axel.reproductorenkotlin.ui.view.adapter.SearchedSongsAdapter
 import com.axel.reproductorenkotlin.viewmodel.SongsViewModel
@@ -35,10 +36,11 @@ class SongsFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private val songsUseCase: SongsUseCase by inject()
+    private val getPlaylistSongsUseCase: GetPlaylistSongsUseCase by inject()
+    private val getSongsBySearchUseCase: GetSongsBySearchUseCase by inject()
 
     private val viewModel: SongsViewModel by viewModels(
-        factoryProducer = { SongsViewModel.SongsViewModelFactory(songsUseCase) }
+        factoryProducer = { SongsViewModel.SongsViewModelFactory(getPlaylistSongsUseCase, getSongsBySearchUseCase) }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

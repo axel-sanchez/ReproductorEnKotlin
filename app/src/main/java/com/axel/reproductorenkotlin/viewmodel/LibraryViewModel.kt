@@ -2,7 +2,7 @@ package com.axel.reproductorenkotlin.viewmodel
 
 import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.UserPlaylists
-import com.axel.reproductorenkotlin.domain.LibraryUseCase
+import com.axel.reproductorenkotlin.domain.usecase.LibraryUseCase
 import kotlinx.coroutines.launch
 
 /**

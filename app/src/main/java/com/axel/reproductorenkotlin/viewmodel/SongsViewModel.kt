@@ -3,14 +3,15 @@ package com.axel.reproductorenkotlin.viewmodel
 import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.PlaylistSongs
 import com.axel.reproductorenkotlin.data.models.Search
-import com.axel.reproductorenkotlin.domain.SongsUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetPlaylistSongsUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetSongsBySearchUseCase
 import kotlinx.coroutines.launch
 
 /**
  * View model de [SongsFragment]
  * @author Axel Sanchez
  */
-class SongsViewModel(private val songsUseCase: SongsUseCase) : ViewModel() {
+class SongsViewModel(private val getPlaylistSongsUseCase: GetPlaylistSongsUseCase, private val getSongsBySearchUseCase: GetSongsBySearchUseCase) : ViewModel() {
 
     private val listDataPlaylistSongs = MutableLiveData<List<PlaylistSongs.Item.Track?>>()
     private val listDataSongs = MutableLiveData<List<Search.Tracks.Item?>>()
@@ -25,13 +26,13 @@ class SongsViewModel(private val songsUseCase: SongsUseCase) : ViewModel() {
 
     fun getPlaylistSongs(idPlaylist: String) {
         viewModelScope.launch {
-            setListDataPlaylistSongs(songsUseCase.getPlaylistSongs(idPlaylist))
+            setListDataPlaylistSongs(getPlaylistSongsUseCase.call(idPlaylist))
         }
     }
 
     fun getSongsByQuery(query: String) {
         viewModelScope.launch {
-            setListDataSongs(songsUseCase.getSongsBySearch(query))
+            setListDataSongs(getSongsBySearchUseCase.call(query))
         }
     }
 
@@ -43,10 +44,9 @@ class SongsViewModel(private val songsUseCase: SongsUseCase) : ViewModel() {
         return listDataSongs
     }
 
-    class SongsViewModelFactory(private val songsUseCase: SongsUseCase) : ViewModelProvider.Factory {
-
+    class SongsViewModelFactory(private val getPlaylistSongsUseCase: GetPlaylistSongsUseCase, private val getSongsBySearchUseCase: GetSongsBySearchUseCase) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.getConstructor(SongsUseCase::class.java).newInstance(songsUseCase)
+            return modelClass.getConstructor(GetPlaylistSongsUseCase::class.java, GetSongsBySearchUseCase::class.java).newInstance(getPlaylistSongsUseCase, getSongsBySearchUseCase)
         }
     }
 }

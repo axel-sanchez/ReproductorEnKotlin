@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.axel.reproductorenkotlin.common.hide
 import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.databinding.FragmentProfileBinding
-import com.axel.reproductorenkotlin.domain.ProfileUseCase
+import com.axel.reproductorenkotlin.domain.usecase.ProfileUseCase
 import com.axel.reproductorenkotlin.viewmodel.ProfileViewModel
 import com.bumptech.glide.Glide
 import org.koin.android.ext.android.inject

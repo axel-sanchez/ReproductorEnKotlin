@@ -2,7 +2,7 @@ package com.axel.reproductorenkotlin.viewmodel
 
 import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.ItemSong
-import com.axel.reproductorenkotlin.domain.ExploreUseCase
+import com.axel.reproductorenkotlin.domain.usecase.ExploreUseCase
 import kotlinx.coroutines.launch
 
 /**

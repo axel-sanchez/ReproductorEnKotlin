@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.domain
+package com.axel.reproductorenkotlin.domain.usecase
 
 import com.axel.reproductorenkotlin.data.models.User
 import com.axel.reproductorenkotlin.data.service.ConnectToApi

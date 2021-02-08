@@ -2,7 +2,7 @@ package com.axel.reproductorenkotlin.viewmodel
 
 import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.User
-import com.axel.reproductorenkotlin.domain.ProfileUseCase
+import com.axel.reproductorenkotlin.domain.usecase.ProfileUseCase
 import kotlinx.coroutines.launch
 
 /**
