@@ -1,7 +1,6 @@
 package com.axel.reproductorenkotlin.viewmodel
 
 import android.content.Context
-import android.media.AudioManager
 import android.media.MediaPlayer
 import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.MyTime
@@ -9,14 +8,13 @@ import com.axel.reproductorenkotlin.helpers.SongHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.dsl.module.applicationContext
-import kotlin.coroutines.coroutineContext
+import java.lang.ref.WeakReference
 
 /**
  * View model de [PlayerFragment]
  * @author Axel Sanchez
  */
-class PlayerViewModel(private val context: Context) : ViewModel() {
+class PlayerViewModel(private val context: WeakReference<Context>) : ViewModel() {
 
     var job: Job? = null
 
@@ -89,7 +87,7 @@ class PlayerViewModel(private val context: Context) : ViewModel() {
     }
 
     fun initializeMediaPlayer() {
-        mediaPlayer = MediaPlayer.create(context, SongHelper.songsList[position].song)
+        mediaPlayer = MediaPlayer.create(context.get(), SongHelper.songsList[position].song)
     }
 
     fun mediaPlayerIsPlaying() = mediaPlayer.isPlaying
@@ -115,10 +113,10 @@ class PlayerViewModel(private val context: Context) : ViewModel() {
         mediaPlayer.seekTo(progress)
     }
 
-    class PlayerViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    class PlayerViewModelFactory(private val context: WeakReference<Context>) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.getConstructor(Context::class.java).newInstance(context)
+            return modelClass.getConstructor(WeakReference::class.java).newInstance(context)
         }
     }
 }

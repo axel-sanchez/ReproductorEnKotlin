@@ -13,11 +13,12 @@ import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.databinding.FragmentMainBinding
 import com.axel.reproductorenkotlin.helpers.SongHelper
 import com.axel.reproductorenkotlin.viewmodel.PlayerViewModel
+import java.lang.ref.WeakReference
 
 class MainFragment : Fragment() {
 
     private val viewModelPlayer: PlayerViewModel by activityViewModels(
-        factoryProducer = { PlayerViewModel.PlayerViewModelFactory(requireActivity().applicationContext) }
+        factoryProducer = { PlayerViewModel.PlayerViewModelFactory(WeakReference(requireActivity().applicationContext)) }
     )
 
     private var fragmentMainBinding: FragmentMainBinding? = null

@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.axel.reproductorenkotlin.common.hide
 import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.databinding.FragmentProfileBinding
-import com.axel.reproductorenkotlin.domain.usecase.ProfileUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetUserUseCase
 import com.axel.reproductorenkotlin.viewmodel.ProfileViewModel
 import com.bumptech.glide.Glide
 import org.koin.android.ext.android.inject
@@ -22,10 +22,10 @@ class ProfileFragment : Fragment() {
     private var fragmentProfileBinding: FragmentProfileBinding? = null
     private val binding get() = fragmentProfileBinding!!
 
-    private val profileUseCase: ProfileUseCase by inject()
+    private val getUserUseCase: GetUserUseCase by inject()
 
     private val viewModel: ProfileViewModel by activityViewModels(
-        factoryProducer = { ProfileViewModel.ProfileViewModelFactory(profileUseCase) }
+        factoryProducer = { ProfileViewModel.ProfileViewModelFactory(getUserUseCase) }
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

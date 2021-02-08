@@ -22,6 +22,7 @@ import com.axel.reproductorenkotlin.helpers.SongHelper.songsList
 import com.axel.reproductorenkotlin.ui.view.adapter.ItemViewPager
 import com.axel.reproductorenkotlin.ui.view.adapter.ViewPageAdapter
 import com.axel.reproductorenkotlin.viewmodel.PlayerViewModel
+import java.lang.ref.WeakReference
 import java.util.*
 
 class PlayerFragment : Fragment() {
@@ -31,7 +32,7 @@ class PlayerFragment : Fragment() {
     private lateinit var receiver: BroadcastReceiver
 
     private val viewModel: PlayerViewModel by activityViewModels(
-        factoryProducer = { PlayerViewModel.PlayerViewModelFactory(requireActivity().applicationContext) }
+        factoryProducer = { PlayerViewModel.PlayerViewModelFactory(WeakReference(requireActivity().applicationContext)) }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

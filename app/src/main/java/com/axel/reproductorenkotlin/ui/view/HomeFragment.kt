@@ -17,11 +17,12 @@ import com.axel.reproductorenkotlin.helpers.PlayerHelper
 import com.axel.reproductorenkotlin.helpers.SongHelper.songsList
 import com.axel.reproductorenkotlin.ui.view.adapter.SongAdapter
 import com.axel.reproductorenkotlin.viewmodel.PlayerViewModel
+import java.lang.ref.WeakReference
 
 class HomeFragment : Fragment() {
 
     private val viewModelPlayer: PlayerViewModel by activityViewModels(
-        factoryProducer = { PlayerViewModel.PlayerViewModelFactory(requireActivity().applicationContext) }
+        factoryProducer = { PlayerViewModel.PlayerViewModelFactory(WeakReference(requireActivity().applicationContext)) }
     )
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
