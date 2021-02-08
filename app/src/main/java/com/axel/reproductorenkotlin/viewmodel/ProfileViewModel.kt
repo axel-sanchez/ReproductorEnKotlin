@@ -2,14 +2,14 @@ package com.axel.reproductorenkotlin.viewmodel
 
 import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.User
-import com.axel.reproductorenkotlin.domain.usecase.ProfileUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetUserUseCase
 import kotlinx.coroutines.launch
 
 /**
  * View model de [ProfileFragment]
  * @author Axel Sanchez
  */
-class ProfileViewModel(private val profileUseCase: ProfileUseCase) : ViewModel() {
+class ProfileViewModel(private val getUserUseCase: GetUserUseCase) : ViewModel() {
 
     private val listData: MutableLiveData<User?> by lazy {
         MutableLiveData<User?>().also{
@@ -23,7 +23,7 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase) : ViewModel()
 
     private fun getUser() {
         viewModelScope.launch {
-            setListData(profileUseCase.getUser())
+            setListData(getUserUseCase.call())
         }
     }
 
@@ -31,10 +31,9 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase) : ViewModel()
         return listData
     }
 
-    class ProfileViewModelFactory(private val profileUseCase: ProfileUseCase) : ViewModelProvider.Factory {
-
+    class ProfileViewModelFactory(private val getUserUseCase: GetUserUseCase) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.getConstructor(ProfileUseCase::class.java).newInstance(profileUseCase)
+            return modelClass.getConstructor(GetUserUseCase::class.java).newInstance(getUserUseCase)
         }
     }
 }

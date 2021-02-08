@@ -5,14 +5,18 @@ import com.axel.reproductorenkotlin.data.service.ConnectToApi
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
+interface GetUserUseCase{
+    suspend fun call(): User?
+}
+
 /**
  * Use case for ProfileViewModel
  * @author Axel Sanchez
  */
-class ProfileUseCase : KoinComponent {
+class GetUserUseCaseImpl : KoinComponent, GetUserUseCase {
     private val api: ConnectToApi by inject()
 
-    suspend fun getUser(): User? {
+    override suspend fun call(): User? {
         return api.getUser().value
     }
 }
