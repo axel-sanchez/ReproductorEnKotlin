@@ -30,12 +30,12 @@ val moduleApp = module {
     }
     single(name = "service") { (get(name = "retrofit") as Retrofit).create(ApiService::class.java) }
 
-    single { ExploreUseCase() }
-
     single { GetPlaylistSongsUseCaseImpl() as GetPlaylistSongsUseCase }
     single { GetSongsBySearchUseCaseImpl() as GetSongsBySearchUseCase }
 
     single { GetUserUseCaseImpl() as GetUserUseCase }
 
     single { GetUserPlaylistsUseCaseImpl() as GetUserPlaylistsUseCase }
+
+    single { GetItemSongListUseCaseImpl() as GetItemSongListUseCase }
 }

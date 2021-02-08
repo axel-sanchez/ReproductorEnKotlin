@@ -13,7 +13,7 @@ import com.axel.reproductorenkotlin.common.hide
 import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.ItemSong
 import com.axel.reproductorenkotlin.databinding.FragmentExploreBinding
-import com.axel.reproductorenkotlin.domain.usecase.ExploreUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetItemSongListUseCase
 import com.axel.reproductorenkotlin.ui.view.adapter.ExploreAdapter
 import com.axel.reproductorenkotlin.viewmodel.ExploreViewModel
 import org.koin.android.ext.android.inject
@@ -23,9 +23,9 @@ class ExploreFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private val exploreUseCase: ExploreUseCase by inject()
+    private val getItemSongListUseCase: GetItemSongListUseCase by inject()
     private val viewModel: ExploreViewModel by activityViewModels(
-        factoryProducer = { ExploreViewModel.ExploreViewModelFactory(exploreUseCase) }
+        factoryProducer = { ExploreViewModel.ExploreViewModelFactory(getItemSongListUseCase) }
     )
 
     private var fragmentExploreBinding: FragmentExploreBinding? = null

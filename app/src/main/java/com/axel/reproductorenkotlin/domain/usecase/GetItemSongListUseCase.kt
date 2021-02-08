@@ -5,14 +5,18 @@ import com.axel.reproductorenkotlin.data.service.ConnectToApi
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
+interface GetItemSongListUseCase{
+    suspend fun call(): MutableList<ItemSong?>
+}
+
 /**
  * Caso de uso para
  * @author Axel Sanchez
  */
-class ExploreUseCase : KoinComponent {
+class GetItemSongListUseCaseImpl : KoinComponent, GetItemSongListUseCase {
     private val api: ConnectToApi by inject()
 
-    suspend fun getItemSongList(): MutableList<ItemSong?> {
+    override suspend fun call(): MutableList<ItemSong?> {
         return api.getItemSongList().value?: mutableListOf()
     }
 }
