@@ -5,14 +5,18 @@ import com.axel.reproductorenkotlin.data.service.ConnectToApi
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
+interface GetUserPlaylistsUseCase{
+    suspend fun call(): List<UserPlaylists.Item?>
+}
+
 /**
  * Caso de uso para
  * @author Axel Sanchez
  */
-class LibraryUseCase : KoinComponent {
+class GetUserPlaylistsUseCaseImpl : GetUserPlaylistsUseCase, KoinComponent {
     private val api: ConnectToApi by inject()
 
-    suspend fun getUserPlaylistsOnline(): List<UserPlaylists.Item?> {
+    override suspend fun call(): List<UserPlaylists.Item?> {
         return api.getUserPlaylists().value?.items?: listOf()
     }
 }

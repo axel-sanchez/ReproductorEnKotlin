@@ -2,14 +2,14 @@ package com.axel.reproductorenkotlin.viewmodel
 
 import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.UserPlaylists
-import com.axel.reproductorenkotlin.domain.usecase.LibraryUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetUserPlaylistsUseCase
 import kotlinx.coroutines.launch
 
 /**
  * View model de [LibraryFragment]
  * @author Axel Sanchez
  */
-class LibraryViewModel(private val libraryUseCase: LibraryUseCase) : ViewModel() {
+class LibraryViewModel(private val getUserPlaylistsUseCase: GetUserPlaylistsUseCase) : ViewModel() {
 
     private val listData: MutableLiveData<List<UserPlaylists.Item?>> by lazy {
         MutableLiveData<List<UserPlaylists.Item?>>().also {
@@ -23,7 +23,7 @@ class LibraryViewModel(private val libraryUseCase: LibraryUseCase) : ViewModel()
 
     private fun getUserPlaylists() {
         viewModelScope.launch {
-            setListData(libraryUseCase.getUserPlaylistsOnline())
+            setListData(getUserPlaylistsUseCase.call())
         }
     }
 
@@ -31,10 +31,9 @@ class LibraryViewModel(private val libraryUseCase: LibraryUseCase) : ViewModel()
         return listData
     }
 
-    class LibraryViewModelFactory(private val libraryUseCase: LibraryUseCase) : ViewModelProvider.Factory {
-
+    class LibraryViewModelFactory(private val getUserPlaylistsUseCase: GetUserPlaylistsUseCase) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.getConstructor(LibraryUseCase::class.java).newInstance(libraryUseCase)
+            return modelClass.getConstructor(GetUserPlaylistsUseCase::class.java).newInstance(getUserPlaylistsUseCase)
         }
     }
 }

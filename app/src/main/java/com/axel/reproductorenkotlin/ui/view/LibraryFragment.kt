@@ -13,7 +13,7 @@ import com.axel.reproductorenkotlin.common.hide
 import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.UserPlaylists
 import com.axel.reproductorenkotlin.databinding.FragmentLibraryBinding
-import com.axel.reproductorenkotlin.domain.usecase.LibraryUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetUserPlaylistsUseCase
 import com.axel.reproductorenkotlin.ui.view.adapter.LibraryAdapter
 import com.axel.reproductorenkotlin.viewmodel.LibraryViewModel
 import org.koin.android.ext.android.inject
@@ -23,10 +23,10 @@ class LibraryFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private val libraryUseCase: LibraryUseCase by inject()
+    private val getUserPlaylistsUseCase: GetUserPlaylistsUseCase by inject()
 
     private val viewModel: LibraryViewModel by activityViewModels(
-        factoryProducer = { LibraryViewModel.LibraryViewModelFactory(libraryUseCase) }
+        factoryProducer = { LibraryViewModel.LibraryViewModelFactory(getUserPlaylistsUseCase) }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
