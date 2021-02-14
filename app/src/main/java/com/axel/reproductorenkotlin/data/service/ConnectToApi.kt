@@ -2,7 +2,7 @@ package com.axel.reproductorenkotlin.data.service
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axel.reproductorenkotlin.data.models.ItemSong
+import com.axel.reproductorenkotlin.data.models.FeaturedPlaylistSong
 import com.axel.reproductorenkotlin.data.models.PlaylistSongs
 import com.axel.reproductorenkotlin.data.models.Search
 
@@ -10,8 +10,8 @@ import com.axel.reproductorenkotlin.data.models.Search
  * @author Axel Sanchez
  */
 class ConnectToApi(private val service: ApiService) {
-    suspend fun getItemSongList(): MutableLiveData<MutableList<ItemSong?>> {
-        var mutableLiveData = MutableLiveData<MutableList<ItemSong?>>()
+    suspend fun getItemSongList(): MutableLiveData<MutableList<FeaturedPlaylistSong?>> {
+        var mutableLiveData = MutableLiveData<MutableList<FeaturedPlaylistSong?>>()
 
         try {
             val response = service.getFeaturedPlaylists("Bearer $token", "AR")

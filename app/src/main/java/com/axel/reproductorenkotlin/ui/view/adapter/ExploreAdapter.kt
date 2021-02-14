@@ -3,24 +3,24 @@ package com.axel.reproductorenkotlin.ui.view.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.axel.reproductorenkotlin.data.models.ItemSong
+import com.axel.reproductorenkotlin.data.models.FeaturedPlaylistSong
 import com.axel.reproductorenkotlin.databinding.ItemPlaylistBinding
 import com.bumptech.glide.Glide
 
 class ExploreAdapter(
-    private val dataList: List<ItemSong?>,
-    private val itemClick: (ItemSong) -> Unit
+    private val dataList: List<FeaturedPlaylistSong?>,
+    private val itemClick: (FeaturedPlaylistSong) -> Unit
 ) : RecyclerView.Adapter<ExploreAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemPlaylistBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(itemSong: ItemSong?, itemClick: (ItemSong) -> Unit) {
+        fun bind(featuredPlaylistSong: FeaturedPlaylistSong?, itemClick: (FeaturedPlaylistSong) -> Unit) {
 
-            itemSong?.let {
-                binding.cardView.setOnClickListener { itemClick(itemSong) }
+            featuredPlaylistSong?.let {
+                binding.cardView.setOnClickListener { itemClick(featuredPlaylistSong) }
 
                 Glide.with(binding.root)
-                    .load(itemSong.getImages()[0].getUrl())
+                    .load(featuredPlaylistSong.getImages()[0].getUrl())
                     .into(binding.image)
             }
         }

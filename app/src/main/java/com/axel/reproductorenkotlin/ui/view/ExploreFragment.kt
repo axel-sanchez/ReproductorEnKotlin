@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.common.hide
 import com.axel.reproductorenkotlin.common.show
-import com.axel.reproductorenkotlin.data.models.ItemSong
+import com.axel.reproductorenkotlin.data.models.FeaturedPlaylistSong
 import com.axel.reproductorenkotlin.databinding.FragmentExploreBinding
-import com.axel.reproductorenkotlin.domain.usecase.GetItemSongListUseCase
+import com.axel.reproductorenkotlin.domain.usecase.GetFeaturedPlaylistSongsUseCase
 import com.axel.reproductorenkotlin.ui.view.adapter.ExploreAdapter
 import com.axel.reproductorenkotlin.viewmodel.ExploreViewModel
 import org.koin.android.ext.android.inject
@@ -23,9 +23,9 @@ class ExploreFragment : Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private val getItemSongListUseCase: GetItemSongListUseCase by inject()
+    private val getFeaturedPlaylistSongsUseCase: GetFeaturedPlaylistSongsUseCase by inject()
     private val viewModel: ExploreViewModel by activityViewModels(
-        factoryProducer = { ExploreViewModel.ExploreViewModelFactory(getItemSongListUseCase) }
+        factoryProducer = { ExploreViewModel.ExploreViewModelFactory(getFeaturedPlaylistSongsUseCase) }
     )
 
     private var fragmentExploreBinding: FragmentExploreBinding? = null
@@ -64,8 +64,8 @@ class ExploreFragment : Fragment() {
         })
     }
 
-    private fun setAdapter(itemSongList: MutableList<ItemSong?>) {
-        viewAdapter = ExploreAdapter(itemSongList) { itemClick(it) }
+    private fun setAdapter(featuredPlaylistSongList: MutableList<FeaturedPlaylistSong?>) {
+        viewAdapter = ExploreAdapter(featuredPlaylistSongList) { itemClick(it) }
 
         viewManager = GridLayoutManager(this.requireContext(), 2)
 
@@ -82,8 +82,8 @@ class ExploreFragment : Fragment() {
         }
     }
 
-    private fun itemClick(playlist: ItemSong) {
-        val action = ExploreFragmentDirections.toSongsFragment(idPlaylist = playlist.getId(), isSearch = false)
+    private fun itemClick(featuredPlaylist: FeaturedPlaylistSong) {
+        val action = ExploreFragmentDirections.toSongsFragment(idPlaylist = featuredPlaylist.getId(), isSearch = false)
         findNavController().navigate(action)
     }
 }

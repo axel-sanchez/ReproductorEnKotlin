@@ -1,39 +1,39 @@
 package com.axel.reproductorenkotlin.viewmodel
 
 import androidx.lifecycle.*
-import com.axel.reproductorenkotlin.data.models.ItemSong
-import com.axel.reproductorenkotlin.domain.usecase.GetItemSongListUseCase
+import com.axel.reproductorenkotlin.data.models.FeaturedPlaylistSong
+import com.axel.reproductorenkotlin.domain.usecase.GetFeaturedPlaylistSongsUseCase
 import kotlinx.coroutines.launch
 
 /**
  * View model de [ExploreFragment]
  * @author Axel Sanchez
  */
-class ExploreViewModel(private val getItemSongListUseCase: GetItemSongListUseCase) : ViewModel() {
+class ExploreViewModel(private val getFeaturedPlaylistSongsUseCase: GetFeaturedPlaylistSongsUseCase) : ViewModel() {
 
-    private val listData: MutableLiveData<MutableList<ItemSong?>> by lazy {
-        MutableLiveData<MutableList<ItemSong?>>().also {
+    private val listData: MutableLiveData<MutableList<FeaturedPlaylistSong?>> by lazy {
+        MutableLiveData<MutableList<FeaturedPlaylistSong?>>().also {
             getItemSongList()
         }
     }
 
-    private fun setListData(itemSongList: MutableList<ItemSong?>) {
-        listData.postValue(itemSongList)
+    private fun setListData(featuredPlaylistSongList: MutableList<FeaturedPlaylistSong?>) {
+        listData.postValue(featuredPlaylistSongList)
     }
 
     private fun getItemSongList() {
         viewModelScope.launch {
-            setListData(getItemSongListUseCase.call())
+            setListData(getFeaturedPlaylistSongsUseCase.call())
         }
     }
 
-    fun getItemSongListLiveData(): LiveData<MutableList<ItemSong?>> {
+    fun getItemSongListLiveData(): LiveData<MutableList<FeaturedPlaylistSong?>> {
         return listData
     }
 
-    class ExploreViewModelFactory(private val getItemSongListUseCase: GetItemSongListUseCase) : ViewModelProvider.Factory {
+    class ExploreViewModelFactory(private val getFeaturedPlaylistSongsUseCase: GetFeaturedPlaylistSongsUseCase) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return modelClass.getConstructor(GetItemSongListUseCase::class.java).newInstance(getItemSongListUseCase)
+            return modelClass.getConstructor(GetFeaturedPlaylistSongsUseCase::class.java).newInstance(getFeaturedPlaylistSongsUseCase)
         }
     }
 }

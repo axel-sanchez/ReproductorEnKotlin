@@ -65,19 +65,19 @@ class Image {
 
     @SerializedName("height")
     @Expose
-    private lateinit var height: Object
+    private lateinit var height: Any
     @SerializedName("url")
     @Expose
     private var url: String = ""
     @SerializedName("width")
     @Expose
-    private lateinit var width: Object
+    private lateinit var width: Any
 
-    fun getHeight(): Object {
+    fun getHeight(): Any {
         return height
     }
 
-    fun setHeight(height: Object) {
+    fun setHeight(height: Any) {
         this.height = height
     }
 
@@ -89,16 +89,16 @@ class Image {
         this.url = url
     }
 
-    fun getWidth(): Object {
+    fun getWidth(): Any {
         return width
     }
 
-    fun setWidth(width: Object) {
+    fun setWidth(width: Any) {
         this.width = width
     }
 }
 
-class ItemSong {
+class FeaturedPlaylistSong {
 
     @SerializedName("collaborative")
     @Expose
@@ -126,10 +126,10 @@ class ItemSong {
     private lateinit var owner: Owner
     @SerializedName("primary_color")
     @Expose
-    private lateinit var primaryColor: Object
+    private lateinit var primaryColor: Any
     @SerializedName("public")
     @Expose
-    private lateinit var _public: Object
+    private lateinit var _public: Any
     @SerializedName("snapshot_id")
     @Expose
     private var snapshotId = ""
@@ -207,19 +207,19 @@ class ItemSong {
         this.owner = owner
     }
 
-    fun getPrimaryColor(): Object {
+    fun getPrimaryColor(): Any {
         return primaryColor
     }
 
-    fun setPrimaryColor(primaryColor: Object) {
+    fun setPrimaryColor(primaryColor: Any) {
         this.primaryColor = primaryColor
     }
 
-    fun getPublic(): Object {
+    fun getPublic(): Any {
         return _public
     }
 
-    fun setPublic(_public: Object) {
+    fun setPublic(_public: Any) {
         this._public = _public
     }
 
@@ -360,19 +360,19 @@ class Playlists {
     private var href = ""
     @SerializedName("items")
     @Expose
-    private var items: List<ItemSong>? = null
+    private var items: List<FeaturedPlaylistSong>? = null
     @SerializedName("limit")
     @Expose
     private var limit: Int = 0
     @SerializedName("next")
     @Expose
-    private lateinit var next: Object
+    private lateinit var next: Any
     @SerializedName("offset")
     @Expose
     private var offset = 0
     @SerializedName("previous")
     @Expose
-    private lateinit var previous: Object
+    private lateinit var previous: Any
     @SerializedName("total")
     @Expose
     private var total = 0
@@ -385,11 +385,11 @@ class Playlists {
         this.href = href
     }
 
-    fun getItems(): List<ItemSong> {
+    fun getItems(): List<FeaturedPlaylistSong> {
         return items!!
     }
 
-    fun setItems(items: List<ItemSong>) {
+    fun setItems(items: List<FeaturedPlaylistSong>) {
         this.items = items
     }
 
@@ -401,11 +401,11 @@ class Playlists {
         this.limit = limit
     }
 
-    fun getNext(): Object {
+    fun getNext(): Any {
         return next
     }
 
-    fun setNext(next: Object) {
+    fun setNext(next: Any) {
         this.next = next
     }
 
@@ -417,11 +417,11 @@ class Playlists {
         this.offset = offset
     }
 
-    fun getPrevious(): Object {
+    fun getPrevious(): Any {
         return previous
     }
 
-    fun setPrevious(previous: Object) {
+    fun setPrevious(previous: Any) {
         this.previous = previous
     }
 

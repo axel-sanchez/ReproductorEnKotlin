@@ -29,7 +29,7 @@ val moduleApp = module {
     single { GetPlaylistSongsUseCaseImpl(get() as ConnectToApi) as GetPlaylistSongsUseCase }
     single { GetSongsBySearchUseCaseImpl(get() as ConnectToApi) as GetSongsBySearchUseCase }
 
-    single { GetItemSongListUseCaseImpl(get() as ConnectToApi) as GetItemSongListUseCase }
+    single { GetFeaturedPlaylistSongsUseCaseImpl(get() as ConnectToApi) as GetFeaturedPlaylistSongsUseCase }
 
     single { UserRepositoryImpl(get() as UserRemoteSource) as UserRepository }
     single { UserRemoteSourceImpl(get(name = "service") as ApiService) as UserRemoteSource }
