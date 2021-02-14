@@ -23,4 +23,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="followers">Followers</string>
     <string name="search_a_song">Buscar una canción</string>
+    <string name="login">Iniciar Sesión</string>
 </resources>

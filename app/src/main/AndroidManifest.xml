@@ -18,17 +18,21 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:name=".application.MyApplication">
-        <activity android:name=".ui.view.MainActivity">
+
+        <activity
+            android:name=".ui.view.AuthenticationActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
 
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-    </application>
 
+        <activity android:name=".ui.view.MainActivity"/>
+    </application>
 </manifest>

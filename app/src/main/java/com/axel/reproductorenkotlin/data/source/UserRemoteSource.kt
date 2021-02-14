@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.axel.reproductorenkotlin.data.models.User
 import com.axel.reproductorenkotlin.data.models.UserPlaylists
 import com.axel.reproductorenkotlin.data.service.ApiService
-import com.axel.reproductorenkotlin.ui.view.MainActivity.Companion.token
+import com.axel.reproductorenkotlin.ui.view.AuthenticationActivity.Companion.token
 
 interface UserRemoteSource{
     suspend fun getUser(): MutableLiveData<User?>
