@@ -2,6 +2,7 @@ package com.axel.reproductorenkotlin.domain.usecase
 
 import com.axel.reproductorenkotlin.data.models.User
 import com.axel.reproductorenkotlin.data.service.ConnectToApi
+import com.axel.reproductorenkotlin.domain.repository.UserRepository
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
@@ -13,10 +14,8 @@ interface GetUserUseCase{
  * Use case for ProfileViewModel
  * @author Axel Sanchez
  */
-class GetUserUseCaseImpl : KoinComponent, GetUserUseCase {
-    private val api: ConnectToApi by inject()
-
+class GetUserUseCaseImpl(private val repository: UserRepository): GetUserUseCase {
     override suspend fun call(): User? {
-        return api.getUser().value
+        return repository.getUser().value
     }
 }

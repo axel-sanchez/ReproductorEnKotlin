@@ -1,7 +1,11 @@
 package com.axel.reproductorenkotlin.di
 
+import com.axel.reproductorenkotlin.data.repository.UserRepositoryImpl
 import com.axel.reproductorenkotlin.data.service.ApiService
 import com.axel.reproductorenkotlin.data.service.ConnectToApi
+import com.axel.reproductorenkotlin.data.source.UserRemoteSource
+import com.axel.reproductorenkotlin.data.source.UserRemoteSourceImpl
+import com.axel.reproductorenkotlin.domain.repository.UserRepository
 import com.axel.reproductorenkotlin.domain.usecase.*
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -14,14 +18,6 @@ const val BASE_URL = "https://api.spotify.com/v1/"
 val moduleApp = module {
     single { ConnectToApi() }
 
-    single(name = "retrofitToken") {
-        Retrofit.Builder()
-            .baseUrl("https://accounts.spotify.com")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-    single(name = "serviceToken") { (get(name = "retrofitToken") as Retrofit).create(ApiService::class.java) }
-
     single(name = "retrofit") {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -33,9 +29,13 @@ val moduleApp = module {
     single { GetPlaylistSongsUseCaseImpl() as GetPlaylistSongsUseCase }
     single { GetSongsBySearchUseCaseImpl() as GetSongsBySearchUseCase }
 
-    single { GetUserUseCaseImpl() as GetUserUseCase }
+    single { GetUserUseCaseImpl(get() as UserRepository) as GetUserUseCase }
 
-    single { GetUserPlaylistsUseCaseImpl() as GetUserPlaylistsUseCase }
+    single { GetUserPlaylistsUseCaseImpl(get() as UserRepository) as GetUserPlaylistsUseCase }
 
     single { GetItemSongListUseCaseImpl() as GetItemSongListUseCase }
+
+    single { UserRemoteSourceImpl(get(name = "service") as ApiService) as UserRemoteSource }
+
+    single { UserRepositoryImpl(get() as UserRemoteSource) as UserRepository }
 }
