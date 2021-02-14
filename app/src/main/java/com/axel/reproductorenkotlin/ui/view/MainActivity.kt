@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.axel.reproductorenkotlin.R
-import com.axel.reproductorenkotlin.data.service.ConnectToApi
 import com.spotify.sdk.android.authentication.AuthenticationClient
 import com.spotify.sdk.android.authentication.AuthenticationRequest
 import com.spotify.sdk.android.authentication.AuthenticationResponse
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             when (response.type) {
                 AuthenticationResponse.Type.TOKEN -> {
                     Log.i("SUCCESFUL", "onActivityResult: ${response.accessToken}")
-                    ConnectToApi.token = response.accessToken
+                    token = response.accessToken
                 }
                 AuthenticationResponse.Type.ERROR -> {
                     println("error: ${response.error}")
@@ -52,5 +51,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    companion object {
+        var token = ""
     }
 }

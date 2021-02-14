@@ -1,16 +1,24 @@
-package com.axel.reproductorenkotlin.data.service
+package com.axel.reproductorenkotlin.data.source
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axel.reproductorenkotlin.data.models.FeaturedPlaylistSong
 import com.axel.reproductorenkotlin.data.models.PlaylistSongs
 import com.axel.reproductorenkotlin.data.models.Search
+import com.axel.reproductorenkotlin.data.service.ApiService
+import com.axel.reproductorenkotlin.ui.view.MainActivity.Companion.token
 
 /**
  * @author Axel Sanchez
  */
-class ConnectToApi(private val service: ApiService) {
-    suspend fun getItemSongList(): MutableLiveData<MutableList<FeaturedPlaylistSong?>> {
+interface SongRemoteSource {
+    suspend fun getFeaturedPlaylistSong(): MutableLiveData<MutableList<FeaturedPlaylistSong?>>
+    suspend fun getPlaylistSongs(idPlaylist: String): MutableLiveData<PlaylistSongs?>
+    suspend fun getSongsBySearch(query: String): MutableLiveData<Search?>
+}
+
+class SongRemoteSourceImpl(private val service: ApiService): SongRemoteSource {
+    override suspend fun getFeaturedPlaylistSong(): MutableLiveData<MutableList<FeaturedPlaylistSong?>> {
         var mutableLiveData = MutableLiveData<MutableList<FeaturedPlaylistSong?>>()
 
         try {
@@ -32,7 +40,7 @@ class ConnectToApi(private val service: ApiService) {
         return mutableLiveData
     }
 
-    suspend fun getPlaylistSongs(idPlaylist: String): MutableLiveData<PlaylistSongs?> {
+    override suspend fun getPlaylistSongs(idPlaylist: String): MutableLiveData<PlaylistSongs?> {
         var mutableLiveData = MutableLiveData<PlaylistSongs?>()
 
         try {
@@ -53,7 +61,7 @@ class ConnectToApi(private val service: ApiService) {
         return mutableLiveData
     }
 
-    suspend fun getSongsBySearch(query: String): MutableLiveData<Search?> {
+    override suspend fun getSongsBySearch(query: String): MutableLiveData<Search?> {
         var mutableLiveData = MutableLiveData<Search?>()
 
         try {
@@ -72,9 +80,5 @@ class ConnectToApi(private val service: ApiService) {
         }
 
         return mutableLiveData
-    }
-
-    companion object {
-        var token = ""
     }
 }

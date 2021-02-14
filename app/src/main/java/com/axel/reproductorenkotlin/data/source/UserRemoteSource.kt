@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.axel.reproductorenkotlin.data.models.User
 import com.axel.reproductorenkotlin.data.models.UserPlaylists
 import com.axel.reproductorenkotlin.data.service.ApiService
-import com.axel.reproductorenkotlin.data.service.ConnectToApi
+import com.axel.reproductorenkotlin.ui.view.MainActivity.Companion.token
 
 interface UserRemoteSource{
     suspend fun getUser(): MutableLiveData<User?>
@@ -21,7 +21,7 @@ class UserRemoteSourceImpl(private val service: ApiService): UserRemoteSource {
         var mutableLiveData = MutableLiveData<User?>()
 
         try {
-            val response = service.getUser("Bearer ${ConnectToApi.token}")
+            val response = service.getUser("Bearer $token")
             if (response.isSuccessful) {
                 Log.i("Successful Response", response.body().toString())
                 mutableLiveData.value = response.body()
@@ -42,7 +42,7 @@ class UserRemoteSourceImpl(private val service: ApiService): UserRemoteSource {
         var mutableLiveData = MutableLiveData<UserPlaylists?>()
 
         try {
-            val response = service.getUserPlaylists("Bearer ${ConnectToApi.token}")
+            val response = service.getUserPlaylists("Bearer $token")
             if (response.isSuccessful) {
                 Log.i("Successful Response", response.body().toString())
                 mutableLiveData.value = response.body()

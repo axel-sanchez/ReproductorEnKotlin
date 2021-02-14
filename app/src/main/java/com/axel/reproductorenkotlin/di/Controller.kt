@@ -1,10 +1,13 @@
 package com.axel.reproductorenkotlin.di
 
+import com.axel.reproductorenkotlin.data.repository.SongRepositoryImpl
 import com.axel.reproductorenkotlin.data.repository.UserRepositoryImpl
 import com.axel.reproductorenkotlin.data.service.ApiService
-import com.axel.reproductorenkotlin.data.service.ConnectToApi
+import com.axel.reproductorenkotlin.data.source.SongRemoteSource
+import com.axel.reproductorenkotlin.data.source.SongRemoteSourceImpl
 import com.axel.reproductorenkotlin.data.source.UserRemoteSource
 import com.axel.reproductorenkotlin.data.source.UserRemoteSourceImpl
+import com.axel.reproductorenkotlin.domain.repository.SongRepository
 import com.axel.reproductorenkotlin.domain.repository.UserRepository
 import com.axel.reproductorenkotlin.domain.usecase.*
 import org.koin.dsl.module.module
@@ -24,12 +27,12 @@ val moduleApp = module {
     }
     single(name = "service") { (get(name = "retrofit") as Retrofit).create(ApiService::class.java) }
 
-    single { ConnectToApi(get() as ApiService) }
+    single { SongRepositoryImpl(get() as SongRemoteSource) as SongRepository }
+    single { SongRemoteSourceImpl(get(name = "service") as ApiService) as SongRemoteSource }
+    single { GetPlaylistSongsUseCaseImpl(get() as SongRepository) as GetPlaylistSongsUseCase }
+    single { GetSongsBySearchUseCaseImpl(get() as SongRepository) as GetSongsBySearchUseCase }
 
-    single { GetPlaylistSongsUseCaseImpl(get() as ConnectToApi) as GetPlaylistSongsUseCase }
-    single { GetSongsBySearchUseCaseImpl(get() as ConnectToApi) as GetSongsBySearchUseCase }
-
-    single { GetFeaturedPlaylistSongsUseCaseImpl(get() as ConnectToApi) as GetFeaturedPlaylistSongsUseCase }
+    single { GetFeaturedPlaylistSongsUseCaseImpl(get() as SongRepository) as GetFeaturedPlaylistSongsUseCase }
 
     single { UserRepositoryImpl(get() as UserRemoteSource) as UserRepository }
     single { UserRemoteSourceImpl(get(name = "service") as ApiService) as UserRemoteSource }

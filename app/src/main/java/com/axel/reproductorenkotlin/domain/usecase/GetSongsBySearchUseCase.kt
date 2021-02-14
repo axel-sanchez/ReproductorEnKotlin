@@ -1,7 +1,7 @@
 package com.axel.reproductorenkotlin.domain.usecase
 
 import com.axel.reproductorenkotlin.data.models.Search
-import com.axel.reproductorenkotlin.data.service.ConnectToApi
+import com.axel.reproductorenkotlin.domain.repository.SongRepository
 
 interface GetSongsBySearchUseCase{
     suspend fun call(query: String): List<Search.Tracks.Item?>
@@ -10,8 +10,8 @@ interface GetSongsBySearchUseCase{
 /**
  * @author Axel Sanchez
  */
-class GetSongsBySearchUseCaseImpl(private val api: ConnectToApi): GetSongsBySearchUseCase {
+class GetSongsBySearchUseCaseImpl(private val repository: SongRepository): GetSongsBySearchUseCase {
     override suspend fun call(query: String): List<Search.Tracks.Item?> {
-        return api.getSongsBySearch(query).value?.tracks?.items ?: listOf()
+        return repository.getSongsBySearch(query).value?.tracks?.items ?: listOf()
     }
 }
