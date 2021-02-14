@@ -16,8 +16,6 @@ const val BASE_URL = "https://api.spotify.com/v1/"
  * @author Axel Sanchez
  */
 val moduleApp = module {
-    single { ConnectToApi() }
-
     single(name = "retrofit") {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -26,16 +24,15 @@ val moduleApp = module {
     }
     single(name = "service") { (get(name = "retrofit") as Retrofit).create(ApiService::class.java) }
 
-    single { GetPlaylistSongsUseCaseImpl() as GetPlaylistSongsUseCase }
-    single { GetSongsBySearchUseCaseImpl() as GetSongsBySearchUseCase }
+    single { ConnectToApi(get() as ApiService) }
 
-    single { GetUserUseCaseImpl(get() as UserRepository) as GetUserUseCase }
+    single { GetPlaylistSongsUseCaseImpl(get() as ConnectToApi) as GetPlaylistSongsUseCase }
+    single { GetSongsBySearchUseCaseImpl(get() as ConnectToApi) as GetSongsBySearchUseCase }
 
-    single { GetUserPlaylistsUseCaseImpl(get() as UserRepository) as GetUserPlaylistsUseCase }
-
-    single { GetItemSongListUseCaseImpl() as GetItemSongListUseCase }
-
-    single { UserRemoteSourceImpl(get(name = "service") as ApiService) as UserRemoteSource }
+    single { GetItemSongListUseCaseImpl(get() as ConnectToApi) as GetItemSongListUseCase }
 
     single { UserRepositoryImpl(get() as UserRemoteSource) as UserRepository }
+    single { UserRemoteSourceImpl(get(name = "service") as ApiService) as UserRemoteSource }
+    single { GetUserUseCaseImpl(get() as UserRepository) as GetUserUseCase }
+    single { GetUserPlaylistsUseCaseImpl(get() as UserRepository) as GetUserPlaylistsUseCase }
 }

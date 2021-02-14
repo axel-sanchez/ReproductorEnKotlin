@@ -2,17 +2,14 @@ package com.axel.reproductorenkotlin.data.service
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axel.reproductorenkotlin.data.models.*
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import com.axel.reproductorenkotlin.data.models.ItemSong
+import com.axel.reproductorenkotlin.data.models.PlaylistSongs
+import com.axel.reproductorenkotlin.data.models.Search
 
 /**
  * @author Axel Sanchez
  */
-class ConnectToApi : KoinComponent {
-
-    private val service: ApiService by inject(name = "service")
-
+class ConnectToApi(private val service: ApiService) {
     suspend fun getItemSongList(): MutableLiveData<MutableList<ItemSong?>> {
         var mutableLiveData = MutableLiveData<MutableList<ItemSong?>>()
 

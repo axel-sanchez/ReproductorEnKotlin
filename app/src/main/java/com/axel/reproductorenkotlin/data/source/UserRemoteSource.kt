@@ -6,8 +6,6 @@ import com.axel.reproductorenkotlin.data.models.User
 import com.axel.reproductorenkotlin.data.models.UserPlaylists
 import com.axel.reproductorenkotlin.data.service.ApiService
 import com.axel.reproductorenkotlin.data.service.ConnectToApi
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 
 interface UserRemoteSource{
     suspend fun getUser(): MutableLiveData<User?>
@@ -17,7 +15,7 @@ interface UserRemoteSource{
 /**
  * @author Axel Sanchez
  */
-class UserRemoteSourceImpl(private val service: ApiService): UserRemoteSource, KoinComponent {
+class UserRemoteSourceImpl(private val service: ApiService): UserRemoteSource {
 
     override suspend fun getUser(): MutableLiveData<User?> {
         var mutableLiveData = MutableLiveData<User?>()
