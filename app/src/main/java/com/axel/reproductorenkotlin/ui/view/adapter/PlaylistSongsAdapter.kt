@@ -28,13 +28,16 @@ class PlaylistSongsAdapter(
     private var job: Job? = null
     private var mediaPlayer: MediaPlayer? = null
 
+    fun destroyJob(){
+        stopSong(mediaPlayer)
+        job?.cancel()
+        job = null
+    }
+
     inner class ViewHolder(private val binding: ItemTrackBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(
-            song: PlaylistSongs.Item.Track?,
-            spotifyClickListener: (PlaylistSongs.Item.Track?) -> Unit
-        ) {
+        fun bind(song: PlaylistSongs.Item.Track?, spotifyClickListener: (PlaylistSongs.Item.Track?) -> Unit) {
 
             var isPlaying = false
 
@@ -73,10 +76,7 @@ class PlaylistSongsAdapter(
 
     private fun itemClickPlayPause(preview_url: String, btnPlayPause: Button, setIsPlayingFalse: () -> Unit) {
         mediaPlayer?.let {
-            it.stop()
-            mediaPlayer = null
-            job?.cancel()
-            job = null
+            stopSong(it)
         } ?: kotlin.run {
             job = scope.launch {
                 mediaPlayer = MediaPlayer().apply {
@@ -95,7 +95,13 @@ class PlaylistSongsAdapter(
                 }
             }
         }
+    }
 
+    private fun stopSong(mPlayer: MediaPlayer?) {
+        mPlayer?.stop()
+        mediaPlayer = null
+        job?.cancel()
+        job = null
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

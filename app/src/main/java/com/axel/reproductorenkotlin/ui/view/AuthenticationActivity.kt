@@ -47,18 +47,18 @@ class AuthenticationActivity: AppCompatActivity() {
         // Check if result comes from the correct activity
         if (requestCode == REQUEST_CODE) {
             val response = AuthenticationClient.getResponse(resultCode, intent)
-            when (response.type) {
+            when (response?.type) {
                 AuthenticationResponse.Type.TOKEN -> {
                     Log.i("SUCCESSFUL", "onActivityResult: ${response.accessToken}")
-                    token = response.accessToken
+                    token = response.accessToken?:""
                     goToMainActivity()
                 }
                 AuthenticationResponse.Type.ERROR -> {
                     Toast.makeText(this, "Error de autenticación", Toast.LENGTH_SHORT).show()
-                    Log.e("Error Auth", response.error)
+                    Log.e("Error Auth", response.error?:"")
                 }
                 else -> {
-                    Log.e("No valid response", response.error)
+                    Log.e("No valid response", response?.error?:"")
                 }
             }
         }

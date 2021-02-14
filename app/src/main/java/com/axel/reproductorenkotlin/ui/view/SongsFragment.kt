@@ -172,5 +172,7 @@ class SongsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         fragmentSongsBinding = null
+        if(viewAdapter is PlaylistSongsAdapter) (viewAdapter as PlaylistSongsAdapter).destroyJob()
+        if(viewAdapter is SearchedSongsAdapter) (viewAdapter as SearchedSongsAdapter).destroyJob()
     }
 }
