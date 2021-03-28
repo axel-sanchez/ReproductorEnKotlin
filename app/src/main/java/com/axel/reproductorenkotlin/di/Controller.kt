@@ -27,15 +27,15 @@ val moduleApp = module {
     }
     single(name = "service") { (get(name = "retrofit") as Retrofit).create(ApiService::class.java) }
 
-    single { SongRepositoryImpl(get() as SongRemoteSource) as SongRepository }
-    single { SongRemoteSourceImpl(get(name = "service") as ApiService) as SongRemoteSource }
-    single { GetPlaylistSongsUseCaseImpl(get() as SongRepository) as GetPlaylistSongsUseCase }
-    single { GetSongsBySearchUseCaseImpl(get() as SongRepository) as GetSongsBySearchUseCase }
+    single<SongRepository> { SongRepositoryImpl(get() as SongRemoteSource) }
+    single<SongRemoteSource> { SongRemoteSourceImpl(get(name = "service") as ApiService) }
+    single<GetPlaylistSongsUseCase> { GetPlaylistSongsUseCaseImpl(get() as SongRepository) }
+    single<GetSongsBySearchUseCase> { GetSongsBySearchUseCaseImpl(get() as SongRepository) }
 
-    single { GetFeaturedPlaylistSongsUseCaseImpl(get() as SongRepository) as GetFeaturedPlaylistSongsUseCase }
+    single<GetFeaturedPlaylistSongsUseCase> { GetFeaturedPlaylistSongsUseCaseImpl(get() as SongRepository) }
 
-    single { UserRepositoryImpl(get() as UserRemoteSource) as UserRepository }
-    single { UserRemoteSourceImpl(get(name = "service") as ApiService) as UserRemoteSource }
-    single { GetUserUseCaseImpl(get() as UserRepository) as GetUserUseCase }
-    single { GetUserPlaylistsUseCaseImpl(get() as UserRepository) as GetUserPlaylistsUseCase }
+    single<UserRepository> { UserRepositoryImpl(get() as UserRemoteSource) }
+    single<UserRemoteSource> { UserRemoteSourceImpl(get(name = "service") as ApiService) }
+    single<GetUserUseCase> { GetUserUseCaseImpl(get() as UserRepository) }
+    single<GetUserPlaylistsUseCase> { GetUserPlaylistsUseCaseImpl(get() as UserRepository) }
 }
