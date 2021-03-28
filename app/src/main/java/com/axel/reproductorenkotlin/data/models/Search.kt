@@ -1,9 +1,13 @@
 package com.axel.reproductorenkotlin.data.models
 
-data class Search(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity data class Search(
+    @PrimaryKey var id: Long,
     var tracks: Tracks? = null
 ) {
-    data class Tracks(
+    @Entity data class Tracks(
         var href: String? = null,
         var items: List<Item?>? = null,
         var limit: Int? = null,
@@ -12,7 +16,7 @@ data class Search(
         var previous: Any? = null,
         var total: Int? = null
     ) {
-        data class Item(
+        @Entity data class Item(
             var album: Album? = null,
             var artists: List<Artist?>? = null,
             var available_markets: List<String?>? = null,
@@ -31,7 +35,7 @@ data class Search(
             var type: String? = null,
             var uri: String? = null
         ) {
-            data class Album(
+            @Entity data class Album(
                 var album_type: String? = null,
                 var artists: List<Artist?>? = null,
                 var available_markets: List<String?>? = null,
@@ -46,7 +50,7 @@ data class Search(
                 var type: String? = null,
                 var uri: String? = null
             ) {
-                data class Artist(
+                @Entity data class Artist(
                     var external_urls: ExternalUrls? = null,
                     var href: String? = null,
                     var id: String? = null,
@@ -54,23 +58,23 @@ data class Search(
                     var type: String? = null,
                     var uri: String? = null
                 ) {
-                    data class ExternalUrls(
+                    @Entity data class ExternalUrls(
                         var spotify: String? = null
                     )
                 }
 
-                data class ExternalUrls(
+                @Entity data class ExternalUrls(
                     var spotify: String? = null
                 )
 
-                data class Image(
+                @Entity data class Image(
                     var height: Int? = null,
                     var url: String? = null,
                     var width: Int? = null
                 )
             }
 
-            data class Artist(
+            @Entity data class Artist(
                 var external_urls: ExternalUrls? = null,
                 var href: String? = null,
                 var id: String? = null,
@@ -78,16 +82,16 @@ data class Search(
                 var type: String? = null,
                 var uri: String? = null
             ) {
-                data class ExternalUrls(
+                @Entity data class ExternalUrls(
                     var spotify: String? = null
                 )
             }
 
-            data class ExternalIds(
+            @Entity data class ExternalIds(
                 var isrc: String? = null
             )
 
-            data class ExternalUrls(
+            @Entity data class ExternalUrls(
                 var spotify: String? = null
             )
         }

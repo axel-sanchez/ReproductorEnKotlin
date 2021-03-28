@@ -1,6 +1,10 @@
 package com.axel.reproductorenkotlin.data.models
 
-data class UserPlaylists(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity data class UserPlaylists(
+    @PrimaryKey var id: Long,
     var href: String? = null,
     var items: List<Item?>? = null,
     var limit: Int? = null,
@@ -9,7 +13,7 @@ data class UserPlaylists(
     var previous: Any? = null,
     var total: Int? = null
 ) {
-    data class Item(
+    @Entity data class Item(
         var collaborative: Boolean? = null,
         var description: String? = null,
         var external_urls: ExternalUrls? = null,
@@ -25,17 +29,17 @@ data class UserPlaylists(
         var type: String? = null,
         var uri: String? = null
     ) {
-        data class ExternalUrls(
+        @Entity data class ExternalUrls(
             var spotify: String? = null
         )
 
-        data class Image(
+        @Entity data class Image(
             var height: Any? = null,
             var url: String? = null,
             var width: Any? = null
         )
 
-        data class Owner(
+        @Entity data class Owner(
             var display_name: String? = null,
             var external_urls: ExternalUrls? = null,
             var href: String? = null,
@@ -43,12 +47,12 @@ data class UserPlaylists(
             var type: String? = null,
             var uri: String? = null
         ) {
-            data class ExternalUrls(
+            @Entity data class ExternalUrls(
                 var spotify: String? = null
             )
         }
 
-        data class Tracks(
+        @Entity data class Tracks(
             var href: String? = null,
             var total: Int? = null
         )

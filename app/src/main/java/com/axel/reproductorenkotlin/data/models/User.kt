@@ -1,25 +1,28 @@
 package com.axel.reproductorenkotlin.data.models
 
-data class User(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity data class User(
+    @PrimaryKey var id: Long,
     var display_name: String? = null,
     var external_urls: ExternalUrls? = null,
     var followers: Followers? = null,
     var href: String? = null,
-    var id: String? = null,
     var images: List<Image?>? = null,
     var type: String? = null,
     var uri: String? = null
 ) {
-    data class ExternalUrls(
+    @Entity data class ExternalUrls(
         var spotify: String? = null
     )
 
-    data class Followers(
+    @Entity data class Followers(
         var href: Any? = null,
         var total: Int? = null
     )
 
-    data class Image(
+    @Entity data class Image(
         var height: Any? = null,
         var url: String? = null,
         var width: Any? = null

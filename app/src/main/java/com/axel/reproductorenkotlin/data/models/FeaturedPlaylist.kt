@@ -1,9 +1,11 @@
 package com.axel.reproductorenkotlin.data.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class ExternalUrls {
+@Entity class ExternalUrls {
 
     @SerializedName("spotify")
     @Expose
@@ -19,7 +21,7 @@ class ExternalUrls {
 
 }
 
-class ExternalUrls_ {
+@Entity class ExternalUrls_ {
 
     @SerializedName("spotify")
     @Expose
@@ -35,7 +37,9 @@ class ExternalUrls_ {
 
 }
 
-class FeaturedPlaylist {
+@Entity class FeaturedPlaylist {
+
+    @PrimaryKey var id: Long = 0
 
     @SerializedName("message")
     @Expose
@@ -61,7 +65,7 @@ class FeaturedPlaylist {
     }
 }
 
-class Image {
+@Entity class Image {
 
     @SerializedName("height")
     @Expose
@@ -98,7 +102,7 @@ class Image {
     }
 }
 
-class FeaturedPlaylistSong {
+@Entity class FeaturedPlaylistSong {
 
     @SerializedName("collaborative")
     @Expose
@@ -255,7 +259,7 @@ class FeaturedPlaylistSong {
         this.uri = uri
     }
 
-    inner class Tracks {
+    @Entity inner class Tracks {
 
         @SerializedName("href")
         @Expose
@@ -283,7 +287,7 @@ class FeaturedPlaylistSong {
 
 }
 
-class Owner {
+@Entity class Owner {
 
     @SerializedName("display_name")
     @Expose
@@ -353,7 +357,7 @@ class Owner {
     }
 }
 
-class Playlists {
+@Entity class Playlists {
 
     @SerializedName("href")
     @Expose

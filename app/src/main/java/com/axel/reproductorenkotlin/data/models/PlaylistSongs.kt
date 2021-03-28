@@ -1,6 +1,10 @@
 package com.axel.reproductorenkotlin.data.models
 
-data class PlaylistSongs(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity data class PlaylistSongs(
+    @PrimaryKey var id: Long,
     var href: String? = null,
     var items: List<Item?>? = null,
     var limit: Int? = null,
@@ -9,7 +13,7 @@ data class PlaylistSongs(
     var previous: Any? = null,
     var total: Int? = null
 ) {
-    data class Item(
+    @Entity data class Item(
         var added_at: String? = null,
         var added_by: AddedBy? = null,
         var is_local: Boolean? = null,
@@ -17,19 +21,19 @@ data class PlaylistSongs(
         var track: Track? = null,
         var video_thumbnail: VideoThumbnail? = null
     ) {
-        data class AddedBy(
+        @Entity data class AddedBy(
             var external_urls: ExternalUrls? = null,
             var href: String? = null,
             var id: String? = null,
             var type: String? = null,
             var uri: String? = null
         ) {
-            data class ExternalUrls(
+            @Entity data class ExternalUrls(
                 var spotify: String? = null
             )
         }
 
-        data class Track(
+        @Entity data class Track(
             var album: Album? = null,
             var artists: List<Artist?>? = null,
             var disc_number: Int? = null,
@@ -51,7 +55,7 @@ data class PlaylistSongs(
             var type: String? = null,
             var uri: String? = null
         ) {
-            data class Album(
+            @Entity data class Album(
                 var album_type: String? = null,
                 var artists: List<Artist?>? = null,
                 var external_urls: ExternalUrls? = null,
@@ -65,7 +69,7 @@ data class PlaylistSongs(
                 var type: String? = null,
                 var uri: String? = null
             ) {
-                data class Artist(
+                @Entity data class Artist(
                     var external_urls: ExternalUrls? = null,
                     var href: String? = null,
                     var id: String? = null,
@@ -73,23 +77,23 @@ data class PlaylistSongs(
                     var type: String? = null,
                     var uri: String? = null
                 ) {
-                    data class ExternalUrls(
+                    @Entity data class ExternalUrls(
                         var spotify: String? = null
                     )
                 }
 
-                data class ExternalUrls(
+                @Entity data class ExternalUrls(
                     var spotify: String? = null
                 )
 
-                data class Image(
+                @Entity data class Image(
                     var height: Int? = null,
                     var url: String? = null,
                     var width: Int? = null
                 )
             }
 
-            data class Artist(
+            @Entity data class Artist(
                 var external_urls: ExternalUrls? = null,
                 var href: String? = null,
                 var id: String? = null,
@@ -97,33 +101,33 @@ data class PlaylistSongs(
                 var type: String? = null,
                 var uri: String? = null
             ) {
-                data class ExternalUrls(
+                @Entity data class ExternalUrls(
                     var spotify: String? = null
                 )
             }
 
-            data class ExternalIds(
+            @Entity data class ExternalIds(
                 var isrc: String? = null
             )
 
-            data class ExternalUrls(
+            @Entity data class ExternalUrls(
                 var spotify: String? = null
             )
 
-            data class LinkedFrom(
+            @Entity data class LinkedFrom(
                 var external_urls: ExternalUrls? = null,
                 var href: String? = null,
                 var id: String? = null,
                 var type: String? = null,
                 var uri: String? = null
             ) {
-                data class ExternalUrls(
+                @Entity data class ExternalUrls(
                     var spotify: String? = null
                 )
             }
         }
 
-        data class VideoThumbnail(
+        @Entity data class VideoThumbnail(
             var url: Any? = null
         )
     }
