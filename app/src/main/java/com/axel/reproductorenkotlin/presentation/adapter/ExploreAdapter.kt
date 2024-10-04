@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view.adapter
+package com.axel.reproductorenkotlin.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,7 +26,7 @@ class ExploreAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExploreAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val recyclerRowBinding: ItemPlaylistBinding = ItemPlaylistBinding.inflate(layoutInflater, null, false)
         return ViewHolder(recyclerRowBinding)

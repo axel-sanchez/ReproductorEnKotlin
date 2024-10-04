@@ -1,10 +1,9 @@
-package com.axel.reproductorenkotlin.ui.view
+package com.axel.reproductorenkotlin.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -13,10 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.data.models.Song
 import com.axel.reproductorenkotlin.databinding.FragmentHomeBinding
-import com.axel.reproductorenkotlin.helpers.PlayerHelper
 import com.axel.reproductorenkotlin.helpers.SongHelper.songsList
-import com.axel.reproductorenkotlin.ui.view.adapter.SongAdapter
-import com.axel.reproductorenkotlin.viewmodel.PlayerViewModel
+import com.axel.reproductorenkotlin.presentation.adapter.SongAdapter
+import com.axel.reproductorenkotlin.presentation.viewmodel.PlayerViewModel
 import java.lang.ref.WeakReference
 
 class HomeFragment : Fragment() {

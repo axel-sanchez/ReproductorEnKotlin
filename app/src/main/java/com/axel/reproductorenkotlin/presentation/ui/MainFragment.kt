@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view
+package com.axel.reproductorenkotlin.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.axel.reproductorenkotlin.R
 import com.axel.reproductorenkotlin.databinding.FragmentMainBinding
 import com.axel.reproductorenkotlin.helpers.SongHelper
-import com.axel.reproductorenkotlin.viewmodel.PlayerViewModel
+import com.axel.reproductorenkotlin.presentation.viewmodel.PlayerViewModel
 import java.lang.ref.WeakReference
 
 class MainFragment : Fragment() {

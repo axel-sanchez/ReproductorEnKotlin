@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.application
+package com.axel.reproductorenkotlin.core
 
 import android.app.Application
 import com.axel.reproductorenkotlin.di.moduleApp

@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view
+package com.axel.reproductorenkotlin.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import com.axel.reproductorenkotlin.common.hide
 import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.databinding.FragmentProfileBinding
 import com.axel.reproductorenkotlin.domain.usecase.GetUserUseCase
-import com.axel.reproductorenkotlin.viewmodel.ProfileViewModel
+import com.axel.reproductorenkotlin.presentation.viewmodel.ProfileViewModel
 import com.bumptech.glide.Glide
 import org.koin.android.ext.android.inject
 

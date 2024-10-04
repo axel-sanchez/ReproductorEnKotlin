@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.viewmodel
+package com.axel.reproductorenkotlin.presentation.viewmodel
 
 import androidx.lifecycle.*
 import com.axel.reproductorenkotlin.data.models.User

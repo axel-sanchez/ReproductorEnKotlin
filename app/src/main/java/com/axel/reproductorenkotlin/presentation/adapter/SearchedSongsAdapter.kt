@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view.adapter
+package com.axel.reproductorenkotlin.presentation.adapter
 
 import android.media.AudioManager
 import android.media.MediaPlayer

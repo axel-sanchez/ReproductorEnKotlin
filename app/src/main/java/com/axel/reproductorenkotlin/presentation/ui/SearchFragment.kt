@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view
+package com.axel.reproductorenkotlin.presentation.ui
 
 import android.content.Context
 import android.os.Build

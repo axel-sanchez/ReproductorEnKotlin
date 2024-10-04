@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view.adapter
+package com.axel.reproductorenkotlin.presentation.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

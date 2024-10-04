@@ -6,7 +6,7 @@
     app:startDestination="@id/mainFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.axel.reproductorenkotlin.ui.view.MainFragment"
+        android:name="com.axel.reproductorenkotlin.presentation.ui.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/playerFragment"
-        android:name="com.axel.reproductorenkotlin.ui.view.PlayerFragment"
+        android:name="com.axel.reproductorenkotlin.presentation.ui.PlayerFragment"
         android:label="PlayerFragment"
         tools:layout="@layout/fragment_player"/>
 </navigation>

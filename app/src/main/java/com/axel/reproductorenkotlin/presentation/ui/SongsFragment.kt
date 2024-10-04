@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view
+package com.axel.reproductorenkotlin.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -22,9 +22,9 @@ import com.axel.reproductorenkotlin.data.models.Search
 import com.axel.reproductorenkotlin.databinding.FragmentSongsBinding
 import com.axel.reproductorenkotlin.domain.usecase.GetPlaylistSongsUseCase
 import com.axel.reproductorenkotlin.domain.usecase.GetSongsBySearchUseCase
-import com.axel.reproductorenkotlin.ui.view.adapter.PlaylistSongsAdapter
-import com.axel.reproductorenkotlin.ui.view.adapter.SearchedSongsAdapter
-import com.axel.reproductorenkotlin.viewmodel.SongsViewModel
+import com.axel.reproductorenkotlin.presentation.adapter.PlaylistSongsAdapter
+import com.axel.reproductorenkotlin.presentation.adapter.SearchedSongsAdapter
+import com.axel.reproductorenkotlin.presentation.viewmodel.SongsViewModel
 import org.koin.android.ext.android.inject
 
 class SongsFragment : Fragment() {

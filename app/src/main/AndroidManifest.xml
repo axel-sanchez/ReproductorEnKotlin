@@ -17,10 +17,10 @@
             android:roundIcon="@drawable/icono_music"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
-            android:name=".application.MyApplication">
+            android:name=".core.MyApplication">
 
         <activity
-            android:name=".ui.view.AuthenticationActivity">
+            android:name=".presentation.ui.AuthenticationActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -33,6 +33,6 @@
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <activity android:name=".ui.view.MainActivity"/>
+        <activity android:name=".presentation.ui.MainActivity"/>
     </application>
 </manifest>

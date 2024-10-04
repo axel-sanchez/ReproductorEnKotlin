@@ -6,7 +6,7 @@ import com.axel.reproductorenkotlin.data.models.FeaturedPlaylistSong
 import com.axel.reproductorenkotlin.data.models.PlaylistSongs
 import com.axel.reproductorenkotlin.data.models.Search
 import com.axel.reproductorenkotlin.data.service.ApiService
-import com.axel.reproductorenkotlin.ui.view.AuthenticationActivity.Companion.token
+import com.axel.reproductorenkotlin.presentation.ui.AuthenticationActivity.Companion.token
 
 /**
  * @author Axel Sanchez

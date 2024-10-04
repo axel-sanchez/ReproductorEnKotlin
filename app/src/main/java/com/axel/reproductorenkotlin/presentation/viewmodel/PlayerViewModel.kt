@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.viewmodel
+package com.axel.reproductorenkotlin.presentation.viewmodel
 
 import android.content.Context
 import android.media.MediaPlayer

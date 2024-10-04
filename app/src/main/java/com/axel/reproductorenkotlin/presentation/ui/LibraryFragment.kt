@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view
+package com.axel.reproductorenkotlin.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,8 +14,8 @@ import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.UserPlaylists
 import com.axel.reproductorenkotlin.databinding.FragmentLibraryBinding
 import com.axel.reproductorenkotlin.domain.usecase.GetUserPlaylistsUseCase
-import com.axel.reproductorenkotlin.ui.view.adapter.LibraryAdapter
-import com.axel.reproductorenkotlin.viewmodel.LibraryViewModel
+import com.axel.reproductorenkotlin.presentation.adapter.LibraryAdapter
+import com.axel.reproductorenkotlin.presentation.viewmodel.LibraryViewModel
 import org.koin.android.ext.android.inject
 
 class LibraryFragment : Fragment() {

@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view
+package com.axel.reproductorenkotlin.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,8 +14,8 @@ import com.axel.reproductorenkotlin.common.show
 import com.axel.reproductorenkotlin.data.models.FeaturedPlaylistSong
 import com.axel.reproductorenkotlin.databinding.FragmentExploreBinding
 import com.axel.reproductorenkotlin.domain.usecase.GetFeaturedPlaylistSongsUseCase
-import com.axel.reproductorenkotlin.ui.view.adapter.ExploreAdapter
-import com.axel.reproductorenkotlin.viewmodel.ExploreViewModel
+import com.axel.reproductorenkotlin.presentation.adapter.ExploreAdapter
+import com.axel.reproductorenkotlin.presentation.viewmodel.ExploreViewModel
 import org.koin.android.ext.android.inject
 
 class ExploreFragment : Fragment() {

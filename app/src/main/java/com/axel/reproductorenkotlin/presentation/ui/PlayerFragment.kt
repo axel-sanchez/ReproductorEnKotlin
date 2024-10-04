@@ -1,4 +1,4 @@
-package com.axel.reproductorenkotlin.ui.view
+package com.axel.reproductorenkotlin.presentation.ui
 
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
@@ -19,9 +19,9 @@ import com.axel.reproductorenkotlin.databinding.FragmentPlayerBinding
 import com.axel.reproductorenkotlin.helpers.HeadphonesDisconnectReceiver
 import com.axel.reproductorenkotlin.helpers.PlayerHelper.millisToMinutesAndSeconds
 import com.axel.reproductorenkotlin.helpers.SongHelper.songsList
-import com.axel.reproductorenkotlin.ui.view.adapter.ItemViewPager
-import com.axel.reproductorenkotlin.ui.view.adapter.ViewPageAdapter
-import com.axel.reproductorenkotlin.viewmodel.PlayerViewModel
+import com.axel.reproductorenkotlin.presentation.adapter.ItemViewPager
+import com.axel.reproductorenkotlin.presentation.adapter.ViewPageAdapter
+import com.axel.reproductorenkotlin.presentation.viewmodel.PlayerViewModel
 import java.lang.ref.WeakReference
 import java.util.*
 
